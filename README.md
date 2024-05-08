@@ -1,4 +1,4 @@
-# [HeirBnB: The AirBnb for Game of Thrones]
+# [HeirBnB: The AirBnB for Game of Thrones]
 
 ## Database Schema Design
 
