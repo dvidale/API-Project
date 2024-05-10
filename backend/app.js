@@ -43,9 +43,15 @@ if (!isProduction) {
 
 const routes = require('./routes');
 
+
+
 app.use(routes); // Connect all the routes
 
-
+app.get("/", (req, res) => {
+  res.json({
+    message: "API server is running",
+  });
+});
 
 
 const { ValidationError } = require('sequelize');
