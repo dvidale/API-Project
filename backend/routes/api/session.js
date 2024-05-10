@@ -41,6 +41,8 @@ if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
   }
 
   const safeUser = {
+    firstName: user.firstName,
+    lastName: user.lastName,
     id: user.id,
     email: user.email,
     username: user.username,
