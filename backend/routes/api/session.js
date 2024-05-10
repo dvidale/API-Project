@@ -9,6 +9,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const validateLogin = [
+  
   check('credential')
     .exists({ checkFalsy: true })
     .notEmpty()
@@ -41,9 +42,9 @@ if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
   }
 
   const safeUser = {
+    id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
-    id: user.id,
     email: user.email,
     username: user.username,
   };
@@ -63,6 +64,8 @@ router.get( '/',  (req, res) => {
     if (user) {
       const safeUser = {
         id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         username: user.username,
       };
