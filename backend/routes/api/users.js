@@ -8,12 +8,15 @@ const router = express.Router();
 
 
 // Sign up
-router.post(
-    '/',
-    async (req, res) => {
+router.post( '/', async (req, res) => {
       const { email, password, username } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ email, username, hashedPassword });
+      const user = await User.create(
+        { 
+          email, 
+          username, 
+          hashedPassword 
+        });
   
       const safeUser = {
         id: user.id,
