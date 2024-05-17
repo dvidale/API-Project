@@ -9,9 +9,6 @@
 
 ## API Documentation
 
-
-# STOPPED AT: Line 950 - update 'current user' URL paths
-
 # `<name of application here>`
 
 ## Database Schema Design
@@ -1281,8 +1278,8 @@ Delete an existing booking.
 * Require proper authorization: Booking must belong to the current user or the
   Spot must belong to the current user
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: DELETE
+  * URL: /api/bookings/:bookingId/delete
   * Body: none
 
 * Successful Response
@@ -1330,8 +1327,8 @@ Delete an existing image for a Spot.
 * Require Authentication: true
 * Require proper authorization: Spot must belong to the current user
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: DELETE
+  * URL: /api/spots/:spotId/images/:imageId/delete
   * Body: none
 
 * Successful Response
@@ -1365,7 +1362,7 @@ Delete an existing image for a Review.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: ?
+  * Method: api/:currentUser/reviews/:reviewId/images/:imageId/delete
   * URL: ?
   * Body: none
 
@@ -1399,8 +1396,8 @@ Return spots filtered by query parameters.
 
 * Require Authentication: false
 * Request
-  * Method: ?
-  * URL: ?
+  * Method: GET
+  * URL: /api/spots
   * Query Parameters
     * page: integer, minimum: 1, maximum: 10, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
