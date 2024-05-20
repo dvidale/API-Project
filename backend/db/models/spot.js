@@ -11,13 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Spot.belongsTo(models.User,{
+        as: 'owner'        
+      });
       Spot.hasMany(models.Booking,{
         foreignKey: 'spotId',
         onDelete: 'CASCADE'
-      });
-      Spot.belongsTo(models.User,{
-        foreignKey: 'userId',
-        as: 'ownerId'
       });
       Spot.hasMany(models.SpotImage,{
         foreignKey: 'spotId'
@@ -31,8 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     userId:{
       type: DataTypes.INTEGER,
       allowNull:false,
-      references:{model: 'Users',
-              key: 'ownerId'
+      references:{
+        model: 'Owners'
       }
     },
     address: {
@@ -40,20 +39,24 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     city:{
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(100),
       allowNull:false
     },
     state: {
       type: DataTypes.STRING(2),
       allowNull: false,
       validate:{
-        len:[2,2],
         isAlpha: true,
-        isUppercase: true
+        noNumbers(value){
+          let nums = new Set(0,1,2,3,4,5)
+          if(nums.has(value)){
+            throw new Error;
+          }
+        }
       }
     },
     country: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(100),
     allowNull: false,
       validate:{
         isAlpha: true

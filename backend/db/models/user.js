@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.Booking, {
         foreignKey: 'userId'
+      });
+      User.hasMany(models.Review,{
+        foreignKey: 'userId'
+      });
+      User.hasMany(models.Spot, {
+        as: 'Owner'
       })
     }
   }
@@ -28,10 +34,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(30),
         allowNull: false,
         validate:{
-          notEmpty: true,
-          isAlpha: true
-        }
-      },
+          notEmpty: true
+      }
+    },
       username: {
         type: DataTypes.STRING(30),
         allowNull: false,
