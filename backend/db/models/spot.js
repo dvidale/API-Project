@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    userId:{
+    ownerId:{
       type: DataTypes.INTEGER,
       allowNull:false,
       references:{
-        model: 'Owners'
+        model: 'Users'
       }
     },
     address: {
@@ -43,17 +43,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull:false
     },
     state: {
-      type: DataTypes.STRING(2),
-      allowNull: false,
-      validate:{
-        isAlpha: true,
-        noNumbers(value){
-          let nums = new Set(0,1,2,3,4,5)
-          if(nums.has(value)){
-            throw new Error;
-          }
-        }
-      }
+      type: DataTypes.STRING(50),
+      allowNull: false
     },
     country: {
       type: DataTypes.STRING(100),
@@ -73,9 +64,7 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING(50),
     allowNull: false,
-    validate:{
-      isAlpha: true
-    }
+    unique: true
   },
     description: {
       type: DataTypes.STRING(500),

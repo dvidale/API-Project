@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userId: {
+      ownerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references:{
-          model:'Owners'
+          model:'Users'
         }
       },
       address: {
@@ -25,7 +25,7 @@ module.exports = {
         allowNull:false
       },
       state: {
-        type: Sequelize.STRING(2),
+        type: Sequelize.STRING(50),
         allowNull:false
       },
       country: {
