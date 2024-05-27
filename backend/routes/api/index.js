@@ -8,6 +8,7 @@ router.use(restoreUser);
 router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
+
 // router.get(
 //   '/restore-user',
 //   (req, res) => {
@@ -15,7 +16,7 @@ router.use('/users', usersRouter);
 //   }
 // );
 
-// GET /api/require-auth
+// // GET /api/require-auth
 // const { requireAuth } = require('../../utils/auth.js');
 // router.get( '/require-auth', requireAuth, (req, res) => {
 //     return res.json(req.user);
