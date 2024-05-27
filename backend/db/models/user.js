@@ -9,6 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.Booking, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE'
+      });
+      User.hasMany(models.Review,{
+        foreignKey: 'userId',
+        onDelete: 'CASCADE'
+      });
+      User.hasMany(models.Spot, {
+        as: 'Owner',
+        foreignKey: 'ownerId',
+        onDelete: 'CASCADE'
+      })
     }
   }
   User.init(
@@ -25,10 +38,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(30),
         allowNull: false,
         validate:{
-          notEmpty: true,
-          isAlpha: true
-        }
-      },
+          notEmpty: true
+      }
+    },
       username: {
         type: DataTypes.STRING(30),
         allowNull: false,
