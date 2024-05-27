@@ -1,19 +1,12 @@
+# AirBnB Clone
 # [HeirBnB: The AirBnB for Game of Thrones]
 
 ## Database Schema Design
 
+![airbnb-database-schema]
 
-![db-schema]
-
-[db-schema]: ./images/airbnb-db-schema.png
-
-## API Documentation
-
-# `<name of application here>`
-
-## Database Schema Design
-
-`<insert database schema design here>`
+[airbnb-database-schema]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-schema.png
+[airbnb-db-diagram-info]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-diagram-info.txt
 
 ## API Documentation
 
@@ -58,10 +51,10 @@ correct role(s) or permission(s).
 
 Returns the information about the current user that is logged in.
 
-* Require Authentication: true
+* Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/users/:id
+  * URL: /api/session
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -78,7 +71,7 @@ Returns the information about the current user that is logged in.
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
-      } 
+      }
     }
     ```
 
@@ -102,7 +95,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /api/login
+  * URL: /api/session
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -128,7 +121,7 @@ information.
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
-      } 
+      }
     }
     ```
 
@@ -168,7 +161,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /api/signup
+  * URL: /api/users
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -258,7 +251,7 @@ Returns all the spots.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/spots/all
+  * URL: /api/spots
   * Body: none
 
 * Successful Response
@@ -298,7 +291,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/users/:userid/spots
+  * URL: /api/spots/current
   * Body: none
 
 * Successful Response
@@ -338,7 +331,7 @@ Returns the details of a spot specified by its id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/spots/:spotsid
+  * URL: /api/spots/:spotId
   * Body: none
 
 * Successful Response
@@ -446,7 +439,7 @@ Creates and returns a new spot.
     }
     ```
 
-* Error Response: Body validation error
+* Error Response: Body validation errors
   * Status Code: 400
   * Headers:
     * Content-Type: application/json
@@ -460,11 +453,11 @@ Creates and returns a new spot.
         "city": "City is required",
         "state": "State is required",
         "country": "Country is required",
-        "lat": "Latitude is not valid",
-        "lng": "Longitude is not valid",
+        "lat": "Latitude must be within -90 and 90",
+        "lng": "Longitude must be within -180 and 180",
         "name": "Name must be less than 50 characters",
         "description": "Description is required",
-        "price": "Price per day is required"
+        "price": "Price per day must be a positive number"
       }
     }
     ```
@@ -477,7 +470,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * URL: /api/spots/:spotid/images
+  * URL: /api/spots/:spotId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -523,7 +516,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT
-  * URL: /api/users/:userid/spots/:spotid/edit
+  * URL: /api/spots/:spotId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -566,7 +559,7 @@ Updates and returns an existing spot.
     }
     ```
 
-* Error Response: Body validation error
+* Error Response: Body validation errors
   * Status Code: 400
   * Headers:
     * Content-Type: application/json
@@ -580,11 +573,11 @@ Updates and returns an existing spot.
         "city": "City is required",
         "state": "State is required",
         "country": "Country is required",
-        "lat": "Latitude is not valid",
-        "lng": "Longitude is not valid",
+        "lat": "Latitude must be within -90 and 90",
+        "lng": "Longitude must be within -180 and 180",
         "name": "Name must be less than 50 characters",
         "description": "Description is required",
-        "price": "Price per day is required"
+        "price": "Price per day must be a positive number"
       }
     }
     ```
@@ -609,7 +602,7 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/users/:userid/spots/:spotid/delete
+  * URL: /api/spots/:spotId
   * Body: none
 
 * Successful Response
@@ -644,8 +637,8 @@ Returns all the reviews written by the current user.
 
 * Require Authentication: true
 * Request
-  * Method: 
-  * URL: ?
+  * Method: GET
+  * URL: /api/reviews/current
   * Body: none
 
 * Successful Response
@@ -833,8 +826,8 @@ Create and return a new image for a review specified by id.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: PUT
-  * URL: /api/spots/:spotId/reviews/:reviewId/images
+  * Method: POST
+  * URL: /api/reviews/:reviewId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -891,7 +884,7 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: PUT
-  * URL: /api/spots/:spotId/reviews/:reviewId
+  * URL: /api/reviews/:reviewId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -957,7 +950,7 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/:currentUser/reviews/:reviewId/delete
+  * URL: /api/reviews/:reviewId
   * Body: none
 
 * Successful Response
@@ -993,7 +986,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/:currentUser/bookings
+  * URL: /api/bookings/current
   * Body: none
 
 * Successful Response
@@ -1107,6 +1100,8 @@ Create and return a new booking from a spot specified by id.
 * Request
   * Method: POST
   * URL: /api/spots/:spotId/bookings
+  * Headers:
+    * Content-Type: application/json
   * Body:
 
     ```json
@@ -1144,6 +1139,7 @@ Create and return a new booking from a spot specified by id.
     {
       "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
       "errors": {
+        "startDate": "startDate cannot be in the past",
         "endDate": "endDate cannot be on or before startDate"
       }
     }
@@ -1185,7 +1181,7 @@ Update and return an existing booking.
 * Require proper authorization: Booking must belong to the current user
 * Request
   * Method: PUT
-  * URL: /api/:currentUser/bookings/:bookingId/edit
+  * URL: /api/bookings/:bookingId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1225,7 +1221,8 @@ Update and return an existing booking.
     {
       "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
       "errors": {
-        "endDate": "endDate cannot come before startDate"
+        "startDate": "startDate cannot be in the past",
+        "endDate": "endDate cannot be on or before startDate"
       }
     }
     ```
@@ -1279,7 +1276,7 @@ Delete an existing booking.
   Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/bookings/:bookingId/delete
+  * URL: /api/bookings/:bookingId
   * Body: none
 
 * Successful Response
@@ -1328,7 +1325,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/spots/:spotId/images/:imageId/delete
+  * URL: /api/spot-images/:imageId
   * Body: none
 
 * Successful Response
@@ -1362,8 +1359,8 @@ Delete an existing image for a Review.
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
-  * Method: api/:currentUser/reviews/:reviewId/images/:imageId/delete
-  * URL: ?
+  * Method: DELETE
+  * URL: /api/review-images/:imageId
   * Body: none
 
 * Successful Response
