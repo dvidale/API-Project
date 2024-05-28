@@ -5,6 +5,5 @@ module.exports = {
   config: path.resolve('config', 'database.js'),
   'models-path': path.resolve('db', 'models'),
   'seeders-path': path.resolve('db', 'seeders'),
-  'migrations-path': path.resolve('db', 'migrations'),
-  'data-path':path.resolve('data','airbnb-clone-spot-descriptions.js')
+  'migrations-path': path.resolve('db', 'migrations')
 };
