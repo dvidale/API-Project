@@ -2,15 +2,16 @@
 
 const { Spot, User } = require('../models');
 
-const { faker } = require('@faker-js/faker');
-
 const {
   ownerNames,
   addresses,
   cities,
   states,
   countries,
+  lats,
+  lngs,
   spotNames,
+  prices,
   descriptions
 } = require('/Users/admin/Developer/aa-backend-portfolio-proj/backend/data/airbnb-clone-spots-generator.js')
 
@@ -48,15 +49,15 @@ module.exports = {
 
     const country = countries[i]
 
-    let lat = faker.location.latitude();
+    const lat = lats[i];
 
-let lng = faker.location.longitude();
+const lng = lngs[i];
 
 const name = spotNames[i];
 
 const description = descriptions[i]
 
-    let price = `${faker.finance.amount({min: 20, max:50, dec:0})}0`
+    let price = prices[i];
 
 const newSpot = await Spot.build({
   ownerId,

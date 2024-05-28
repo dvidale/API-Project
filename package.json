@@ -9,13 +9,9 @@
     "sequelize": "npm run --prefix backend sequelize",
     "sequelize-cli": "npm run --prefix backend sequelize-cli",
     "start": "npm start --prefix backend",
-    "build": "npm run --prefix backend build",
-    "faker":"npm install @faker-js/faker"
+    "build": "npm run --prefix backend build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
-  }
+  "license": "ISC"
 }
