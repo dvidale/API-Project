@@ -1,6 +1,6 @@
 'use strict';
 
-const { SpotImage } = require('../models')
+const { SpotImage, Spot } = require('../models')
 
 let options = {
 
@@ -23,7 +23,7 @@ module.exports = {
     */
 
 await SpotImage.create({
-  spotId: 1,
+  spotId: await Spot.findAll().then(array => array[0].id),
   url: "https://i0.wp.com/static.independent.co.uk/s3fs-public/styles/article_small/public/thumbnails/image/2016/06/27/03/jon-stark-targaryen.jpg",
   preview: true
 })
@@ -40,11 +40,7 @@ return;
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    let imageToDelete = await SpotImage.findByPk({
-      where:{
-        spotId: 1
-      }
-    });
+    let imageToDelete = await SpotImage.findAll().then(array => array[0]);
 
     await imageToDelete.destroy();
 

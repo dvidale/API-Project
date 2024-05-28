@@ -1,6 +1,6 @@
 'use strict';
 
-const { ReviewImage } = require('../models')
+const { ReviewImage, Review } = require('../models')
 
 let options = {
 
@@ -23,9 +23,11 @@ module.exports = {
      * }], {});
     */
 
-    await ReviewImage.create(
+   
+
+  await ReviewImage.create(
       {
-        reviewId: 1,
+        reviewId: await Review.findAll().then(value => value[0].id),
         url: "https://www.deandrevidale.com/wp-content/uploads/Woman-at-Jouvert-in-VR-exhibit-headset-scaled-e1697833475153.jpg"
       }
     )
@@ -41,11 +43,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    let imageToDelete = await ReviewImage.findByPk({
-      where:{
-        reviewId: 1
-      }
-    })
+    let imageToDelete = await ReviewImage.findAll().then(value => value[0])
 
     await imageToDelete.destroy();
     return;
