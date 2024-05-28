@@ -1,6 +1,12 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -13,7 +19,7 @@ module.exports = {
       name:'unique-spot-names',
       fields:['name'],
       type: 'unique'
-    })
+    }, options)
   },
 
   async down (queryInterface, Sequelize) {
