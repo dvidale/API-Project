@@ -16,9 +16,10 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.addConstraint('Spots',{
-      name:'unique-spot-names',
+      
       fields:['name'],
-      type: 'unique'
+      type: 'unique',
+      name:'unique-spot-names'
     }, options)
   },
 
