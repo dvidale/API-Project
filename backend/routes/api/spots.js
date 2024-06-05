@@ -107,7 +107,6 @@ router.get("/", pageify, async (req, res) => {
 
 
 //Get all spots owned by current user
- //requires auth: only current user should be able to access this route, otherwise throw authorization error
 
  router.get("/current", requireAuth, async(req,res)=>{
   
@@ -140,6 +139,7 @@ router.get("/", pageify, async (req, res) => {
         "createdAt",
         "updatedAt",
 
+        //Todo: figure out how to use this line and still return all results and not just one
         // for some reason these lines limits the query to 1 result
         // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
 
@@ -211,6 +211,9 @@ res.json({
 
 
 })
+
+//Creates and returns a new spot
+
 
 
 module.exports = router;
