@@ -1,6 +1,7 @@
 'use strict';
 const {
-  Model
+  Model,
+  ValidationError
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -49,10 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     country: {
       type: DataTypes.STRING(100),
-    allowNull: false,
-      validate:{
-        isAlpha: true
-      }
+    allowNull: false
   },
     lat: {
       type:DataTypes.DECIMAL,
