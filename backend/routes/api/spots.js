@@ -176,6 +176,7 @@ const spot = await Spot.findOne({
       attributes: ['id','firstName','lastName'],
     },
   ],
+  group: ['Spot.id'],
   attributes: [
       "id",
       "ownerId",
@@ -196,8 +197,8 @@ const spot = await Spot.findOne({
 
 
 });
-
-if(spot.id === null){
+console.log("spot", spot);
+if(spot === null || spot.id === null){
 res.status(404);
 res.json({
   "message": "Spot couldn't be found"
@@ -214,6 +215,19 @@ res.json({
 
 //Creates and returns a new spot
 
+router.post('/', requireAuth, async (req, res)=>{
 
+  //target the current user
+  const currentUser = await User.findByPk(req.user.id)
+  //create a spot associated with the current user
+
+  //retrieve the created spot from the db
+
+  //return the created spot to the client
+  //status code 201
+
+
+
+})
 
 module.exports = router;
