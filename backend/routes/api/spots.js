@@ -176,7 +176,7 @@ const spot = await Spot.findOne({
       attributes: ['id','firstName','lastName'],
     },
   ],
-  group: ['Spot.id', 'SpotImages.id', 'owner.id', 'Review.id'],
+  group: ['Spot.id', 'SpotImages.id', 'owner.id','Reviews.id'],
   attributes: [
       "id",
       "ownerId",
@@ -217,7 +217,9 @@ res.json({
 
 router.post('/', requireAuth, async (req, res)=>{
 
-   //pull in client-provided new spot data from req body
+
+
+  //pull in client-provided new spot data from req body
 
   let { 
     address, 
@@ -232,9 +234,9 @@ router.post('/', requireAuth, async (req, res)=>{
 
   //target the current user
   const currentUser = await User.findByPk(req.user.id)
-
+  
   //create a spot associated with the current user
-
+ 
     await currentUser.createSpot({
       address,
       city, 
@@ -246,6 +248,7 @@ router.post('/', requireAuth, async (req, res)=>{
       description, 
       price
     })
+ 
  
   //retrieve the created spot from the db
 const newSpotRecord = await Spot.findOne({
