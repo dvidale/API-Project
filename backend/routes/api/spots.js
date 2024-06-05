@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Op } = require("sequelize");
+const { Op, ValidationError } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { Spot, SpotImage, Review, User } = require("../../db/models");
-
-const { requireAuth } = require('../../utils/auth');
-
+const { check } = require("express-validator");
+const { handleValidationErrors } = require("../../utils/validation");
+const { requireAuth } = require("../../utils/auth");
 
 // Get all spots
 
@@ -40,7 +40,7 @@ const pageify = (req, res, next) => {
 
 router.get("/", pageify, async (req, res) => {
   let where = {};
- 
+
   //you get query params from request
   if (req.query) {
     const query = req.query;
@@ -77,107 +77,6 @@ router.get("/", pageify, async (req, res) => {
       },
     ],
     attributes: [
-        "id",
-        "ownerId",
-        "address",
-        "city",
-        "state",
-        "country",
-        "lat",
-        "lng",
-        "name",
-        "description",
-        "price",
-        "createdAt",
-        "updatedAt",
-
-        // for some reason these lines limits the query to 1 result
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-
-        // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
-        [Sequelize.col("SpotImages.url"), "previewImage"]
-      ]
-  });
-
-  
-
-  res.json(spots);
-});
-
-
-
-//Get all spots owned by current user
-
- router.get("/current", requireAuth, async(req,res)=>{
-  
-  const spots = await Spot.findAll({
-    where:{
-      ownerId: req.user.id
-    },
-    include: [
-      {
-        model: SpotImage,
-        attributes: [],
-      },
-      {
-        model: Review,
-        attributes: [],
-      },
-    ],
-    attributes: [
-        "id",
-        "ownerId",
-        "address",
-        "city",
-        "state",
-        "country",
-        "lat",
-        "lng",
-        "name",
-        "description",
-        "price",
-        "createdAt",
-        "updatedAt",
-
-        //Todo: figure out how to use this line and still return all results and not just one
-        // for some reason these lines limits the query to 1 result
-        // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-
-        // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
-        [Sequelize.col("SpotImages.url"), "previewImage"]
-      ]
-  })
-
-  res.json(spots);
-
-});
-
-// get spot details by id
-router.get("/:spotId", async (req, res)=>{
-
-const spot = await Spot.findOne({
-  where:{
-    id: req.params.spotId
-  },
-  include: [
-    {
-      model: SpotImage,
-      attributes: {
-        exclude:['spotId','createdAt', 'updatedAt']
-      },
-    },
-    {
-      model: Review,
-      attributes: [],
-    },
-    {
-      model: User,
-      as: 'owner',
-      attributes: ['id','firstName','lastName'],
-    },
-  ],
-  group: ['Spot.id', 'SpotImages.id', 'owner.id','Reviews.id'],
-  attributes: [
       "id",
       "ownerId",
       "address",
@@ -191,78 +90,193 @@ const spot = await Spot.findOne({
       "price",
       "createdAt",
       "updatedAt",
-      [Sequelize.fn('COUNT', Sequelize.col('Reviews.id')), 'numReviews'],
-      [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgStarRating']
-    ]
 
+      // for some reason these lines limits the query to 1 result
+      // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
 
+      // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
+      [Sequelize.col("SpotImages.url"), "previewImage"],
+    ],
+  });
+
+  res.json(spots);
 });
-console.log("spot", spot);
-if(spot === null || spot.id === null){
-res.status(404);
-res.json({
-  "message": "Spot couldn't be found"
+
+//Get all spots owned by current user
+
+router.get("/current", requireAuth, async (req, res) => {
+  const spots = await Spot.findAll({
+    where: {
+      ownerId: req.user.id,
+    },
+    include: [
+      {
+        model: SpotImage,
+        attributes: [],
+      },
+      {
+        model: Review,
+        attributes: [],
+      },
+    ],
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+
+      //Todo: figure out how to use this line and still return all results and not just one
+      // for some reason these lines limits the query to 1 result
+      // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
+
+      // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
+      [Sequelize.col("SpotImages.url"), "previewImage"],
+    ],
+  });
+
+  res.json(spots);
 });
-}
+
+// get spot details by id
+router.get("/:spotId", async (req, res) => {
+  const spot = await Spot.findOne({
+    where: {
+      id: req.params.spotId,
+    },
+    include: [
+      {
+        model: SpotImage,
+        attributes: {
+          exclude: ["spotId", "createdAt", "updatedAt"],
+        },
+      },
+      {
+        model: Review,
+        attributes: [],
+      },
+      {
+        model: User,
+        as: "owner",
+        attributes: ["id", "firstName", "lastName"],
+      },
+    ],
+    group: ["Spot.id", "SpotImages.id", "owner.id", "Reviews.id"],
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numReviews"],
+      [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgStarRating"],
+    ],
+  });
+
+  if (spot === null || spot.id === null) {
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found",
+    });
+  }
 
   res.json(spot);
+});
 
+//Creates and returns a new spot only after submitted data is validated
 
+const validateSpot = [
+  check("address")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Street address is required"),
+  check("city")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("City is required"),
+  check("state")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("State is required"),
+  check("country")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Country is required"),
+    check("lat")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(value => value > -90 && value < 90)
+    .withMessage("Latitude must be within -90 and 90"),
+    check("lng")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(value => value > -180 && value < 180)
+    .withMessage("Longitude must be within -180 and 180"),
+    check("name")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isLength({max: 50})
+    .withMessage("Name must be less than 50 characters"),
+    check("description")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Description is required"),
+    check("price")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom(value => value > 0)
+    .withMessage("Price per day must be a positive number"),
+  handleValidationErrors,
+];
 
-
-
-})
-
-//Creates and returns a new spot
-
-router.post('/', requireAuth, async (req, res)=>{
-
-
-
+router.post("/", [requireAuth, validateSpot], async (req, res) => {
   //pull in client-provided new spot data from req body
 
-  let { 
-    address, 
-    city, 
-    state, 
-    country, 
-    lat, 
-    lng, 
-    name, 
-    description, 
-    price } = req.body;
+  let { address, city, state, country, lat, lng, name, description, price } =
+    req.body;
 
-  //target the current user
-  const currentUser = await User.findByPk(req.user.id)
-  
   //create a spot associated with the current user
- 
-    await currentUser.createSpot({
-      address,
-      city, 
-      state, 
-      country, 
-      lat, 
-      lng, 
-      name, 
-      description, 
-      price
-    })
- 
- 
+
+  const newSpot = await Spot.create({
+    ownerId: req.user.id,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+  });
+
   //retrieve the created spot from the db
-const newSpotRecord = await Spot.findOne({
-  where:{
-    name
-  }
-})
-console.log("*** newSpot created -- ", newSpotRecord);
+  const newSpotCheck = await Spot.findOne({
+    where: {
+      name,
+    },
+  });
+
   //return the created spot to the client
   //status code 201
-  res.status(201)
-  res.json(newSpotRecord)
-
-
-})
+  res.status(201);
+  res.json(newSpotCheck);
+});
 
 module.exports = router;
