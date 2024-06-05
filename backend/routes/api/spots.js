@@ -147,6 +147,7 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 // get spot details by id
+// Todo: figure out why numReviews reports 1 review when there are more  (probably because we grouped by Reviews.id)
 router.get("/:spotId", async (req, res) => {
   const spot = await Spot.findOne({
     where: {
