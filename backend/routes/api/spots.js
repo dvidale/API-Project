@@ -201,6 +201,7 @@ router.get("/:spotId", async (req, res) => {
 });
 
 //Creates and returns a new spot only after submitted data is validated
+//Todo: In production, the unique constraint on the names is not catching the duplicates
 
 const validateSpot = [
   check("address")
@@ -446,6 +447,8 @@ res.json(updatedSpot)
 
 
 //DELETE A SPOT
+//Todo: There seems to be a bug around deleting spots that have an image associated with them. In production, the error says it's related to the foreign key contraints
+
 
 router.delete('/:spotId', requireAuth, async (req, res)=>{
 
