@@ -147,6 +147,7 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 // get spot details by id
+// Todo: figure out why numReviews reports 1 review when there are more  (probably because we grouped by Reviews.id)
 router.get("/:spotId", async (req, res) => {
   const spot = await Spot.findOne({
     where: {
@@ -278,5 +279,237 @@ router.post("/", [requireAuth, validateSpot], async (req, res) => {
   res.status(201);
   res.json(newSpotCheck);
 });
+
+
+//Create and return a new image for a spot specified by id.
+
+router.post('/:spotId/images', requireAuth, async (req, res) => {
+
+//check if the spot specified exists
+
+const spotCheck = await Spot.findByPk(req.params.spotId)
+
+if(spotCheck === null){
+  res.status(404);
+  res.json({
+    message: "Spot couldn't be found"
+
+  })
+}
+
+//get the current userId
+const userId = req.user.id
+//Todo: refactor the creation of the spotId array to at least a .then chain
+
+//get the current user's spots
+const userSpots = await Spot.findAll({
+   where:{
+    ownerId: userId
+  }
+});
+
+let spotIdArray = []
+
+for(let ids of userSpots){
+  spotIdArray.push(ids.id)
+}
+
+//check if the spot specified is one of the current user's spots
+
+if(spotIdArray.includes(+req.params.spotId) === false){
+  //return an error
+res.status(403);
+res.json({
+  message: "The spot with the given id does not belong to the current user. Only the spot owner can add images to the spot."})
+
+}
+else{
+// take in post req data for a new image url
+
+let { url, preview } = req.body;
+
+//create a SpotImage with req data, spotId, and userId
+
+await SpotImage.create({
+
+spotId: req.params.spotId,
+url,
+preview,
+})
+
+//check the database for the newly created record
+const newestSpotImage = await SpotImage.findAll({
+  attributes:{
+     exclude:['spotId','createdAt','updatedAt']
+  },
+  order:[
+    ['id', 'DESC']
+  ],
+  limit: 1
+  
+})
+
+res.json(newestSpotImage)
+
+}
+
+} )
+
+//edit a spot
+
+router.put('/:spotId', [requireAuth, validateSpot], async (req, res)=>{
+
+//pull up the spot by the provided id
+const spotCheck = await Spot.findByPk(req.params.spotId);
+
+//check if the spot exists
+if(spotCheck === null){
+  res.status(404);
+  res.json({
+    message: "Spot couldn't be found"
+  })
+}
+
+
+//pull in the current user's id
+const user = await User.findByPk(req.user.id);
+
+// make an array of the ids of the spots owned by the current user
+
+const userId = req.user.id;
+
+const userSpots = await Spot.findAll({
+  where:{
+   ownerId: userId
+ }
+});
+
+let spotIdArray = []
+
+for(let ids of userSpots){
+ spotIdArray.push(ids.id)
+}
+
+//check if the spot specified is one of the current user's spots
+
+if(spotIdArray.includes(+req.params.spotId) === false){
+ //return an error
+res.status(403);
+res.json({
+ message: "The spot with the given id does not belong to the current user. Only the spot owner can update the spot."})
+
+}
+else{
+//pull up the spot to be updated by the id provided
+
+let spot = await Spot.findByPk(+req.params.spotId)
+
+
+//deconstruct the data from the put submission
+
+let {
+  address,
+  city,
+  state,
+  country,
+  lat,
+  lng,
+  name,
+  description,
+  price
+} = req.body; 
+
+
+spot.set({
+  address,
+  city,
+  state,
+  country,
+  lat,
+  lng,
+  name,
+  description,
+  price
+});
+
+await spot.save();
+
+let updatedSpot = await Spot.findByPk(+req.params.spotId)
+
+res.json(updatedSpot)
+}
+
+
+
+
+})
+
+
+//DELETE A SPOT
+
+router.delete('/:spotId', requireAuth, async (req, res)=>{
+
+  // pull up the spot record by the id
+
+  const spotCheck = await Spot.findByPk(+req.params.spotId)
+
+  //make sure the spot exists
+
+  if(spotCheck === null){
+    res.status(404);
+    res.json({
+      message: "Spot couldn't be found"
+    })
+  }
+  
+
+//pull in the current user's id
+const user = await User.findByPk(+req.user.id);
+
+// make an array of the ids of the spots owned by the current user
+
+const userId = req.user.id;
+
+const userSpots = await Spot.findAll({
+  where:{
+   ownerId: userId
+ }
+});
+
+let spotIdArray = []
+
+for(let ids of userSpots){
+ spotIdArray.push(ids.id)
+}
+
+//check if the spot specified is one of the current user's spots
+
+if(spotIdArray.includes(+req.params.spotId) === false){
+ //return an error
+res.status(403);
+res.json({
+ message: "The spot with the given id does not belong to the current user. Only the spot owner can delete the spot."})
+
+}
+else{
+//pull up the spot to be deleted by the id provided
+
+let spot = await Spot.findByPk(+req.params.spotId)
+
+await spot.destroy()
+res.json( {
+  message: "Successfully deleted"
+})
+
+}
+
+
+})
+
+
+
+
+
+
 
 module.exports = router;
