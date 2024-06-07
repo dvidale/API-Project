@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Op, ValidationError } = require("sequelize");
 const { Sequelize } = require("sequelize");
-const { Spot, SpotImage, Review, User , ReviewImage} = require("../../db/models");
+const { Spot, SpotImage, Review, User, ReviewImage, Booking} = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
@@ -252,6 +252,24 @@ router.post("/", [requireAuth, validateSpot], async (req, res) => {
 
   let { address, city, state, country, lat, lng, name, description, price } =
     req.body;
+
+
+    //make sure the name is unique
+
+    const nameCheck = await Spot.findOne({
+      where:{
+        name
+      }
+    })
+
+    if(nameCheck){
+      res.status(400);
+      res.json({
+        message: "Name must be unique"
+      })
+      throw new ValidationError
+
+    }
 
   //create a spot associated with the current user
 
@@ -626,9 +644,86 @@ if(reviewCheck !== null){
 
 }
 
-
 })
 
 
+
+
+/* ---------------------------------------------------
+* * Get all Bookings for a Spot based on the Spot's id
+----------------------------------------------------- */
+
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+
+  const userId = +req.user.id;
+
+const spotId = +req.params.spotId
+
+  //pull up the spot by the provided id
+const spotCheck = await Spot.findByPk(spotId);
+
+//check if the spot exists
+if(spotCheck === null){
+  res.status(404);
+  res.json({
+    message: "Spot couldn't be found"
+  })
+}
+
+
+
+//condition results on if the current user is or is NOT the owner of the spot
+
+const ownerCheck = await Spot.findOne({
+  where:{
+    id: +req.params.spotId,
+    ownerId: +req.user.id
+
+  } 
+})
+
+//if null, current user is not owner. do this:
+if(ownerCheck === null){
+
+  const Bookings = await Booking.findAll({
+    where:{
+      spotId 
+    },
+    attributes: [
+      'spotId', 'startDate','endDate'
+    ]
+  })
+
+
+  res.json({
+    Bookings
+  })
+
+
+}else{
+//if not null, current user is owner, do this:
+// return the details for the user that booked with the booking
+//Todo: User data is displaying below the Booking data. Figure out how to get the User data to show above the Booking data
+const Bookings = await Booking.findAll({
+  include:{
+    model:User,
+    attributes:[
+      'id','firstName','lastName'
+    ]
+  },
+  where:{
+    spotId 
+  }
+})
+
+res.json(
+  Bookings
+)
+
+}
+
+
+
+})
 
 module.exports = router;
