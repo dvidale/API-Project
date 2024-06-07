@@ -7,6 +7,28 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
+
+const spotExists = async(req, res, next)=>{
+
+  const spotId = +req.params.spotId
+
+  //pull up the spot by the provided id
+const spotCheck = await Spot.findByPk(spotId);
+
+//check if the spot exists
+if(spotCheck === null){
+  res.status(404);
+  res.json({
+    message: "Spot couldn't be found"
+  })
+}else{
+  next()
+}
+
+
+}
+
+
 // Get all spots
 
 const pageify = (req, res, next) => {
@@ -725,5 +747,110 @@ res.json(
 
 
 })
+
+
+
+/* ---------------------------------------------------
+* * Create a Booking from a Spot based on the Spot's id
+----------------------------------------------------- */
+
+// const printDates = (req, _res, next)=>{
+
+// let { startDate, endDate } = req.body;
+
+//   console.log(">>>>>>>> startDate", startDate, req.body.startDate, "endDate", endDate);
+// next()
+// }
+
+
+const validateBooking = [
+  check("startDate")
+    .custom(value =>{
+//Todo: This start date object doesn't use the exact time with the date, so same day booking attempts are being rejected. Figure out how to add to the time so it defaults to start no earlier than 4PM 
+      let start = new Date(value)
+    let today = new Date();
+    return (start - today) > 0
+    })
+    .withMessage("startDate cannot be in the past"),
+    check("endDate")
+    .custom((value, {req}) =>{
+      let startDate = req.body.startDate
+      let end = new Date(value);
+      let bookingStart = new Date(startDate);
+    return (end - bookingStart) > 0
+    })
+    .withMessage("endDate cannot be on or before startDate"),
+    handleValidationErrors];
+
+
+
+router.post('/:spotId/bookings', [requireAuth, spotExists, validateBooking], async (req, res)=>{
+
+  const spotId = +req.params.spotId
+const userId = +req.user.id;
+//check if the spot belongs to current user
+
+
+const ownerCheck = await Spot.findOne({
+  where:{
+    id: spotId,
+    ownerId: userId
+  }
+})
+
+if (ownerCheck){
+  res.status(403);
+  res.json({
+    message: "The current user is the owner of this spot. The owner cannot create a booking for a spot they own."
+  })
+}else{
+
+  let { startDate, endDate } = req.body;
+
+//*check for booking conflict
+// create a set filled with objects that have the start and end date as key value pairs. 
+// iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
+
+
+//OR
+
+//create a Set of strings for every date that falls between the start and end date of every booking, inclusively, by putting the dates into a loop and iterating until all the dates are generated and added to the Set
+//check the proposed start date against the Set with the Set method .has, then the end date
+
+
+await Booking.create({
+  spotId,
+  userId,
+startDate,
+endDate
+})
+
+//add the booking start and end dates to the Set
+
+
+
+
+
+// return newly created booking
+
+const newBooking = await Booking.findAll({
+  where:{
+    spotId,
+    userId
+  },
+  order:[['id', 'DESC']],
+  limit:1
+})
+
+
+res.status(200);
+res.json(newBooking);
+
+}
+
+
+})
+
+
 
 module.exports = router;
