@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Op, ValidationError } = require("sequelize");
 const { Sequelize } = require("sequelize");
-const { Spot, SpotImage, Review, User } = require("../../db/models");
+const { Spot, SpotImage, Review, User , ReviewImage} = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
@@ -201,6 +201,7 @@ router.get("/:spotId", async (req, res) => {
 });
 
 //Creates and returns a new spot only after submitted data is validated
+//Todo: In production, the unique constraint on the names is not catching the duplicates
 
 const validateSpot = [
   check("address")
@@ -446,6 +447,8 @@ res.json(updatedSpot)
 
 
 //DELETE A SPOT
+//Todo: There seems to be a bug around deleting spots that have an image associated with them. In production, the error says it's related to the foreign key contraints
+
 
 router.delete('/:spotId', requireAuth, async (req, res)=>{
 
@@ -507,8 +510,124 @@ res.json( {
 })
 
 
+/* -------------------------------
+* * Get all Reviews by a Spot's id
+---------------------------------- */
+
+router.get('/:spotId/reviews', async(req,res)=>{
+
+  //pull the spotId
+  //Todo: Consider making spot check a separate middleware
+  const spotId = +req.params.spotId;
+  
+  const spotCheck = await Spot.findByPk(spotId)
+  
+  if(spotCheck === null){
+      res.status(404)
+      res.json( {
+          message: "Spot couldn't be found"
+        })
+  }
+  
+  //get all the reviews around that id
+  
+  const Reviews = await Review.findAll({
+      where:{
+          spotId
+      },
+      include:[
+        {
+          model: User,
+          attributes:['id','firstName','lastName']
+        },
+      {
+          model: ReviewImage
+      }    
+      ]
+  })
+  
+  const spotReviews = {Reviews}
+  
+  res.json(spotReviews)
+  
+  
+  })
+  
 
 
+/* ---------------------------------------------------
+* * Create a Review for a Spot based on the Spot's id
+----------------------------------------------------- */
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .withMessage("Review text is required"),
+    check("stars")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .isNumeric()
+    .custom(value => value > 0 && value < 6)
+    .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors];
+
+
+
+router.post('/:spotId/reviews', [requireAuth, validateReview], async(req, res)=>{
+//pull the spotId
+  //Todo: Consider making spot check a separate middleware
+  const spotId = +req.params.spotId;
+  console.log("----- spotId ----  ",spotId );
+  const spotCheck = await Spot.findByPk(spotId)
+  
+  if(spotCheck === null){
+      res.status(404)
+      res.json( {
+          message: "Spot couldn't be found"
+        })
+  }
+
+// pull review data from post req body
+
+let { review, stars } = req.body;
+
+//check if a review for the specified spot already exists from the current user 
+
+const userId = +req.user.id;
+
+const reviewCheck = await Review.findOne({
+  where:{
+    userId,
+    spotId
+  }
+})
+
+if(reviewCheck !== null){
+  res.status(403)
+  res.json({
+    "message": "User already has a review for this spot"
+  })
+}else{
+  await Review.create({
+    userId,
+    spotId,
+    review,
+    stars
+  })
+  
+  let newReview = await Review.findAll({
+    order:[['id', 'DESC']],
+    limit:1
+  })
+  
+  res.status(201)
+  res.json(newReview)
+
+
+}
+
+
+})
 
 
 
