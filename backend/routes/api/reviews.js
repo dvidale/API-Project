@@ -12,7 +12,49 @@ const {
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
-const review = require("../../db/models/review");
+// const review = require("../../db/models/review");
+
+
+
+const reviewExists = async (req, res, next)=>{
+
+  //pull the review Id
+  const reviewId = +req.params.reviewId;
+  
+  //make sure the review exists
+  const reviewCheck = await Review.findOne({
+      where:{
+        id: reviewId
+      }
+    });
+  
+  if(reviewCheck === null){
+      res.status(404);
+      res.json({
+          message: "Review couldn't be found"
+        })
+  }
+  
+  return next()
+  
+  }
+  
+
+  const validateReview = [
+    check("review")
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .withMessage("Review text is required"),
+      check("stars")
+      .exists({ checkFalsy: true })
+      .notEmpty()
+      .isNumeric()
+      .custom(value => value > 0 && value < 6)
+      .withMessage("Stars must be an integer from 1 to 5"),
+      handleValidationErrors];
+
+
+
 
 /* ------------------------------------
 * * GET all Reviews of the Current User
@@ -67,54 +109,16 @@ router.get("/current", requireAuth, async (req, res) => {
 *   Add an Image to a Review based on the Review's id
 ----------------------------------------------------- */
 
-const reviewExists = async (req, res)=>{
-
-//pull the review Id
-const reviewId = +req.params.reviewId;
-
-//make sure the review exists
-const reviewCheck = await Review.findOne({
-    where:{
-      id: reviewId
-    }
-  });
-
-if(reviewCheck === null){
-    res.status(404);
-    res.json({
-        message: "Review couldn't be found"
-      })
-}
-
-
-}
-
 
 router.post('/:reviewId/images', [requireAuth, reviewExists], async(req,res)=>{
-// //pull the review Id
-
-// const reviewId = +req.params.reviewId;
-
-// //make sure the review exists
-
-
-// const reviewCheck = await Review.findOne({
-//     where:{
-//       id: reviewId
-//     }
-//   });
-
-// if(reviewCheck === null){
-//     res.status(404);
-//     res.json({
-//         message: "Review couldn't be found"
-//       })
-// }
+  
 
 // make sure the current user owns the review
 
 const userId = +req.user.id
 // if we find a review, that's the one to add the image to. if we don't, the review with that id doesn't belong to the user
+
+const reviewId = +req.params.reviewId;
 
 let userReview = await Review.findOne({
 where:{
@@ -155,8 +159,6 @@ res.json({
     "message": "Maximum number of images for this resource was reached"
   })
 
-
-
 }
 
 // create an image record and associate it with the review
@@ -185,7 +187,47 @@ res.json(newReviewImage)
 ----------------------------------------------------- */
 
 
-router.put('/:reviewId')
+
+router.put('/:reviewId', [requireAuth, reviewExists, validateReview], async (req, res)=>{
+
+  // make sure the current user owns the review
+
+const userId = +req.user.id
+
+// if we find a review owned by this user, we can edit it. if we don't, the review with that id doesn't belong to the user
+
+const reviewId = +req.params.reviewId;
+
+let userReview = await Review.findOne({
+where:{
+    id: reviewId,
+    userId
+
+}
+
+});
+
+if(userReview === null){
+    res.status(403);
+    res.json({
+        message: "The current user does not own this review. Only the owner can edit the review."
+      })
+}
+
+let {review, stars} = req.body;
+
+await userReview.set({
+review,
+stars
+})
+
+await userReview.save();
+
+let updatedReview = await Review.findByPk(reviewId)
+
+res.json(updatedReview)
+
+})
 
 
 
@@ -195,5 +237,44 @@ router.put('/:reviewId')
 /* ---------------------------------------------------
 * * Delete a Review
 ----------------------------------------------------- */
+
+router.delete('/:reviewId',[requireAuth, reviewExists], async(req,res)=>{
+
+
+  // make sure the current user owns the review
+
+  const userId = +req.user.id
+
+  // if we find a review owned by this user, we can edit it. if we don't, the review with that id doesn't belong to the user
+  
+  const reviewId = +req.params.reviewId;
+  
+  let userReview = await Review.findOne({
+  where:{
+      id: reviewId,
+      userId
+  
+  }
+  
+  });
+  
+  if(userReview === null){
+      res.status(403);
+      res.json({
+          message: "The current user does not own this review. Only the owner can edit the review."
+        })
+  }
+
+
+await userReview.destroy()
+
+res.json( {
+  "message": "Successfully deleted"
+})
+
+})
+
+
+
 
 module.exports = router;
