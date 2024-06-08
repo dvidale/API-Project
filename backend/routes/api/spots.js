@@ -789,7 +789,7 @@ router.post('/:spotId/bookings', [requireAuth, spotExists, validateBooking], asy
   const spotId = +req.params.spotId
 const userId = +req.user.id;
 //check if the spot belongs to current user
-
+let alreadyBooked = new Set()
 
 const ownerCheck = await Spot.findOne({
   where:{
@@ -808,15 +808,36 @@ if (ownerCheck){
   let { startDate, endDate } = req.body;
 
 //*check for booking conflict
-// create a set filled with objects that have the start and end date as key value pairs. 
+// create a set filled with objects that have the spotId, start and end date as key value pairs. 
 // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
 
+const futureBookings = await Booking.findAll({
+  where:{
+    spotId,
+    startDate: {
+      [Op.gt]: new Date()
+    }  
+  }
+})
 
-//OR
 
-//create a Set of strings for every date that falls between the start and end date of every booking, inclusively, by putting the dates into a loop and iterating until all the dates are generated and added to the Set
-//check the proposed start date against the Set with the Set method .has, then the end date
 
+for(let i = 0; i < futureBookings.length; i++){
+
+let requestedStartDate = new Date(startDate)
+let requestedEndDate = new Date(endDate)
+
+if((requestedStartDate >= futureBookings[i].startDate && requestedStartDate <= futureBookings[i].endDate) || 
+(requestedEndDate >= futureBookings[i].startDate && requestedEndDate <= futureBookings[i].endDate))
+{
+
+  res.status(403);
+  return res.json({
+    message:"Sorry, this spot is already booked for the specified dates"
+  })
+
+}
+}
 
 await Booking.create({
   spotId,
