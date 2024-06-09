@@ -617,7 +617,7 @@ router.post('/:spotId/reviews', [requireAuth, validateReview], async(req, res)=>
 //pull the spotId
   //Todo: Consider making spot check a separate middleware
   const spotId = +req.params.spotId;
-  console.log("----- spotId ----  ",spotId );
+ 
   const spotCheck = await Spot.findByPk(spotId)
   
   if(spotCheck === null){
@@ -725,8 +725,8 @@ if(ownerCheck === null){
 }else{
 //if not null, current user is owner, do this:
 // return the details for the user that booked with the booking
-//Todo: User data is displaying below the Booking data. Figure out how to get the User data to show above the Booking data
-const Bookings = await Booking.findAll({
+
+const bookings = await Booking.findAll({
   include:{
     model:User,
     attributes:[
@@ -738,8 +738,43 @@ const Bookings = await Booking.findAll({
   }
 })
 
+let Bookings = [];
+
+
+
+bookings.map( booking =>{
+
+let User = booking.User;
+let id = booking.id;
+let spotId = booking.spotId;
+let userId = booking.userId;
+let startDate = booking.startDate;
+let endDate = booking.endDate;
+let createdAt = booking.createdAt;
+let updatedAt = booking.updatedAt;
+
+
+
+
+Bookings.push({ 
+  User,
+  id,
+  spotId,
+  userId,
+  startDate,
+  endDate,
+  createdAt,
+  updatedAt
+})
+
+
+})
+
+
+console.log("Bookings", Bookings);
+
 res.json(
-  Bookings
+  {Bookings}
 )
 
 }
@@ -765,18 +800,19 @@ res.json(
 
 const validateBooking = [
   check("startDate")
-    .custom(value =>{
-//Todo: This start date object doesn't use the exact time with the date, so same day booking attempts are being rejected. Figure out how to add to the time so it defaults to start no earlier than 4PM 
-      let start = new Date(value)
+  .custom((value) => {
+    let start = new Date(`${value}T09:00:00`);
     let today = new Date();
-    return (start - today) > 0
-    })
+    const todayWithCheckoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 4, 0, 0, 0);
+
+    return start - todayWithCheckoutTime > 0;
+  })
     .withMessage("startDate cannot be in the past"),
     check("endDate")
     .custom((value, {req}) =>{
       let startDate = req.body.startDate
-      let end = new Date(value);
-      let bookingStart = new Date(startDate);
+      let end = new Date(`${value}T04:00:00`);
+      let bookingStart = new Date(`${startDate}T09:00:00`);
     return (end - bookingStart) > 0
     })
     .withMessage("endDate cannot be on or before startDate"),
@@ -808,7 +844,7 @@ if (ownerCheck){
   let { startDate, endDate } = req.body;
 
 //*check for booking conflict
-// create a set filled with objects that have the spotId, start and end date as key value pairs. 
+
 // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
 
 const futureBookings = await Booking.findAll({
@@ -821,35 +857,46 @@ const futureBookings = await Booking.findAll({
 })
 
 
+let errorObj = {}
+let startDateWithTime = new Date(`${startDate}T09:00:00`)
+let endDateWithTime = new Date(`${endDate}T04:00:00`)
+
 
 for(let i = 0; i < futureBookings.length; i++){
 
-let requestedStartDate = new Date(startDate)
-let requestedEndDate = new Date(endDate)
-
-if((requestedStartDate >= futureBookings[i].startDate && requestedStartDate <= futureBookings[i].endDate) || 
-(requestedEndDate >= futureBookings[i].startDate && requestedEndDate <= futureBookings[i].endDate))
-{
-
-  res.status(403);
-  return res.json({
-    message:"Sorry, this spot is already booked for the specified dates"
-  })
+if((startDateWithTime >= futureBookings[i].startDate && startDateWithTime <= futureBookings[i].endDate) ){
+  errorObj.startDate = "Start date conflicts with an existing booking"
+  break;
+}
 
 }
+
+for(let i=0; i <futureBookings.length; i++){
+
+  if((endDateWithTime >= futureBookings[i].startDate && endDateWithTime <= futureBookings[i].endDate))
+    {
+    errorObj.endDate = "End date conflicts with an existing booking";
+    break;
+    }
+
 }
+
+  
+  if(Object.keys(errorObj).length > 0){
+    res.status(403);
+    return res.json({
+      message:"Sorry, this spot is already booked for the specified dates",
+      errors: errorObj  })
+  }
+    
+  
 
 await Booking.create({
   spotId,
   userId,
-startDate,
-endDate
+  startDate: startDateWithTime,
+  endDate: endDateWithTime
 })
-
-//add the booking start and end dates to the Set
-
-
-
 
 
 // return newly created booking
