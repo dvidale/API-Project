@@ -195,12 +195,70 @@ router.put(
 
 router.delete('/:bookingId',[requireAuth,bookingExists], async(req,res)=>{
 
+  const bookingId = +req.params.bookingId;
+  const userId = +req.user.id;
+
+//bookings that have been started can't be deleted
+
+const bookingStartDate = await Booking.findByPk(bookingId).then(result => result.startDate);
+
+const bookingEndDate = await Booking.findByPk(bookingId).then(result => result.endDate);
+
+const today = new Date()
+
+
+
+
+if(bookingStartDate < today && today < bookingEndDate){
+
+res.status(403);
+return res.json({
+   message: "Bookings that have been started can't be deleted"
+})
+
+
+}
+
+
+
     //Authorization: booking must belong to current user or spot must belong to current user
+
+    //find booking that belongs to user
+const bookingUser = await Booking.findOne({
+  where:{
+    id: bookingId,
+    userId
+  }
+})
+
+//see if spot booked belongs to user
+
+const bookingSpotOwner = await Booking.findOne({
+  where:{
+    id: bookingId
+  },
+  include:{
+    model: Spot,
+    where:{
+      ownerId: userId
+    }
+  }
+})
 
 //Error: Bookings that have been started can't be deleted
 
+if(bookingUser !== null || bookingSpotOwner !== null){
 
+  const booking = await Booking.findByPk(bookingId)
 //successful deletion
+await booking.destroy();
+
+res.json( {
+  "message": "Successfully deleted"
+})
+
+
+}
 
 
 

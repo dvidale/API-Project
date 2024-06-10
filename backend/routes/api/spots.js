@@ -767,11 +767,7 @@ Bookings.push({
   updatedAt
 })
 
-
 })
-
-
-console.log("Bookings", Bookings);
 
 res.json(
   {Bookings}
