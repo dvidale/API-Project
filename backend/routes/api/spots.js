@@ -28,10 +28,12 @@ if(spotCheck === null){
 
 }
 
+/* ----------------------------------------------
+   * Get all spots
+----------------------------------------------- */
 
-// Get all spots
 
-const pageify = (req, res, next) => {
+const pageify = (req, _res, next) => {
   let { page, size } = req.query;
 
   if (!page) page = 1;
@@ -55,8 +57,8 @@ const pageify = (req, res, next) => {
     req.offset = size * (page - 1);
   }
 
-  //  console.log("page", page, "size", size);
-  //  console.log("limit and offset before route ---", req.limit, req.offset);
+   console.log(">>>>>>> page", page, "size", size);
+   console.log(">>>>>>>> limit and offset before route ---", req.limit, req.offset);
   next();
 };
 
@@ -79,25 +81,16 @@ router.get("/", pageify, async (req, res) => {
     // if it has a size, it doesn't have to have a page, but it probably will
   }
 
-  // if(req.limit){
-  //     pagination.limit = req.limit;
-  // }
-  // if(req.offset){
-  //     pagination.offset = req.offset;
-  // }
-
-  let spots = await Spot.findAll({
+  const pagination = {};
+  if(req.limit){
+      pagination.limit = req.limit;
+  }
+  if(req.offset){
+      pagination.offset = req.offset;
+  }
+  console.log("   >>>>>>> pagination", pagination);
+  const spots = await Spot.findAll({
     where,
-    include: [
-      {
-        model: SpotImage,
-        attributes: [],
-      },
-      {
-        model: Review,
-        attributes: [],
-      },
-    ],
     attributes: [
       "id",
       "ownerId",
@@ -112,19 +105,36 @@ router.get("/", pageify, async (req, res) => {
       "price",
       "createdAt",
       "updatedAt",
-
-      // for some reason these lines limits the query to 1 result
-      // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-
-      // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
+      [Sequelize.fn('avg', Sequelize.col('Reviews.stars')), 'avgRating'],
       [Sequelize.col("SpotImages.url"), "previewImage"],
     ],
+    include: [
+      {
+        model: SpotImage,
+        attributes: [],
+      },
+      {
+        model: Review,
+        attributes: [],
+      }
+    ],
+    group:['Reviews.spotId']
+
+,...pagination
+,subQuery:false
   });
 
-  res.json(spots);
+  res.json({
+    Spots:spots,
+    page: +req.query.page,
+    size: +req.query.size
+  });
 });
 
-//Get all spots owned by current user
+
+/* -------------------------------------
+ * Get all spots owned by current user
+---------------------------------------- */
 
 router.get("/current", requireAuth, async (req, res) => {
   const spots = await Spot.findAll({
