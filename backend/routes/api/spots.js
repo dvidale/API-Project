@@ -28,16 +28,13 @@ if(spotCheck === null){
 
 }
 
-/* ----------------------------------------------
-   * Get all spots
------------------------------------------------ */
 
 
 const pageify = (req, _res, next) => {
   let { page, size } = req.query;
 
-  if (!page) page = 1;
-  if (!size) size = 20;
+  if (!page || Number.isNaN(+page)) page = 1;
+  if (!size || Number.isNaN(+size)) size = 20;
 
   if (+page < 1) {
     page = 1;
@@ -53,14 +50,20 @@ const pageify = (req, _res, next) => {
   }
 
   if (+page > 0 && +page <= 10 && +size > 0 && +size <= 20) {
+    req.page = page;
     req.limit = size;
     req.offset = size * (page - 1);
   }
 
-   console.log(">>>>>>> page", page, "size", size);
-   console.log(">>>>>>>> limit and offset before route ---", req.limit, req.offset);
+  //  console.log(">>>>>>> page", page, "size", size);
+  //  console.log(">>>>>>>> limit and offset before route ---", req.limit, req.offset);
   next();
 };
+
+/* ----------------------------------------------
+   * Get all spots
+----------------------------------------------- */
+
 
 router.get("/", pageify, async (req, res) => {
   let where = {};
@@ -76,11 +79,10 @@ router.get("/", pageify, async (req, res) => {
       where.name = { [Op.like]: `%${query.name}%` };
     }
 
-    // request includes page and size
-    //if it has a page spec, it doesn't have to have a size, but it probably will
-    // if it has a size, it doesn't have to have a page, but it probably will
+    
   }
 
+// page and size from pageify
   const pagination = {};
   if(req.limit){
       pagination.limit = req.limit;
@@ -88,7 +90,7 @@ router.get("/", pageify, async (req, res) => {
   if(req.offset){
       pagination.offset = req.offset;
   }
-  console.log("   >>>>>>> pagination", pagination);
+  // console.log("   >>>>>>> pagination", pagination);
   const spots = await Spot.findAll({
     where,
     attributes: [
@@ -126,8 +128,8 @@ router.get("/", pageify, async (req, res) => {
 
   res.json({
     Spots:spots,
-    page: +req.query.page,
-    size: +req.query.size
+    page: +req.page,
+    size: +req.limit
   });
 });
 
