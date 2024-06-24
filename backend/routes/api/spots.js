@@ -120,7 +120,7 @@ router.get("/", pageify, async (req, res) => {
         attributes: [],
       }
     ],
-    group:['Reviews.spotId', 'Spot.id','SpotImage.url']
+    group:['Reviews.spotId', 'Spot.id','SpotImages.url']
 
 ,...pagination
 ,subQuery:false
