@@ -29,13 +29,12 @@ if(spotCheck === null){
 }
 
 
-// Get all spots
 
-const pageify = (req, res, next) => {
+const pageify = (req, _res, next) => {
   let { page, size } = req.query;
 
-  if (!page) page = 1;
-  if (!size) size = 20;
+  if (!page || Number.isNaN(+page)) page = 1;
+  if (!size || Number.isNaN(+size)) size = 20;
 
   if (+page < 1) {
     page = 1;
@@ -51,14 +50,20 @@ const pageify = (req, res, next) => {
   }
 
   if (+page > 0 && +page <= 10 && +size > 0 && +size <= 20) {
+    req.page = page;
     req.limit = size;
     req.offset = size * (page - 1);
   }
 
-  //  console.log("page", page, "size", size);
-  //  console.log("limit and offset before route ---", req.limit, req.offset);
+  //  console.log(">>>>>>> page", page, "size", size);
+  //  console.log(">>>>>>>> limit and offset before route ---", req.limit, req.offset);
   next();
 };
+
+/* ----------------------------------------------
+   * Get all spots
+----------------------------------------------- */
+
 
 router.get("/", pageify, async (req, res) => {
   let where = {};
@@ -74,30 +79,20 @@ router.get("/", pageify, async (req, res) => {
       where.name = { [Op.like]: `%${query.name}%` };
     }
 
-    // request includes page and size
-    //if it has a page spec, it doesn't have to have a size, but it probably will
-    // if it has a size, it doesn't have to have a page, but it probably will
+    
   }
 
-  // if(req.limit){
-  //     pagination.limit = req.limit;
-  // }
-  // if(req.offset){
-  //     pagination.offset = req.offset;
-  // }
-
-  let spots = await Spot.findAll({
+// page and size from pageify
+  const pagination = {};
+  if(req.limit){
+      pagination.limit = req.limit;
+  }
+  if(req.offset){
+      pagination.offset = req.offset;
+  }
+  // console.log("   >>>>>>> pagination", pagination);
+  const spots = await Spot.findAll({
     where,
-    include: [
-      {
-        model: SpotImage,
-        attributes: [],
-      },
-      {
-        model: Review,
-        attributes: [],
-      },
-    ],
     attributes: [
       "id",
       "ownerId",
@@ -112,19 +107,36 @@ router.get("/", pageify, async (req, res) => {
       "price",
       "createdAt",
       "updatedAt",
-
-      // for some reason these lines limits the query to 1 result
-      // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
-
-      // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
+      [Sequelize.fn('avg', Sequelize.col('Reviews.stars')), 'avgRating'],
       [Sequelize.col("SpotImages.url"), "previewImage"],
     ],
+    include: [
+      {
+        model: SpotImage,
+        attributes: [],
+      },
+      {
+        model: Review,
+        attributes: [],
+      }
+    ],
+    group:['Reviews.spotId']
+
+,...pagination
+,subQuery:false
   });
 
-  res.json(spots);
+  res.json({
+    Spots:spots,
+    page: +req.page,
+    size: +req.limit
+  });
 });
 
-//Get all spots owned by current user
+
+/* -------------------------------------
+ * Get all spots owned by current user
+---------------------------------------- */
 
 router.get("/current", requireAuth, async (req, res) => {
   const spots = await Spot.findAll({
