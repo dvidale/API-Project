@@ -90,7 +90,7 @@ router.get("/", pageify, async (req, res) => {
   if(req.offset){
       pagination.offset = req.offset;
   }
-  // console.log("   >>>>>>> pagination", pagination);
+  
   const spots = await Spot.findAll({
     where,
     attributes: [
@@ -120,7 +120,7 @@ router.get("/", pageify, async (req, res) => {
         attributes: [],
       }
     ],
-    group:['Reviews.spotId']
+    group:['Reviews.spotId', 'Spot.id']
 
 ,...pagination
 ,subQuery:false
