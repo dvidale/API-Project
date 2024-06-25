@@ -130,6 +130,63 @@ router.get("/", [validateSpotSearch, pageify], async (req, res) => {
       where.name = { [Op.like]: `%${query.name}%` };
     }
 
+    /*----------------- 
+    Latitude
+    ----------------- */
+    //minimum latitude but no maximum
+    if(query.minLat && !query.maxLat){
+      where.lat = { [Op.gte]: `${query.minLat}`}
+    }
+
+    //maximum latitude but no minimum
+    if(query.maxLat && !query.minLat){
+      where.lat = {[Op.lte]: `${query.maxLat}`}
+    }
+
+   
+    //minimum and maximim latitude, inclusive
+    if(query.minLat && query.maxLat){
+      where.lat = {[Op.between]: [query.minLat, query.maxLat]}
+    }
+
+    /*----------------- 
+    Longitude
+    ----------------- */
+    //minimum longitude but no maximum
+    if(query.minLng && !query.maxLng){
+      where.lng = { [Op.gte]: `${query.minLng}`}
+    }
+
+    //maximum longitude but no minimum
+    if(query.maxLng && !query.minLng){
+      where.lng = {[Op.lte]: `${query.maxLng}`}
+    }
+
+    
+    //minimum and maximim longitude, inclusive
+    if(query.minLng && query.maxLng){
+      where.lng = {[Op.between]: [query.minLng, query.maxLng]}
+    }
+
+    /*----------------- 
+    Price
+    ----------------- */
+
+//minimum price but no maximum
+if(query.minPrice && !query.maxPrice){
+  where.price = { [Op.gte]: `${query.minPrice}`}
+}
+
+//maximum price but no minimum
+if(query.maxPrice && !query.minPrice){
+  where.price = {[Op.lte]: `${query.maxPrice}`}
+}
+
+
+//minimum and maximum price, inclusive
+if(query.minPrice && query.maxPrice){
+  where.price = {[Op.between]: [query.minPrice, query.maxPrice]}
+}
     
   }
 
@@ -856,7 +913,7 @@ res.json(
 // next()
 // }
 
-
+//Todo: Shane said the Postman test will fail a same day booking, but save the same day functionality for frontend
 const validateBooking = [
   check("startDate")
   .custom((value) => {
