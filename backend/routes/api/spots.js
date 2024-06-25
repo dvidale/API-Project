@@ -55,17 +55,68 @@ const pageify = (req, _res, next) => {
     req.offset = size * (page - 1);
   }
 
-  //  console.log(">>>>>>> page", page, "size", size);
-  //  console.log(">>>>>>>> limit and offset before route ---", req.limit, req.offset);
+ 
   next();
 };
+
+const validateSpotSearch = [
+  check("page")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom((value)=> value >= 1)
+    .withMessage("Page must be greater than or equal to 1"),
+  check("size")
+    .exists({ checkFalsy: true })
+    .notEmpty()
+    .custom((value)=> value >= 1)
+    .withMessage("Size must be greater than or equal to 1"),
+    check("minLat")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value > -90)
+    .withMessage("Minimum latitude is invalid"),
+    check("maxLat")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value < 90)
+    .withMessage("Maximum latitude is invalid"),
+    check("minLng")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value > -180)
+    .withMessage("Minimum longitude is invalid"),
+    check("maxLng")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value < 180)
+    .withMessage("Maximum longitude is invalid"),
+    check("minPrice")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value >= 0)
+    .withMessage("Minimum price must be greater than or equal to 0"),
+    check("maxPrice")
+    .isDecimal()
+     .optional({values: 'undefined' | 'null' | 'falsy'
+    })
+    .custom(value => value >= 0)
+    .withMessage("Maximum price must be greater than or equal to 0"),
+    handleValidationErrors];
+
+
+
 
 /* ----------------------------------------------
    * Get all spots
 ----------------------------------------------- */
 
 
-router.get("/", pageify, async (req, res) => {
+router.get("/", [validateSpotSearch, pageify], async (req, res) => {
   let where = {};
 
   //you get query params from request
