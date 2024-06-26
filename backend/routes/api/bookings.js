@@ -88,7 +88,15 @@ const validateBooking = [
     .custom((value) => {
       let start = new Date(`${value}T09:00:00`);
       let today = new Date();
-      const todayWithCheckoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 4, 0, 0, 0);
+      const todayWithCheckoutTime = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate(),
+        4,
+        0,
+        0,
+        0
+      );
 
       return start - todayWithCheckoutTime > 0;
     })
@@ -112,40 +120,95 @@ router.get("/current", requireAuth, async (req, res) => {
   //get current user id
   let userId = +req.user.id;
 
-  const Bookings = await Booking.findAll({
+  const spotImageRes = await Booking.findAll({
+where:{
+  userId,
+},
+include:{
+  model: Spot,
+  include:{
+    model: SpotImage,
+    where:{
+      preview: true
+    },
+    require: false,
+  }
+}
+  })
+
+  const results = await Booking.findAll({
     where: {
       userId,
     },
-    include: 
-    {
+    include: {
       model: Spot,
-      include: [
+      // include: SpotImage,
+      include:
         {
           model: SpotImage,
           attributes: [['url', 'previewImage']]
+          // attributes: []
         },
-      ],
-      attributes: [
-        "id",
-        "ownerId",
-        "address",
-        "city",
-        "state",
-        "country",
-        "lat",
-        "lng",
-        "name",
-        "price"
-        // [Sequelize.col("SpotImages.url"), "previewImage"],
-      ]
-    //   ,
-    //   attributes: {
-    //     exclude: ["description", "createdAt", "updatedAt"],
-    //   },
+      attributes: {
+        include: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+          // [Sequelize.col("SpotImages.url"), "previewImage"]
+        ],
+        exclude: ["description", "createdAt", "updatedAt"],
+      }
     }
   });
 
-  res.json({ Bookings });
+
+  
+
+
+   const Bookings = results.map((booking)=>{
+   return(
+    {
+      id: booking.id,
+      spotId: booking.spotId,
+      Spot:{
+        id:booking.Spot.id,
+        ownerId: booking.Spot.ownerId,
+        address: booking.Spot.address,
+        city: booking.Spot.city,
+        state: booking.Spot.state,
+        country: booking.Spot.country,
+        lat: booking.Spot.lat,
+        lng: booking.Spot.lng,
+        name: booking.Spot.name,
+        price: booking.Spot.price,
+        previewImage: booking.Spot.SpotImages[0]
+      },
+      userId: booking.userId,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      createdAt: booking.createdAt,
+      updatedAt: booking.updatedAt
+     }
+
+   ) 
+  
+   
+   
+  }
+  )
+    
+    
+    
+  res.json({ results });
+
+  // res.json({ Bookings });
 });
 
 /* ----------------------------------------------
@@ -185,84 +248,70 @@ router.put(
 
     res.json(updateBooking);
   }
-);  
-
+);
 
 /* ----------------------------------------------
 *   Delete a Booking
 ------------------------------------------------- */
 
-
-router.delete('/:bookingId',[requireAuth,bookingExists], async(req,res)=>{
-
+router.delete("/:bookingId", [requireAuth, bookingExists], async (req, res) => {
   const bookingId = +req.params.bookingId;
   const userId = +req.user.id;
 
-//bookings that have been started can't be deleted
+  //bookings that have been started can't be deleted
 
-const bookingStartDate = await Booking.findByPk(bookingId).then(result => result.startDate);
+  const bookingStartDate = await Booking.findByPk(bookingId).then(
+    (result) => result.startDate
+  );
 
-const bookingEndDate = await Booking.findByPk(bookingId).then(result => result.endDate);
+  const bookingEndDate = await Booking.findByPk(bookingId).then(
+    (result) => result.endDate
+  );
 
-const today = new Date()
+  const today = new Date();
 
-
-
-
-if(bookingStartDate < today && today < bookingEndDate){
-
-res.status(403);
-return res.json({
-   message: "Bookings that have been started can't be deleted"
-})
-
-
-}
-
-
-
-    //Authorization: booking must belong to current user or spot must belong to current user
-
-    //find booking that belongs to user
-const bookingUser = await Booking.findOne({
-  where:{
-    id: bookingId,
-    userId
+  if (bookingStartDate < today && today < bookingEndDate) {
+    res.status(403);
+    return res.json({
+      message: "Bookings that have been started can't be deleted",
+    });
   }
-})
 
-//see if spot booked belongs to user
+  //Authorization: booking must belong to current user or spot must belong to current user
 
-const bookingSpotOwner = await Booking.findOne({
-  where:{
-    id: bookingId
-  },
-  include:{
-    model: Spot,
-    where:{
-      ownerId: userId
-    }
+  //find booking that belongs to user
+  const bookingUser = await Booking.findOne({
+    where: {
+      id: bookingId,
+      userId,
+    },
+  });
+
+  //see if spot booked belongs to user
+
+  const bookingSpotOwner = await Booking.findOne({
+    where: {
+      id: bookingId,
+    },
+    include: {
+      model: Spot,
+      where: {
+        ownerId: userId,
+      },
+    },
+  });
+
+  //Error: Bookings that have been started can't be deleted
+
+  if (bookingUser !== null || bookingSpotOwner !== null) {
+    const booking = await Booking.findByPk(bookingId);
+    //successful deletion
+    await booking.destroy();
+
+    res.json({
+      message: "Successfully deleted",
+    });
   }
-})
-
-//Error: Bookings that have been started can't be deleted
-
-if(bookingUser !== null || bookingSpotOwner !== null){
-
-  const booking = await Booking.findByPk(bookingId)
-//successful deletion
-await booking.destroy();
-
-res.json( {
-  "message": "Successfully deleted"
-})
-
-
-}
-
-
-
-
-})
+});
 
 module.exports = router;
