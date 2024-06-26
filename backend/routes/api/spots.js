@@ -228,8 +228,8 @@ if(query.minPrice && query.maxPrice){
         attributes: [],
       }
     ],
-    // group:['Reviews.spotId', 'Spot.id','SpotImages.url']
-    group:['Reviews.spotId', 'Spot.id']
+    group:['Reviews.spotId', 'Spot.id','SpotImages.url']
+    // group:['Reviews.spotId', 'Spot.id']
 
 ,...pagination
 ,subQuery:false
@@ -284,7 +284,7 @@ router.get("/current", requireAuth, async (req, res) => {
       // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
       [Sequelize.col("SpotImages.url"), "previewImage"],
     ],
-    group:['Reviews.spotId']
+    group:['Reviews.spotId', 'Spot.id']
   });
 
   res.json(spots);
@@ -316,7 +316,7 @@ router.get("/:spotId", async (req, res) => {
         attributes: ["id", "firstName", "lastName"],
       },
     ],
-    group: ["Spot.id", "SpotImages.id", "owner.id", "Reviews.SpotId"],
+    group: ["Spot.id", "SpotImages.id", "owner.id", "Reviews.spotId"],
     attributes: [
       "id",
       "ownerId",
