@@ -81,7 +81,7 @@ const bookingConflict = async (req, res, next) => {
     next();
   }
 };
-//Todo: experiment with moving these validation scripts to the validations utility module
+//Todo-last: experiment with moving these validation scripts to the validations utility module
 
 const validateBooking = [
   check("startDate")

@@ -276,13 +276,14 @@ router.get("/current", requireAuth, async (req, res) => {
       "createdAt",
       "updatedAt",
 
-      //Todo: figure out how to use this line and still return all results and not just one
-      // for some reason these lines limits the query to 1 result
-      // [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
+      // Done: figure out how to use this line and still return all results and not just one
+     
+      [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
 
       // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
       [Sequelize.col("SpotImages.url"), "previewImage"],
     ],
+    group:['Reviews.spotId']
   });
 
   res.json(spots);
@@ -291,7 +292,7 @@ router.get("/current", requireAuth, async (req, res) => {
 /*-----------------------------------
 // Get details from a spot from an id
 ------------------------------------*/
-// Todo: figure out why numReviews reports 1 review when there are more  (probably because we grouped by Reviews.id)
+
 router.get("/:spotId", async (req, res) => {
   const spot = await Spot.findOne({
     where: {
@@ -314,7 +315,7 @@ router.get("/:spotId", async (req, res) => {
         attributes: ["id", "firstName", "lastName"],
       },
     ],
-    group: ["Spot.id", "SpotImages.id", "owner.id", "Reviews.id"],
+    group: ["Spot.id", "SpotImages.id", "owner.id", "Reviews.SpotId"],
     attributes: [
       "id",
       "ownerId",
@@ -463,7 +464,7 @@ if(spotCheck === null){
 
 //get the current userId
 const userId = req.user.id
-//Todo: refactor the creation of the spotId array to at least a .then chain
+//Todo - last: refactor the creation of the spotId array to at least a .then chain
 
 //get the current user's spots
 const userSpots = await Spot.findAll({
@@ -680,7 +681,7 @@ res.json( {
 router.get('/:spotId/reviews', async(req,res)=>{
 
   //pull the spotId
-  //Todo: Consider making spot check a separate middleware
+  //Todo - last: Consider making spot check a separate middleware
   const spotId = +req.params.spotId;
   
   const spotCheck = await Spot.findByPk(spotId)
@@ -738,7 +739,7 @@ const validateReview = [
 
 router.post('/:spotId/reviews', [requireAuth, validateReview], async(req, res)=>{
 //pull the spotId
-  //Todo: Consider making spot check a separate middleware
+  //Todo - last: Consider making spot check a separate middleware
   const spotId = +req.params.spotId;
  
   const spotCheck = await Spot.findByPk(spotId)
@@ -908,30 +909,38 @@ res.json(
 * * Create a Booking from a Spot based on the Spot's id
 ----------------------------------------------------- */
 
-// const printDates = (req, _res, next)=>{
-
-// let { startDate, endDate } = req.body;
-
-//   console.log(">>>>>>>> startDate", startDate, req.body.startDate, "endDate", endDate);
-// next()
-// }
-
-//Todo: Shane said the Postman test will fail a same day booking, but save the same day functionality for frontend
+//Note: Shane said the Postman backend test will fail a same day booking, but save the same day functionality for frontend
 const validateBooking = [
   check("startDate")
-  .custom((value) => {
-    let start = new Date(`${value}T09:00:00`);
-    let today = new Date();
-    const todayWithCheckoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 4, 0, 0, 0);
+  // .custom((value) => {
+  //   let start = new Date(`${value}T09:00:00`);
+  //   let today = new Date();
+  //   const todayWithCheckoutTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 4, 0, 0, 0);
 
-    return start - todayWithCheckoutTime > 0;
+  //   return start - todayWithCheckoutTime > 0;
+  // })
+  //   .withMessage("startDate cannot be in the past"),
+  //   check("endDate")
+  //   .custom((value, {req}) =>{
+  //     let startDate = req.body.startDate
+  //     let end = new Date(`${value}T04:00:00`);
+  //     let bookingStart = new Date(`${startDate}T09:00:00`);
+  //   return (end - bookingStart) > 0
+  //   })
+  //   .withMessage("endDate cannot be on or before startDate"),
+  //   handleValidationErrors];
+  .custom((value) => {
+    let start = new Date(value);
+    let today = new Date();
+    
+    return start - today > 0;
   })
     .withMessage("startDate cannot be in the past"),
     check("endDate")
     .custom((value, {req}) =>{
       let startDate = req.body.startDate
-      let end = new Date(`${value}T04:00:00`);
-      let bookingStart = new Date(`${startDate}T09:00:00`);
+      let end = new Date(value);
+      let bookingStart = new Date(startDate);
     return (end - bookingStart) > 0
     })
     .withMessage("endDate cannot be on or before startDate"),
@@ -962,8 +971,9 @@ if (ownerCheck){
 
   let { startDate, endDate } = req.body;
 
-//*check for booking conflict
-
+/* -----------------------------
+check for booking conflict
+------------------------------ */
 // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
 
 const futureBookings = await Booking.findAll({
@@ -977,13 +987,16 @@ const futureBookings = await Booking.findAll({
 
 
 let errorObj = {}
-let startDateWithTime = new Date(`${startDate}T09:00:00`)
-let endDateWithTime = new Date(`${endDate}T04:00:00`)
+// Removed these variables from the logic to remove the ability for same day time specific bookings
+// let startDateWithTime = new Date(`${startDate}T09:00:00`)
+// let endDateWithTime = new Date(`${endDate}T04:00:00`)
 
+let startDateNoTime = new Date(startDate)
+let endDateNoTime = new Date(endDate)
 
 for(let i = 0; i < futureBookings.length; i++){
 
-if((startDateWithTime >= futureBookings[i].startDate && startDateWithTime <= futureBookings[i].endDate) ){
+if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate) ){
   errorObj.startDate = "Start date conflicts with an existing booking"
   break;
 }
@@ -992,7 +1005,7 @@ if((startDateWithTime >= futureBookings[i].startDate && startDateWithTime <= fut
 
 for(let i=0; i <futureBookings.length; i++){
 
-  if((endDateWithTime >= futureBookings[i].startDate && endDateWithTime <= futureBookings[i].endDate))
+  if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
     {
     errorObj.endDate = "End date conflicts with an existing booking";
     break;
@@ -1013,8 +1026,8 @@ for(let i=0; i <futureBookings.length; i++){
 await Booking.create({
   spotId,
   userId,
-  startDate: startDateWithTime,
-  endDate: endDateWithTime
+  startDate: startDateNoTime,
+  endDate: endDateNoTime
 })
 
 

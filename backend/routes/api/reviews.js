@@ -82,15 +82,31 @@ router.get("/current", requireAuth, async (req, res) => {
 
       {
         model: Spot,
-        include: {
-          model: SpotImage,
-          //Todo: get image url to return on Spot object as "previewImage".
-          // ? Should spots only have one SpotImage each? 
-          attributes: ['url'],
-        },
         attributes: {
+          include:[
+          "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "price",
+            [Sequelize.col("SpotImages.url"), "previewImage"]
+          ],
           exclude: ["description", "createdAt", "updatedAt"],
         },
+        include: {
+          model: SpotImage,
+          
+          //Todo: get image url to return on Spot object as "previewImage".
+          attributes: []
+          // attributes: ['url'],
+          // raw:true
+        },
+       
       },
       {
         model: ReviewImage,
@@ -240,7 +256,7 @@ res.json(updatedReview)
 
 router.delete('/:reviewId',[requireAuth, reviewExists], async(req,res)=>{
 
-
+//Todo: I'm getting a foreign key constraint error when trying to delete
   // make sure the current user owns the review
 
   const userId = +req.user.id
