@@ -173,6 +173,9 @@ include:{
 
 
    const Bookings = results.map((booking)=>{
+// if(booking.Spot.SpotImages[0].url === undefined){
+//   booking.Spot.SpotImages[0].url = null
+// }
    return(
     {
       id: booking.id,
@@ -206,9 +209,9 @@ include:{
     
     
     
-  res.json({ results });
+  // res.json({ results });
 
-  // res.json({ Bookings });
+  res.json({ Bookings });
 });
 
 /* ----------------------------------------------
