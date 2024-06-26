@@ -491,7 +491,7 @@ else{
 // take in post req data for a new image url
 
 let { url, preview } = req.body;
-
+      
 //create a SpotImage with req data, spotId, and userId
 
 await SpotImage.create({

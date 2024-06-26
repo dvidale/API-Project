@@ -146,7 +146,7 @@ include:{
       include:
         {
           model: SpotImage,
-          attributes: [['url', 'previewImage']]
+          attributes: ['url']
           // attributes: []
         },
       attributes: {
@@ -169,13 +169,19 @@ include:{
   });
 
 
-  
+//   const spotImagess = results.map((imgs)=>{
+// if(imgs.Spot.SpotImages.length === 0){
+//   imgs.Spot.SpotImages[0] = {url:null}
+// }
+// return imgs.Spot.SpotImages[0].url
+
+//   })
 
 
    const Bookings = results.map((booking)=>{
-// if(booking.Spot.SpotImages[0].url === undefined){
-//   booking.Spot.SpotImages[0].url = null
-// }
+    if(booking.Spot.SpotImages.length === 0){
+      booking.Spot.SpotImages[0] = {url:null}
+    }
    return(
     {
       id: booking.id,
@@ -191,7 +197,7 @@ include:{
         lng: booking.Spot.lng,
         name: booking.Spot.name,
         price: booking.Spot.price,
-        previewImage: booking.Spot.SpotImages[0]
+        previewImage: booking.Spot.SpotImages[0].url
       },
       userId: booking.userId,
       startDate: booking.startDate,
@@ -210,7 +216,7 @@ include:{
     
     
   // res.json({ results });
-
+// res.json({spotImagess})
   res.json({ Bookings });
 });
 
