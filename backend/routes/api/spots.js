@@ -61,13 +61,13 @@ const pageify = (req, _res, next) => {
 
 const validateSpotSearch = [
   check("page")
-    .exists({ checkFalsy: true })
-    .notEmpty()
+  .optional({values: 'undefined' | 'null' | 'falsy'
+  })
     .custom((value)=> value >= 1)
     .withMessage("Page must be greater than or equal to 1"),
   check("size")
-    .exists({ checkFalsy: true })
-    .notEmpty()
+  .optional({values: 'undefined' | 'null' | 'falsy'
+  })
     .custom((value)=> value >= 1)
     .withMessage("Size must be greater than or equal to 1"),
     check("minLat")
@@ -228,7 +228,8 @@ if(query.minPrice && query.maxPrice){
         attributes: [],
       }
     ],
-    group:['Reviews.spotId', 'Spot.id','SpotImages.url']
+    // group:['Reviews.spotId', 'Spot.id','SpotImages.url']
+    group:['Reviews.spotId', 'Spot.id']
 
 ,...pagination
 ,subQuery:false

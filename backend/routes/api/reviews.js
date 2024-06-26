@@ -94,7 +94,7 @@ router.get("/current", requireAuth, async (req, res) => {
       "lng",
       "name",
       "price",
-            [Sequelize.col("SpotImages.url"), "previewImage"]
+            // [Sequelize.col("SpotImages.url"), "previewImage"]
           ],
           exclude: ["description", "createdAt", "updatedAt"],
         },
@@ -102,8 +102,8 @@ router.get("/current", requireAuth, async (req, res) => {
           model: SpotImage,
           
           //Todo: get image url to return on Spot object as "previewImage".
-          attributes: []
-          // attributes: ['url'],
+          // attributes: []
+          attributes: ['url'],
           // raw:true
         },
        

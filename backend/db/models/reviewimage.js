@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references:{
         model: 'Reviews'
+    
       }
     },
     url: {
