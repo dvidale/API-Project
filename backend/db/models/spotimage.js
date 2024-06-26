@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     } ,
     preview: {
-      type: DataTypes.BOOLEAN
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     } 
   }, {
     sequelize,

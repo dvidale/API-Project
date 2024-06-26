@@ -288,7 +288,9 @@ router.get("/current", requireAuth, async (req, res) => {
   res.json(spots);
 });
 
-// get spot details by id
+/*-----------------------------------
+// Get details from a spot from an id
+------------------------------------*/
 // Todo: figure out why numReviews reports 1 review when there are more  (probably because we grouped by Reviews.id)
 router.get("/:spotId", async (req, res) => {
   const spot = await Spot.findOne({
@@ -329,7 +331,7 @@ router.get("/:spotId", async (req, res) => {
       "updatedAt",
       [Sequelize.fn("COUNT", Sequelize.col("Reviews.id")), "numReviews"],
       [Sequelize.fn("AVG", Sequelize.col("Reviews.stars")), "avgStarRating"],
-    ],
+    ]
   });
 
   if (spot === null || spot.id === null) {
@@ -441,8 +443,9 @@ router.post("/", [requireAuth, validateSpot], async (req, res) => {
   res.json(newSpotCheck);
 });
 
-
-//Create and return a new image for a spot specified by id.
+/*------------------------------------------------
+Create and return a new image for a spot specified by id.
+------------------------------------------------*/
 
 router.post('/:spotId/images', requireAuth, async (req, res) => {
 
@@ -488,7 +491,7 @@ else{
 // take in post req data for a new image url
 
 let { url, preview } = req.body;
-
+      
 //create a SpotImage with req data, spotId, and userId
 
 await SpotImage.create({
