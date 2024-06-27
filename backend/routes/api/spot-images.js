@@ -2,77 +2,61 @@ const express = require("express");
 const router = express.Router();
 const { Op, ValidationError } = require("sequelize");
 const { Sequelize } = require("sequelize");
-const { Spot, SpotImage, Review, User, ReviewImage, Booking} = require("../../db/models");
+const {
+  Spot,
+  SpotImage,
+  Review,
+  User,
+  ReviewImage,
+  Booking,
+} = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
+router.delete("/:imageId", requireAuth, async (req, res) => {
+  console.log(">>>> DELETE SPOT IMAGE -- imageId:", +req.params.imageId);
+  const spotImageId = +req.params.imageId;
 
-router.delete('/:imageId', requireAuth, async (req, res)=>{
+  const userId = +req.user.id;
 
-    const spotImageId = +req.params.imageId
+  const spotImage = await SpotImage.findByPk(spotImageId);
 
-    const userId = +req.user.id;
-
-    const spotImage = await SpotImage.findByPk(spotImageId);
-
-    if(spotImage === null || spotImageId === null || spotImageId === NaN){
-
-        res.status(404);
-        return res.json({
-            "message": "Spot Image couldn't be found"
-          })
-
-        }
-
-
-
+  if (spotImage === null) {
+    res.status(404);
+    return res.json({
+      message: "Spot Image couldn't be found",
+    });
+  } 
+  else {
     //make sure spot is owned by current user
 
-        const spotOwnerCheck = await SpotImage.findOne({
+    const spotOwnerCheck = await SpotImage.findOne({
+      where: {
+        id: spotImageId,
+      },
+      include: {
+        model: Spot,
+        where: {
+          ownerId: userId,
+        },
+      },
+    });
 
-            where:{
-                id: spotImageId
-            },
-            include:{
-                model: Spot,
-                where:{
-                    ownerId: userId
-                }
-            }
-        })
+    if (spotOwnerCheck === null) {
+      res.status(403);
+      res.json({
+        message:
+          "The current user does not own the spot associated with this image. Spot must belong to the current user to delete an image.",
+      });
+    } else {
+      await spotImage.destroy();
 
-
-        if(spotOwnerCheck === null){
-
-            res.status(403);
-            res.json({
-                message: "The current user does not own the spot associated with this image. Spot must belong to the current user to delete an image."
-            })
-
-        }else{
-
-            await spotImage.destroy();
-
-            res.json({
-                "message": "Successfully deleted"
-              })
-        }
-
-
-    
-
-
-    
-
-
-
-
-
-})
-
-
-
-
+      res.json({
+        message: "Successfully deleted",
+      });
+    }
+  }
+});
 
 module.exports = router;
