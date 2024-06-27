@@ -496,7 +496,7 @@ let { url, preview } = req.body;
       
 //create a SpotImage with req data, spotId, and userId
 
-await SpotImage.create({
+const newSpotImage = await SpotImage.create({
 
 spotId: req.params.spotId,
 url,
@@ -504,18 +504,18 @@ preview,
 })
 
 //check the database for the newly created record
-const newestSpotImage = await SpotImage.findAll({
-  attributes:{
-     exclude:['spotId','createdAt','updatedAt']
-  },
-  order:[
-    ['id', 'DESC']
-  ],
-  limit: 1
+// const newestSpotImage = await SpotImage.findAll({
+//   attributes:{
+//      exclude:['spotId','createdAt','updatedAt']
+//   },
+//   order:[
+//     ['id', 'DESC']
+//   ],
+//   limit: 1
   
-})
+// })
 
-res.json(newestSpotImage)
+res.json(newSpotImage)
 
 }
 
@@ -647,8 +647,8 @@ const userSpots = await Spot.findAll({
 
 let spotIdArray = []
 
-for(let ids of userSpots){
- spotIdArray.push(ids.id)
+for(let spot of userSpots){
+ spotIdArray.push(spot.id)
 }
 
 //check if the spot specified is one of the current user's spots
