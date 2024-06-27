@@ -18,7 +18,7 @@ const spotCheck = await Spot.findByPk(spotId);
 //check if the spot exists
 if(spotCheck === null){
   res.status(404);
-  res.json({
+  return res.json({
     message: "Spot couldn't be found"
   })
 }else{
@@ -235,7 +235,7 @@ if(query.minPrice && query.maxPrice){
 ,subQuery:false
   });
 
-  res.json({
+  return res.json({
     Spots:spots,
     page: +req.page,
     size: +req.limit
@@ -338,7 +338,7 @@ router.get("/:spotId", async (req, res) => {
 
   if (spot === null || spot.id === null) {
     res.status(404);
-    res.json({
+    return res.json({
       message: "Spot couldn't be found",
     });
   }
@@ -457,7 +457,7 @@ const spotCheck = await Spot.findByPk(req.params.spotId)
 
 if(spotCheck === null){
   res.status(404);
-  res.json({
+  return res.json({
     message: "Spot couldn't be found"
 
   })
@@ -485,7 +485,7 @@ for(let ids of userSpots){
 if(spotIdArray.includes(+req.params.spotId) === false){
   //return an error
 res.status(403);
-res.json({
+return res.json({
   message: "The spot with the given id does not belong to the current user. Only the spot owner can add images to the spot."})
 
 }
@@ -531,7 +531,7 @@ const spotCheck = await Spot.findByPk(req.params.spotId);
 //check if the spot exists
 if(spotCheck === null){
   res.status(404);
-  res.json({
+  return res.json({
     message: "Spot couldn't be found"
   })
 }
@@ -561,7 +561,7 @@ for(let ids of userSpots){
 if(spotIdArray.includes(+req.params.spotId) === false){
  //return an error
 res.status(403);
-res.json({
+return res.json({
  message: "The spot with the given id does not belong to the current user. Only the spot owner can update the spot."})
 
 }
@@ -625,7 +625,7 @@ router.delete('/:spotId', requireAuth, async (req, res)=>{
 
   if(spotCheck === null){
     res.status(404);
-    res.json({
+    return res.json({
       message: "Spot couldn't be found"
     })
   }
@@ -655,7 +655,7 @@ for(let ids of userSpots){
 if(spotIdArray.includes(+req.params.spotId) === false){
  //return an error
 res.status(403);
-res.json({
+return res.json({
  message: "The spot with the given id does not belong to the current user. Only the spot owner can delete the spot."})
 
 }
@@ -665,7 +665,7 @@ else{
 let spot = await Spot.findByPk(+req.params.spotId)
 
 await spot.destroy()
-res.json( {
+return res.json( {
   message: "Successfully deleted"
 })
 
@@ -689,7 +689,7 @@ router.get('/:spotId/reviews', async(req,res)=>{
   
   if(spotCheck === null){
       res.status(404)
-      res.json( {
+      return res.json( {
           message: "Spot couldn't be found"
         })
   }
@@ -747,7 +747,7 @@ router.post('/:spotId/reviews', [requireAuth, validateReview], async(req, res)=>
   
   if(spotCheck === null){
       res.status(404)
-      res.json( {
+      return res.json( {
           message: "Spot couldn't be found"
         })
   }
@@ -769,7 +769,7 @@ const reviewCheck = await Review.findOne({
 
 if(reviewCheck !== null){
   res.status(403)
-  res.json({
+  return res.json({
     "message": "User already has a review for this spot"
   })
 }else{
@@ -812,7 +812,7 @@ const spotCheck = await Spot.findByPk(spotId);
 //check if the spot exists
 if(spotCheck === null){
   res.status(404);
-  res.json({
+  return res.json({
     message: "Spot couldn't be found"
   })
 }
@@ -965,7 +965,7 @@ const ownerCheck = await Spot.findOne({
 
 if (ownerCheck){
   res.status(403);
-  res.json({
+  return res.json({
     message: "The current user is the owner of this spot. The owner cannot create a booking for a spot they own."
   })
 }else{
