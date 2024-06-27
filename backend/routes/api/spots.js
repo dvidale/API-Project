@@ -284,7 +284,7 @@ router.get("/current", requireAuth, async (req, res) => {
       // for some reason these lines make the query lose connection to the SpotImages table if any code is added after them
       [Sequelize.col("SpotImages.url"), "previewImage"],
     ],
-    group:['Reviews.spotId', 'Spot.id']
+    group:['Reviews.spotId', 'Spot.id',"SpotImages.url"]
   });
 
   res.json(spots);
