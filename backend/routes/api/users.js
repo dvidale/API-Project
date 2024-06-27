@@ -52,7 +52,7 @@ const emailCheck = await User.findOne({
 
 if(emailCheck){
   res.status(500)
-  res.json({
+  return res.json({
     "message": "User already exists",
     "errors": {
       "email": "User with that email already exists"
@@ -70,7 +70,7 @@ const usernameCheck = await User.findOne({
 
 if(usernameCheck){
   res.status(500)
-  res.json({
+  return res.json({
     "message": "User already exists",
     "errors": {
       "username": "User with that username already exists"
