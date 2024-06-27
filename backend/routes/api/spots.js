@@ -612,7 +612,7 @@ res.json(updatedSpot)
 
 
 //DELETE A SPOT
-//Todo: There seems to be a bug around deleting spots that have an image associated with them. In production, the error says it's related to the foreign key contraints
+//DONE: There seems to be a bug around deleting spots that have an image associated with them. In production, the error says it's related to the foreign key contraints
 
 
 router.delete('/:spotId', requireAuth, async (req, res)=>{
@@ -632,11 +632,12 @@ router.delete('/:spotId', requireAuth, async (req, res)=>{
   
 
 //pull in the current user's id
+console.log(">>>> check current user's permission")
 const user = await User.findByPk(+req.user.id);
 
 // make an array of the ids of the spots owned by the current user
 
-const userId = req.user.id;
+const userId = +req.user.id;
 
 const userSpots = await Spot.findAll({
   where:{
