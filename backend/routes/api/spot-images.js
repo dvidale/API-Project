@@ -16,7 +16,7 @@ router.delete('/:imageId', requireAuth, async (req, res)=>{
 
     const spotImage = await SpotImage.findByPk(spotImageId);
 
-    if(spotImage === null){
+    if(spotImage === null || spotImageId === null || spotImageId === NaN){
 
         res.status(404);
         return res.json({
