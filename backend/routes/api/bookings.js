@@ -66,7 +66,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
   for(let i = 0; i < futureBookings.length; i++){
   
     //check if requested start date is within a previously booked stay
-  if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate) ){
+  if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id) ){
     errorObj.startDate = "Start date conflicts with an existing booking"
     break;
   }
@@ -75,7 +75,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
   // check if the requested end date is within a previously booked stay
   for(let i=0; i <futureBookings.length; i++){
   
-    if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+    if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
       {
       errorObj.endDate = "End date conflicts with an existing booking";
       break;
@@ -90,7 +90,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
   
     // startDate >= futureStartDate && endDate <= futureEndDate
   
-    if((startDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+    if((startDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
       {
         errorObj.startDate = "Start date conflicts with an existing booking"
       errorObj.endDate = "End date conflicts with an existing booking";
@@ -107,7 +107,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
   
     // startDate <= futureStartDate && endDate >= futureEndDate
   
-    if((startDateNoTime <= futureBookings[i].startDate && endDateNoTime >= futureBookings[i].endDate))
+    if((startDateNoTime <= futureBookings[i].startDate && endDateNoTime >= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
       {
         errorObj.startDate = "Start date conflicts with an existing booking"
       errorObj.endDate = "End date conflicts with an existing booking";
@@ -126,6 +126,24 @@ const editBookingConflictCheck = async (req, res, next)=>{
       next()
     }
       
+  }
+
+  const bookingOwner = async (req, res, next) =>{
+
+    const bookingId = +req.params.bookingId;
+
+    const booking = await Booking.findByPk(bookingId);
+
+    if(booking.userId !== req.user.id){
+      res.status(403)
+      res.json({
+        message: "The current user is not the owner of this booking. Only the owner of the booking can perform the requested action."
+      })
+    }else{
+      next()
+    }
+
+
   }
 
 //Todo-last: experiment with moving these validation scripts to the validations utility module
@@ -289,7 +307,7 @@ include:{
 
 router.put(
   "/:bookingId",
-  [requireAuth, bookingExists, editBookingConflictCheck, validateBooking],
+  [requireAuth, bookingExists, editBookingConflictCheck, bookingOwner, validateBooking],
   async (req, res) => {
     // error: can't edit a booking that's past the end date
 
@@ -317,7 +335,7 @@ router.put(
     }
 
     const updateBooking = await Booking.findByPk(bookingId);
-console.log(">>>>>> edit a booking -  response body:", updateBooking)
+
     res.json(updateBooking);
   }
 );
@@ -326,7 +344,7 @@ console.log(">>>>>> edit a booking -  response body:", updateBooking)
 *   Delete a Booking
 ------------------------------------------------- */
 
-router.delete("/:bookingId", [requireAuth, bookingExists], async (req, res) => {
+router.delete("/:bookingId", [requireAuth, bookingExists, bookingOwner], async (req, res) => {
   const bookingId = +req.params.bookingId;
   const userId = +req.user.id;
 
