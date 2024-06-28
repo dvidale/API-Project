@@ -7,6 +7,13 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
+const printParams = async(req, _res, next) =>{
+  console.log(">>>>>>> query params", req.query)
+  next()
+}
+
+router.get('/', printParams)
+
 
 const spotExists = async(req, res, next)=>{
 
