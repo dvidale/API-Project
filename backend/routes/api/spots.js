@@ -774,20 +774,22 @@ if(reviewCheck !== null){
     "message": "User already has a review for this spot"
   })
 }else{
-  await Review.create({
+
+
+const createdReview = await Review.create({
     userId,
     spotId,
     review,
     stars
   })
   
-  let newReview = await Review.findAll({
-    order:[['id', 'DESC']],
-    limit:1
-  })
+  // let newReview = await Review.findAll({
+  //   order:[['id', 'DESC']],
+  //   limit:1
+  // })
   
   res.status(201)
-  res.json(newReview)
+  res.json(createdReview)
 
 
 }
@@ -1025,7 +1027,7 @@ for(let i=0; i <futureBookings.length; i++){
     
   
 
-await Booking.create({
+const newBooking = await Booking.create({
   spotId,
   userId,
   startDate: startDateNoTime,
@@ -1034,16 +1036,6 @@ await Booking.create({
 
 
 // return newly created booking
-
-const newBooking = await Booking.findAll({
-  where:{
-    spotId,
-    userId
-  },
-  order:[['id', 'DESC']],
-  limit:1
-})
-
 
 res.status(200);
 res.json(newBooking);
