@@ -12,18 +12,18 @@ const router = express.Router();
 const validateSignup = [
   check('firstName')
   .exists({ checkFalsy: true })
-  .withMessage('Please provide a first name.'),
+  .withMessage('First Name is required.'),
   check('lastName')
   .exists({ checkFalsy: true })
-  .withMessage('Please provide a last name.'),
+  .withMessage('Last Name is required.'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email.'),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Please provide a username with at least 4 characters.'),
+    .withMessage('Username is required.'),
   check('username')
     .not()
     .isEmail()
@@ -39,6 +39,46 @@ const validateSignup = [
 router.post( '/', validateSignup, async (req, res) => {
 
       const { firstName, lastName, email, username, password } = req.body;
+
+//DONE: write error logic and responses for duplicate email and duplicate username to match README
+
+//check if email already exists in the database
+
+const emailCheck = await User.findOne({
+  where:{
+    email
+  }
+})
+
+if(emailCheck){
+  res.status(500)
+  return res.json({
+    "message": "User already exists",
+    "errors": {
+      "email": "User with that email already exists"
+    }
+  })
+}
+
+//check is username already exists in the database
+
+const usernameCheck = await User.findOne({
+  where:{
+    username
+  }
+})
+
+if(usernameCheck){
+  res.status(500)
+  return res.json({
+    "message": "User already exists",
+    "errors": {
+      "username": "User with that username already exists"
+    }
+  })
+}
+
+
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create(
         { 
