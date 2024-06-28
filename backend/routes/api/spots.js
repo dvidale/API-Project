@@ -909,11 +909,102 @@ res.json(
 
 
 
-/* ---------------------------------------------------
-* * Create a Booking from a Spot based on the Spot's id
------------------------------------------------------ */
 
-//Note: Shane said the Postman backend test will fail a same day booking, but save the same day functionality for frontend
+    const bookingConflictCheck = async (req, res, next)=>{
+      /* -----------------------------
+      check for booking conflict
+      ------------------------------ */
+      // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
+      
+        let { startDate, endDate } = req.body;
+        const spotId = +req.params.spotId
+
+      
+      const futureBookings = await Booking.findAll({
+        where:{
+          spotId,
+          startDate: {
+            [Op.gt]: new Date()
+          }  
+        }
+      })
+      
+      
+      let errorObj = {}
+      // Removed these variables from the logic to remove the ability for same day time specific bookings
+      // let startDateWithTime = new Date(`${startDate}T09:00:00`)
+      // let endDateWithTime = new Date(`${endDate}T04:00:00`)
+      
+      let startDateNoTime = new Date(startDate)
+      let endDateNoTime = new Date(endDate)
+      
+      for(let i = 0; i < futureBookings.length; i++){
+      
+        //check if requested start date is within a previously booked stay
+      if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate) ){
+        errorObj.startDate = "Start date conflicts with an existing booking"
+        break;
+      }
+      
+      }
+      // check if the requested end date is within a previously booked stay
+      for(let i=0; i <futureBookings.length; i++){
+      
+        if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+          {
+          errorObj.endDate = "End date conflicts with an existing booking";
+          break;
+          }
+      
+      }
+      
+      //check if the start and end dates are within the time span of a previously booked stay
+      
+      for(let i=0; i <futureBookings.length; i++){
+      
+      
+        // startDate >= futureStartDate && endDate <= futureEndDate
+      
+        if((startDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+          {
+            errorObj.startDate = "Start date conflicts with an existing booking"
+          errorObj.endDate = "End date conflicts with an existing booking";
+          break;
+          }
+      
+      }
+      
+      
+      //check if the start and end dates surround the time span of a previously booked stay
+      
+      for(let i=0; i <futureBookings.length; i++){
+      
+      
+        // startDate <= futureStartDate && endDate >= futureEndDate
+      
+        if((startDateNoTime <= futureBookings[i].startDate && endDateNoTime >= futureBookings[i].endDate))
+          {
+            errorObj.startDate = "Start date conflicts with an existing booking"
+          errorObj.endDate = "End date conflicts with an existing booking";
+          break;
+          }
+      
+      }
+      
+        
+        if(Object.keys(errorObj).length > 0){
+          res.status(403);
+          return res.json({
+            message:"Sorry, this spot is already booked for the specified dates",
+            errors: errorObj  })
+        }else{
+          next()
+        }
+          
+      }
+
+
+      //Note: Shane said the Postman backend test will fail a same day booking, but save the same day functionality for frontend
 const validateBooking = [
   check("startDate")
   // .custom((value) => {
@@ -951,13 +1042,17 @@ const validateBooking = [
     handleValidationErrors];
 
 
+/* ---------------------------------------------------
+* * Create a Booking from a Spot based on the Spot's id
+----------------------------------------------------- */
 
-router.post('/:spotId/bookings', [requireAuth, spotExists, validateBooking], async (req, res)=>{
+
+router.post('/:spotId/bookings', [requireAuth, spotExists, bookingConflictCheck, validateBooking], async (req, res)=>{
 
   const spotId = +req.params.spotId
 const userId = +req.user.id;
 //check if the spot belongs to current user
-let alreadyBooked = new Set()
+
 
 const ownerCheck = await Spot.findOne({
   where:{
@@ -975,67 +1070,22 @@ if (ownerCheck){
 
   let { startDate, endDate } = req.body;
 
-/* -----------------------------
-check for booking conflict
------------------------------- */
-// iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
-
-const futureBookings = await Booking.findAll({
-  where:{
-    spotId,
-    startDate: {
-      [Op.gt]: new Date()
-    }  
-  }
-})
-
-
-let errorObj = {}
-// Removed these variables from the logic to remove the ability for same day time specific bookings
-// let startDateWithTime = new Date(`${startDate}T09:00:00`)
-// let endDateWithTime = new Date(`${endDate}T04:00:00`)
-
-let startDateNoTime = new Date(startDate)
-let endDateNoTime = new Date(endDate)
-
-for(let i = 0; i < futureBookings.length; i++){
-
-if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate) ){
-  errorObj.startDate = "Start date conflicts with an existing booking"
-  break;
-}
-
-}
-
-for(let i=0; i <futureBookings.length; i++){
-
-  if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
-    {
-    errorObj.endDate = "End date conflicts with an existing booking";
-    break;
-    }
-
-}
 
   
-  if(Object.keys(errorObj).length > 0){
-    res.status(403);
-    return res.json({
-      message:"Sorry, this spot is already booked for the specified dates",
-      errors: errorObj  })
-  }
-    
-  
+
 
 const newBooking = await Booking.create({
   spotId,
   userId,
-  startDate: startDateNoTime,
-  endDate: endDateNoTime
+  startDate,
+  endDate
 })
 
 
 // return newly created booking
+
+
+
 
 res.status(200);
 res.json(newBooking);
