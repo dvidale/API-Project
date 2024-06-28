@@ -453,7 +453,7 @@ router.post("/", [requireAuth, validateSpot], async (req, res) => {
 });
 
 /*------------------------------------------------
-Create and return a new image for a spot specified by id.
+Create an image for a spot specified by id.
 ------------------------------------------------*/
 
 router.post('/:spotId/images', requireAuth, async (req, res) => {
@@ -510,17 +510,6 @@ url,
 preview,
 })
 
-//check the database for the newly created record
-// const newestSpotImage = await SpotImage.findAll({
-//   attributes:{
-//      exclude:['spotId','createdAt','updatedAt']
-//   },
-//   order:[
-//     ['id', 'DESC']
-//   ],
-//   limit: 1
-  
-// })
 
 res.json(newSpotImage)
 
