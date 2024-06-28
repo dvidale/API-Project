@@ -14,6 +14,9 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
+
+
+
 const bookingExists = async (req, res, next) => {
   const bookingCheck = await Booking.findByPk(+req.params.bookingId);
 
@@ -27,14 +30,19 @@ const bookingExists = async (req, res, next) => {
   }
 };
 
-const bookingConflictCheck = async (req, res, next)=>{
+const editBookingConflictCheck = async (req, res, next)=>{
   /* -----------------------------
   check for booking conflict
   ------------------------------ */
   // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
   
     let { startDate, endDate } = req.body;
-    const spotId = +req.params.spotId
+
+    const bookingId = +req.params.bookingId;
+
+    const booking = await Booking.findByPk(bookingId);
+
+    const spotId = booking.spotId
 
   
   const futureBookings = await Booking.findAll({
@@ -281,7 +289,7 @@ include:{
 
 router.put(
   "/:bookingId",
-  [requireAuth, bookingExists, bookingConflictCheck, validateBooking],
+  [requireAuth, bookingExists, editBookingConflictCheck, validateBooking],
   async (req, res) => {
     // error: can't edit a booking that's past the end date
 
@@ -309,7 +317,7 @@ router.put(
     }
 
     const updateBooking = await Booking.findByPk(bookingId);
-
+console.log(">>>>>> edit a booking -  response body:", updateBooking)
     res.json(updateBooking);
   }
 );
