@@ -255,7 +255,7 @@ if(query.minPrice && query.maxPrice){
 ---------------------------------------- */
 
 router.get("/current", requireAuth, async (req, res) => {
-  const spots = await Spot.findAll({
+  const Spots = await Spot.findAll({
     where: {
       ownerId: req.user.id,
     },
@@ -294,7 +294,7 @@ router.get("/current", requireAuth, async (req, res) => {
     group:['Reviews.spotId', 'Spot.id',"SpotImages.url"]
   });
 
-  res.json(spots);
+  res.json({Spots});
 });
 
 /*-----------------------------------
@@ -510,8 +510,13 @@ url,
 preview,
 })
 
+const resImageRecord = {
+  id:newSpotImage.id,
+url:newSpotImage.url,
+preview:newSpotImage.preview
+}
 
-res.json(newSpotImage)
+res.json(resImageRecord)
 
 }
 
@@ -717,9 +722,7 @@ router.get('/:spotId/reviews', async(req,res)=>{
   
 
 
-/* ---------------------------------------------------
-* * Create a Review for a Spot based on the Spot's id
------------------------------------------------------ */
+
 const validateReview = [
   check("review")
     .exists({ checkFalsy: true })
@@ -733,6 +736,10 @@ const validateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
     handleValidationErrors];
 
+
+/* ---------------------------------------------------
+* * Create a Review for a Spot based on the Spot's id
+----------------------------------------------------- */
 
 
 router.post('/:spotId/reviews', [requireAuth, validateReview], async(req, res)=>{
@@ -765,7 +772,7 @@ const reviewCheck = await Review.findOne({
 })
 
 if(reviewCheck !== null){
-  res.status(403)
+  res.status(500)
   return res.json({
     "message": "User already has a review for this spot"
   })
@@ -916,7 +923,7 @@ res.json(
         const spotId = +req.params.spotId
 
       
-      const futureBookings = await Booking.findAll({
+      const currentBookings = await Booking.findAll({
         where:{
           spotId,
           startDate: {
@@ -927,44 +934,51 @@ res.json(
       
       
       let errorObj = {}
-      // Removed these variables from the logic to remove the ability for same day time specific bookings
+      //* Removed these variables from the logic to remove the ability for same day time specific bookings
       // let startDateWithTime = new Date(`${startDate}T09:00:00`)
       // let endDateWithTime = new Date(`${endDate}T04:00:00`)
       
       let startDateNoTime = new Date(startDate)
       let endDateNoTime = new Date(endDate)
       
-      for(let i = 0; i < futureBookings.length; i++){
-      
-        //check if requested start date is within a previously booked stay
-      if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate) ){
+       //check if requested start date is within a previously booked stay
+      for(let i = 0; i < currentBookings.length; i++){
+      if((startDateNoTime >= currentBookings[i].startDate && startDateNoTime <= currentBookings[i].endDate) ){
         errorObj.startDate = "Start date conflicts with an existing booking"
         break;
       }
       
       }
       // check if the requested end date is within a previously booked stay
-      for(let i=0; i <futureBookings.length; i++){
+      for(let i=0; i <currentBookings.length; i++){
       
-        if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+        if((endDateNoTime >= currentBookings[i].startDate && endDateNoTime <= currentBookings[i].endDate))
           {
           errorObj.endDate = "End date conflicts with an existing booking";
           break;
           }
       
       }
+
+
+      if(Object.keys(errorObj).length > 0){
+        res.status(403);
+        return res.json({
+          message:"Sorry, this spot is already booked for the specified dates",
+          errors: errorObj  })
+      }
+
       
       //check if the start and end dates are within the time span of a previously booked stay
       
-      for(let i=0; i <futureBookings.length; i++){
+      for(let i=0; i <currentBookings.length; i++){
       
       
         // startDate >= futureStartDate && endDate <= futureEndDate
       
-        if((startDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate))
+        if((startDateNoTime >= currentBookings[i].startDate && endDateNoTime <= currentBookings[i].endDate))
           {
-            errorObj.startDate = "Start date conflicts with an existing booking"
-          errorObj.endDate = "End date conflicts with an existing booking";
+            errorObj.bookingConflict = "Start and end dates are within an existing booking";
           break;
           }
       
@@ -973,15 +987,14 @@ res.json(
       
       //check if the start and end dates surround the time span of a previously booked stay
       
-      for(let i=0; i <futureBookings.length; i++){
+      for(let i=0; i <currentBookings.length; i++){
       
       
         // startDate <= futureStartDate && endDate >= futureEndDate
       
-        if((startDateNoTime <= futureBookings[i].startDate && endDateNoTime >= futureBookings[i].endDate))
+        if((startDateNoTime <= currentBookings[i].startDate && endDateNoTime >= currentBookings[i].endDate))
           {
-            errorObj.startDate = "Start date conflicts with an existing booking"
-          errorObj.endDate = "End date conflicts with an existing booking";
+            errorObj.bookingConflict = "Start and end dates surround an existing booking";
           break;
           }
       

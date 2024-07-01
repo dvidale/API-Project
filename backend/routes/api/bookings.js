@@ -45,7 +45,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
     const spotId = booking.spotId
 
   
-  const futureBookings = await Booking.findAll({
+  const currentBooking = await Booking.findAll({
     where:{
       spotId,
       startDate: {
@@ -63,60 +63,59 @@ const editBookingConflictCheck = async (req, res, next)=>{
   let startDateNoTime = new Date(startDate)
   let endDateNoTime = new Date(endDate)
   
-  for(let i = 0; i < futureBookings.length; i++){
+  for(let i = 0; i < currentBooking.length; i++){
   
     //check if requested start date is within a previously booked stay
-  if((startDateNoTime >= futureBookings[i].startDate && startDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id) ){
+  if((startDateNoTime >= currentBooking[i].startDate && startDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id) ){
     errorObj.startDate = "Start date conflicts with an existing booking"
     break;
   }
   
   }
   // check if the requested end date is within a previously booked stay
-  for(let i=0; i <futureBookings.length; i++){
+  for(let i=0; i <currentBooking.length; i++){
   
-    if((endDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
+    if((endDateNoTime >= currentBooking[i].startDate && endDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
       {
       errorObj.endDate = "End date conflicts with an existing booking";
       break;
       }
   
+  }
+  if(Object.keys(errorObj).length > 0){
+    res.status(403);
+    return res.json({
+      message:"Sorry, this spot is already booked for the specified dates",
+      errors: errorObj  })
   }
   
   //check if the start and end dates are within the time span of a previously booked stay
   
-  for(let i=0; i <futureBookings.length; i++){
-  
-  
+  for(let i=0; i <currentBooking.length; i++){
     // startDate >= futureStartDate && endDate <= futureEndDate
   
-    if((startDateNoTime >= futureBookings[i].startDate && endDateNoTime <= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
+    if((startDateNoTime >= currentBooking[i].startDate && endDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
       {
-        errorObj.startDate = "Start date conflicts with an existing booking"
-      errorObj.endDate = "End date conflicts with an existing booking";
+        errorObj.bookingConflict = "Start and end dates are within an existing booking";
       break;
       }
   
   }
+
   
   
   //check if the start and end dates surround the time span of a previously booked stay
   
-  for(let i=0; i <futureBookings.length; i++){
-  
-  
+  for(let i=0; i <currentBooking.length; i++){
     // startDate <= futureStartDate && endDate >= futureEndDate
   
-    if((startDateNoTime <= futureBookings[i].startDate && endDateNoTime >= futureBookings[i].endDate && booking.id !== futureBookings[i].id))
+    if((startDateNoTime <= currentBooking[i].startDate && endDateNoTime >= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
       {
-        errorObj.startDate = "Start date conflicts with an existing booking"
-      errorObj.endDate = "End date conflicts with an existing booking";
+        errorObj.bookingConflict = "Start and end dates surround an existing booking";
       break;
       }
   
   }
-  
-    
     if(Object.keys(errorObj).length > 0){
       res.status(403);
       return res.json({
