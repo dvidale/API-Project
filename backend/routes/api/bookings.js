@@ -111,7 +111,8 @@ const editBookingConflictCheck = async (req, res, next)=>{
   
     if((startDateNoTime <= currentBooking[i].startDate && endDateNoTime >= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
       {
-        errorObj.bookingConflict = "Start and end dates surround an existing booking";
+        errorObj.startDate = "Start date conflicts with an existing booking"
+        errorObj.endDate = "End date conflicts with an existing booking";
       break;
       }
   
