@@ -44,6 +44,16 @@ const editBookingConflictCheck = async (req, res, next)=>{
 
     const spotId = booking.spotId
 
+let end = booking.endDate
+let today = new Date()
+
+console.log(">>>>> end", end, "today", today );
+    if (end - today <= 0) {
+      res.status(403);
+      return res.json({
+        message: "Past bookings can't be modified",
+      });
+    }
   
   const currentBooking = await Booking.findAll({
     where:{
