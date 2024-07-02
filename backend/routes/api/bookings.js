@@ -44,7 +44,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
 
     const spotId = booking.spotId
 
-let end = booking.endDate
+let end = new Date(endDate)
 let today = new Date()
 
 console.log(">>>>> end", end, "today", today );
