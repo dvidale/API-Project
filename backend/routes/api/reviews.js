@@ -101,7 +101,7 @@ router.get("/current", requireAuth, async (req, res) => {
         include: {
           model: SpotImage,
           
-          //Todo: get image url to return on Spot object as "previewImage".
+          //DONE: get image url to return on Spot object as "previewImage".
           // attributes: []
           attributes: ['url'],
           // raw:true
@@ -210,35 +210,29 @@ const reviewImages = await Review.findOne({
 
 }).then(result => result.ReviewImages);
 
-if(reviewImages.length >= 10){
+if(reviewImages.length === 10){
 
 res.status(403);
-res.json({
+return res.json({
     "message": "Maximum number of images for this resource was reached"
   })
 
-}
+}else{
 
 // create an image record and associate it with the review
 
 let { url } = req.body;
 
-await ReviewImage.create({
+const newReviewImage = await ReviewImage.create({
     reviewId,
     url
 })
 
-//recall the newly created ReviewImage record
-
-const newReviewImage = await ReviewImage.findOne({
-    attributes:['id', 'url'],
-    order:[['id', 'DESC']],
-    limit: 1
-})
-
 res.json(newReviewImage)
+}
 
 })
+
 
 /* ---------------------------------------------------
 * * Edit a Review

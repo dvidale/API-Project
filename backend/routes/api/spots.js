@@ -7,12 +7,6 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const printParams = async(req, _res, next) =>{
-  console.log(">>>>>>> query params", req.query)
-  next()
-}
-
-router.get('/', printParams)
 
 
 const spotExists = async(req, res, next)=>{
@@ -633,7 +627,7 @@ router.delete('/:spotId', requireAuth, async (req, res)=>{
   
 
 //pull in the current user's id
-console.log(">>>> check current user's permission")
+
 const user = await User.findByPk(+req.user.id);
 
 // make an array of the ids of the spots owned by the current user
