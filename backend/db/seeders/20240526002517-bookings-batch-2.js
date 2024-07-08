@@ -52,7 +52,6 @@ while(alreadyBookedUsers.has(userId) === true || userId === spot.ownerId){
 alreadyBookedUsers.add(userId);
 
 
-// console.log("users booked", alreadyBookedUsers)
 
 //create the booking with selected spot and user
 

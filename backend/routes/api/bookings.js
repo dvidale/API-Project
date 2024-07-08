@@ -47,7 +47,7 @@ const editBookingConflictCheck = async (req, res, next)=>{
 let end = booking.endDate
 let today = new Date()
 
-console.log(">>>>> end", end, "today", today );
+
     if (end - today <= 0) {
       res.status(403);
       return res.json({
