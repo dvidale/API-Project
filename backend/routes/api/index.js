@@ -38,6 +38,7 @@ router.use('/bookings', bookingsRouter);
 //   }
 // );
 
+//*Save this route for testing CSRF setup!!!
 // router.post('/test', function(req, res) {
 //     res.json({ requestBody: req.body });
 //   });
