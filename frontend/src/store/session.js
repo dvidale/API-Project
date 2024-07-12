@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const LOGIN = "/session/LOGIN";
 const DELETE = "/session/DELETE";
+
 /* --------------------
 *Regular Action Creators
 --------------------*/
@@ -19,13 +20,14 @@ const deleteSession = () => {
   };
 };
 
+
 /* ------------------
 * Thunks
 --------------------*/
 
-export const login = (user) => {
+export const login = (user) => 
   async (dispatch) => {
-    console.log(">>>inside login thunk <<<");
+    
     const { credential, password } = user;
     const url = "/api/session";
     const method = "POST";
@@ -33,16 +35,28 @@ export const login = (user) => {
     const options = { method, body };
 
     const response = await csrfFetch(url, options);
-console.log(">>> response to csrfFetch from login thunk ----", response);
+
     if (response.ok) {
       const data = await response.json();
       dispatch(loginSession(data.user));
       return data.user;
     }
   };
-};
 
-export const deleteCurrentSession = () => {
+export const restoreUser = () => 
+  async (dispatch) => {
+
+    const response = await csrfFetch('/api/session')
+
+    if(response.ok){
+      const currentUser = await response.json()
+      dispatch(loginSession(currentUser))
+      return currentUser; 
+    }
+  }
+
+
+export const deleteCurrentSession = () => 
   async (dispatch) => {
     const url = "/api/session";
     const method = "DELETE";
@@ -54,7 +68,6 @@ export const deleteCurrentSession = () => {
       dispatch(deleteSession());
     }
   };
-};
 
 /* ------------------
 *Reducers
