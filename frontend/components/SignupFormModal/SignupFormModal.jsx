@@ -1,42 +1,35 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as sessionActions from '../../src/store/session'
-import { Navigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch} from "react-redux";
+import { useModal } from '../../src/context/Modal'
+import * as sessionActions from '../../src/store/session';
+import './SignupForm.css';
 
-const SignupFormPage = () => {
+
+const SignupFormModal = () => {
   const [username, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [err, setErr] = useState({});
+  const [errors, setErrors] = useState({});
+const { closeModal } = useModal();
 
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
+  
+
+
+  
 
   //Todo: Make sure the password validation behavior satisfies the scorecard
-  useEffect(()=>{
-    const errors = {};
 
-    if (password !== confirmPassword){
-        errors.password = "passwords do not match";
-        setErr(errors);
-    }else{
-        setErr({})
-    }
-
-},[password, confirmPassword])
-
-  if (sessionUser){ return <Navigate to="/" replace={true} />;}
 
   function submitHandler(e) {
  
     e.preventDefault();
-
+    if (password === confirmPassword) {
+      setErrors({});
     
-      
-
     const signUpData = {
         username,
       firstName,
@@ -45,13 +38,19 @@ const SignupFormPage = () => {
       password,
     };
 
-    return dispatch(sessionActions.signUp(signUpData)).catch(
+    return dispatch(sessionActions.signUp(signUpData)).then(closeModal).catch(
         async (res) => {
       const data = await res.json();
-      if (data?.errors) setErr(data.errors);
+      if (data?.errors) setErrors(data.errors);
     });
   }
 //Todo: add error prompts to the form for all fields
+
+return setErrors({
+  confirmPassword: "Confirm Password field must be the same as the Password field"
+});
+
+}
   return (
     <>
       <h1>Sign Up</h1>
@@ -95,7 +94,7 @@ const SignupFormPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-         {err && <p>{err.password}</p>}
+         {errors && <p>{errors.password}</p>}
         <label htmlFor="confirmPassword">confirmPassword:</label>
         <input
           type="password"
@@ -104,10 +103,10 @@ const SignupFormPage = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         {/* {errors.confirmPassword && <p>{errors.confirmPassword}</p>} */}
-        <button type="submit" disabled={Object.keys(err).length} >Sign Up</button>
+        <button type="submit" disabled={Object.keys(errors).length} >Sign Up</button>
       </form>
     </>
   );
 };
 
-export default SignupFormPage;
+export default SignupFormModal;

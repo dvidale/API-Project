@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as sessionActions from './store/session'
 import { useDispatch } from 'react-redux'
-import SignupFormPage from "../components/SignupFormPage";
 import Navigation from "../components/Navigation";
 
 
@@ -29,7 +28,6 @@ useEffect(() =>{
       <Navigation isLoaded={isLoaded}/>
       <Routes>
           <Route path="/" element={<h1>Welcome!</h1>} />
-          <Route path="/signup" element={<SignupFormPage/>}/>
         </Routes>
         
       </BrowserRouter>
