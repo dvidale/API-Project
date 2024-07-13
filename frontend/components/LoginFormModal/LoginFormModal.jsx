@@ -1,20 +1,21 @@
 import { useState } from "react"
-import { useDispatch, useSelector } from 'react-redux'
-import { Navigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import { useModal } from "../../src/context/Modal"
+
 import * as sessionActions from '../../src/store/session'
 import './LoginForm.css'
 
-const LoginFormPage = () => {
+const LoginFormModal = () => {
 
     const [credential, setCredential] = useState('')
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState({});
 
-    const sessionUser = useSelector((state) => state.session.user);
+ 
 
     const dispatch = useDispatch()
 
-    if (sessionUser){ return <Navigate to="/" replace={true} />;}
+  const { closeModal } = useModal();
    
 const onSubmit = (e) => {
   
@@ -25,13 +26,12 @@ setErrors({});
 const user = { credential, password }
 //Todo: double check errors are being displayed properly
 
-return dispatch(sessionActions.login(user)).catch(
+return dispatch(sessionActions.login(user)).then(closeModal).catch(
     async (res) => {
         errors
       const data = await res.json();
       if (data?.errors) setErrors(data.errors);
-      setCredential('');
-      setPassword('');
+      
     });
 }
 
@@ -41,9 +41,21 @@ return dispatch(sessionActions.login(user)).catch(
         <h1>Login</h1>
         <form onSubmit={onSubmit} >
         <label htmlFor="credential">Username or Email:</label>
-        <input name="credential" type="text" value={credential} onChange={e => {setCredential(e.target.value)}} required />
-        <label htmlFor="password">Password:</label>
-        <input name="password" type="password" value={password} onChange={e => {setPassword(e.target.value)}} required />
+        <input name="credential" 
+        type="text" 
+        value={credential} 
+        onChange={e => {setCredential(e.target.value)}} 
+        required />
+        <label htmlFor="password">
+            Password:
+            </label>
+        <input 
+        name="password" 
+        type="password" 
+        value={password} 
+        onChange={e => {setPassword(e.target.value)}} 
+        required />
+        {errors.credential && (<p>{errors.credential}</p>)}
         <button type="submit">Log In</button>
         </form>
 
@@ -53,4 +65,4 @@ return dispatch(sessionActions.login(user)).catch(
     )
 }
 
-export default LoginFormPage
+export default LoginFormModal
