@@ -11,7 +11,7 @@ const LoginFormPage = () => {
     const [errors, setErrors] = useState({});
 
     const sessionUser = useSelector((state) => state.session.user);
-console.log(">>> from login page - sessionUser:", sessionUser);
+
     const dispatch = useDispatch()
 
     if (sessionUser) return <Navigate to="/" replace={true} />;
@@ -32,6 +32,7 @@ return dispatch(sessionActions.login(user)).catch(
 
     return (
         <>
+        <h1>Login</h1>
         <form onSubmit={onSubmit} >
         <label htmlFor="credential">Username or Email:</label>
         <input name="credential" type="text" value={credential} onChange={e => {setCredential(e.target.value)}} required />

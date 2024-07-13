@@ -49,9 +49,9 @@ export const restoreUser = () =>
     const response = await csrfFetch('/api/session')
 
     if(response.ok){
-      const currentUser = await response.json()
-      dispatch(loginSession(currentUser))
-      return currentUser; 
+      const data = await response.json()
+      dispatch(loginSession(data.user))
+      return data.user; 
     }
   }
 
