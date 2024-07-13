@@ -23,6 +23,7 @@ e.preventDefault()
 setErrors({});
 
 const user = { credential, password }
+//Todo: double check errors are being displayed properly
 
 return dispatch(sessionActions.login(user)).catch(
     async (res) => {
