@@ -66,8 +66,32 @@ export const deleteCurrentSession = () =>
 
     if (response.message === "success") {
       dispatch(deleteSession());
+      return
     }
+    
   };
+
+
+export const signUp = (signUpData) =>
+  async (dispatch) => {
+
+    const url = '/api/users'
+const method = 'POST';
+const body = JSON.stringify(signUpData)
+
+const options = {method, body}
+
+const response = await csrfFetch(url, options)
+
+if(response.ok){
+
+  const res = await response.json()
+  dispatch(loginSession(res.user))
+  return res.user;
+}
+
+
+  } 
 
 /* ------------------
 *Reducers

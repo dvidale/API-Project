@@ -14,9 +14,11 @@ const LoginFormPage = () => {
 
     const dispatch = useDispatch()
 
-    if (sessionUser) return <Navigate to="/" replace={true} />;
-
+    if (sessionUser){ return <Navigate to="/" replace={true} />;}
+   
 const onSubmit = (e) => {
+  
+
 e.preventDefault()
 setErrors({});
 
@@ -24,8 +26,11 @@ const user = { credential, password }
 
 return dispatch(sessionActions.login(user)).catch(
     async (res) => {
+        errors
       const data = await res.json();
       if (data?.errors) setErrors(data.errors);
+      setCredential('');
+      setPassword('');
     });
 }
 
