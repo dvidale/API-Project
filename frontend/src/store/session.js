@@ -1,7 +1,7 @@
 import { csrfFetch } from "./csrf";
 
 const LOGIN = "/session/LOGIN";
-const DELETE = "/session/DELETE";
+const LOGOUT = "/session/LOGOUT";
 
 /* --------------------
 *Regular Action Creators
@@ -14,9 +14,9 @@ const loginSession = (user) => {
   };
 };
 
-const deleteSession = () => {
+const logoutSession = () => {
   return {
-    type: DELETE,
+    type: LOGOUT,
   };
 };
 
@@ -56,7 +56,7 @@ export const restoreUser = () =>
   }
 
 
-export const deleteCurrentSession = () => 
+export const logout = () => 
   async (dispatch) => {
     const url = "/api/session";
     const method = "DELETE";
@@ -64,10 +64,10 @@ export const deleteCurrentSession = () =>
 
     const response = await csrfFetch(url, options);
 
-    if (response.message === "success") {
-      dispatch(deleteSession());
-      return
-    }
+    
+      dispatch(logoutSession());
+      return response
+    
     
   };
 
@@ -102,8 +102,8 @@ export default function sessionReducer(state = { user: null }, action) {
     case LOGIN:
       return { ...state, user: action.payload };
 
-    case DELETE:
-      return (state = { ...state, user: null });
+    case LOGOUT:
+      return { ...state, user: null };
 
     default:
       return state;

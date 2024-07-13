@@ -1,3 +1,3 @@
-import LoginFormModal from "./LoginFormPage";
+import LoginFormModal from "./LoginFormModal";
 
 export default LoginFormModal;

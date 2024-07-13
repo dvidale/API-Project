@@ -11,15 +11,12 @@ const LoginFormModal = () => {
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState({});
 
- 
-
     const dispatch = useDispatch()
 
   const { closeModal } = useModal();
    
 const onSubmit = (e) => {
   
-
 e.preventDefault()
 setErrors({});
 
@@ -28,9 +25,8 @@ const user = { credential, password }
 
 return dispatch(sessionActions.login(user)).then(closeModal).catch(
     async (res) => {
-        errors
       const data = await res.json();
-      if (data?.errors) setErrors(data.errors);
+      if (data && data.errors) setErrors(data.errors);
       
     });
 }

@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as sessionActions from './store/session'
 import { useDispatch } from 'react-redux'
-import SignupFormPage from "../components/SignupFormPage/SignupFormPage";
-import Navigation from "../components/Navigation/Navigation";
+import SignupFormPage from "../components/SignupFormPage";
+import Navigation from "../components/Navigation";
 
 
 function App() {
