@@ -28,7 +28,7 @@ const validateLogin = [
 
 router.post('', validateLogin, async (req, res, next)=>{
 const { credential, password } = req.body;
-console.log(">>>from inside session POST route, credential:", credential)
+
 let user = await User.unscoped().findOne({
     where:{
         [Op.or]:{
