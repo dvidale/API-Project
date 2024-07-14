@@ -15,7 +15,7 @@ const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
 router.delete("/:imageId", requireAuth, async (req, res) => {
-  console.log(">>>> DELETE SPOT IMAGE -- imageId:", +req.params.imageId);
+
   const spotImageId = +req.params.imageId;
 
   const userId = +req.user.id;

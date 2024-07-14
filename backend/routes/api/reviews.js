@@ -101,7 +101,7 @@ router.get("/current", requireAuth, async (req, res) => {
         include: {
           model: SpotImage,
           
-          //Todo: get image url to return on Spot object as "previewImage".
+          //DONE: get image url to return on Spot object as "previewImage".
           // attributes: []
           attributes: ['url'],
           // raw:true
@@ -114,7 +114,49 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
-  res.json(userReviews);
+
+const Reviews = userReviews.map((review) =>{
+  if(review.Spot.SpotImages.length === 0){
+    review.Spot.SpotImages[0] = {url:null}
+  }
+return ({
+      id: review.id,
+      userId: review.userId,
+      spotId: review.spotId,
+      review: review.review,
+      stars: review.stars,
+      createdAt: review.createdAt,
+      updatedAt: review.updatedAt,
+      User:{
+        id: review.User.id,
+        firstName: review.User.firstName,
+        lastName: review.User.lastName
+      },
+      Spot:{
+        id: review.Spot.id,
+        ownerId:review.Spot.ownerId,
+        address: review.Spot.address,
+        city: review.Spot.city,
+        state: review.Spot.state,
+        country: review.Spot.country,
+        lat: review.Spot.lat,
+        lng: review.Spot.lng,
+        name: review.Spot.name,
+        price: review.Spot.price,
+        previewImage: review.Spot.SpotImages[0].url
+      },
+      ReviewImages:review.ReviewImages
+      
+
+})
+
+
+
+
+})
+
+
+  res.json({Reviews});
 });
 
 
@@ -168,35 +210,29 @@ const reviewImages = await Review.findOne({
 
 }).then(result => result.ReviewImages);
 
-if(reviewImages.length >= 10){
+if(reviewImages.length === 10){
 
 res.status(403);
-res.json({
+return res.json({
     "message": "Maximum number of images for this resource was reached"
   })
 
-}
+}else{
 
 // create an image record and associate it with the review
 
 let { url } = req.body;
 
-await ReviewImage.create({
+const newReviewImage = await ReviewImage.create({
     reviewId,
     url
 })
 
-//recall the newly created ReviewImage record
-
-const newReviewImage = await ReviewImage.findOne({
-    attributes:['id', 'url'],
-    order:[['id', 'DESC']],
-    limit: 1
-})
-
 res.json(newReviewImage)
+}
 
 })
+
 
 /* ---------------------------------------------------
 * * Edit a Review

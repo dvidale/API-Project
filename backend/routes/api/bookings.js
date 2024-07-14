@@ -14,6 +14,9 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
+
+
+
 const bookingExists = async (req, res, next) => {
   const bookingCheck = await Booking.findByPk(+req.params.bookingId);
 
@@ -27,90 +30,178 @@ const bookingExists = async (req, res, next) => {
   }
 };
 
-const bookingConflict = async (req, res, next) => {
-  let { startDate, endDate } = req.body;
+const editBookingConflictCheck = async (req, res, next)=>{
+  /* -----------------------------
+  check for booking conflict
+  ------------------------------ */
+  // iterate through the objects as greater than and less than conditionals against the new booking start date and then the end date
+  
+    let { startDate, endDate } = req.body;
 
-  //*check for booking conflict
+    const bookingId = +req.params.bookingId;
 
-  const spotId = await Booking.findByPk(+req.params.bookingId).then(
-    (result) => +result.spotId
-  );
+    const booking = await Booking.findByPk(bookingId);
 
-  //create an array of bookings listed beyond today for this specific spot
+    const spotId = booking.spotId
 
-  const futureBookings = await Booking.findAll({
-    where: {
+let end = booking.endDate
+let today = new Date()
+
+
+    if (end - today <= 0) {
+      res.status(403);
+      return res.json({
+        message: "Past bookings can't be modified",
+      });
+    }
+  
+  const currentBooking = await Booking.findAll({
+    where:{
       spotId,
       startDate: {
-        [Op.gt]: new Date(),
-      },
-    },
-  });
-
-  let errorObj = {};
-  let startDateWithTime = new Date(`${startDate}T09:00:00`);
-  let endDateWithTime = new Date(`${endDate}T04:00:00`);
-
-  for (let i = 0; i < futureBookings.length; i++) {
-    if (
-      startDateWithTime >= futureBookings[i].startDate &&
-      startDateWithTime <= futureBookings[i].endDate
-    ) {
-      errorObj.startDate = "Start date conflicts with an existing booking";
-      break;
+        [Op.gt]: new Date()
+      }  
     }
+  })
+  
+  
+  let errorObj = {}
+  // Removed these variables from the logic to remove the ability for same day time specific bookings
+  // let startDateWithTime = new Date(`${startDate}T09:00:00`)
+  // let endDateWithTime = new Date(`${endDate}T04:00:00`)
+  
+  let startDateNoTime = new Date(startDate)
+  let endDateNoTime = new Date(endDate)
+  
+  for(let i = 0; i < currentBooking.length; i++){
+  
+    //check if requested start date is within a previously booked stay
+  if((startDateNoTime >= currentBooking[i].startDate && startDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id) ){
+    errorObj.startDate = "Start date conflicts with an existing booking"
+    break;
   }
-
-  for (let i = 0; i < futureBookings.length; i++) {
-    if (
-      endDateWithTime >= futureBookings[i].startDate &&
-      endDateWithTime <= futureBookings[i].endDate
-    ) {
+  
+  }
+  // check if the requested end date is within a previously booked stay
+  for(let i=0; i <currentBooking.length; i++){
+  
+    if((endDateNoTime >= currentBooking[i].startDate && endDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
+      {
       errorObj.endDate = "End date conflicts with an existing booking";
       break;
-    }
+      }
+  
   }
-
-  if (Object.keys(errorObj).length > 0) {
+  if(Object.keys(errorObj).length > 0){
     res.status(403);
     return res.json({
-      message: "Sorry, this spot is already booked for the specified dates",
-      errors: errorObj,
-    });
-  } else {
-    next();
+      message:"Sorry, this spot is already booked for the specified dates",
+      errors: errorObj  })
   }
-};
-//Todo-last: experiment with moving these validation scripts to the validations utility module
+  
+  //check if the start and end dates are within the time span of a previously booked stay
+  
+  for(let i=0; i <currentBooking.length; i++){
+    // startDate >= futureStartDate && endDate <= futureEndDate
+  
+    if((startDateNoTime >= currentBooking[i].startDate && endDateNoTime <= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
+      {
+        errorObj.bookingConflict = "Start and end dates are within an existing booking";
+      break;
+      }
+  
+  }
 
+  
+  
+  //check if the start and end dates surround the time span of a previously booked stay
+  
+  for(let i=0; i <currentBooking.length; i++){
+    // startDate <= futureStartDate && endDate >= futureEndDate
+  
+    if((startDateNoTime <= currentBooking[i].startDate && endDateNoTime >= currentBooking[i].endDate && booking.id !== currentBooking[i].id))
+      {
+        errorObj.startDate = "Start date conflicts with an existing booking"
+        errorObj.endDate = "End date conflicts with an existing booking";
+      break;
+      }
+  
+  }
+    if(Object.keys(errorObj).length > 0){
+      res.status(403);
+      return res.json({
+        message:"Sorry, this spot is already booked for the specified dates",
+        errors: errorObj  })
+    }else{
+      next()
+    }
+      
+  }
+
+  const bookingOwner = async (req, res, next) =>{
+
+    const bookingId = +req.params.bookingId;
+
+    const booking = await Booking.findByPk(bookingId);
+
+    if(booking.userId !== req.user.id){
+      res.status(403)
+      res.json({
+        message: "The current user is not the owner of this booking. Only the owner of the booking can perform the requested action."
+      })
+    }else{
+      next()
+    }
+
+
+  }
+
+//Todo-last: experiment with moving these validation scripts to the validations utility module
+//Note: Shane said the Postman backend test will fail a same day booking, but save the same day functionality for frontend
 const validateBooking = [
   check("startDate")
-    .custom((value) => {
-      let start = new Date(`${value}T09:00:00`);
-      let today = new Date();
-      const todayWithCheckoutTime = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate(),
-        4,
-        0,
-        0,
-        0
-      );
+//     .custom((value) => {
+//       let start = new Date(`${value}T09:00:00`);
+//       let today = new Date();
+//       const todayWithCheckoutTime = new Date(
+//         today.getFullYear(),
+//         today.getMonth(),
+//         today.getDate(),
+//         4,
+//         0,
+//         0,
+//         0
+//       );
 
-      return start - todayWithCheckoutTime > 0;
-    })
-    .withMessage("startDate cannot be in the past"),
+//       return start - todayWithCheckoutTime > 0;
+//     })
+//     .withMessage("startDate cannot be in the past"),
+//   check("endDate")
+//     .custom((value, { req }) => {
+//       let startDate = req.body.startDate;
+//       let end = new Date(value).setHours(4);
+//       let bookingStart = new Date(startDate).setHours(9);
+//       return end - bookingStart > 0;
+//     })
+//     .withMessage("endDate cannot be on or before startDate"),
+//   handleValidationErrors,
+// ];
+.custom((value) => {
+  let start = new Date(value);
+  let today = new Date();
+  
+  return start - today > 0;
+})
+  .withMessage("startDate cannot be in the past"),
   check("endDate")
-    .custom((value, { req }) => {
-      let startDate = req.body.startDate;
-      let end = new Date(value).setHours(4);
-      let bookingStart = new Date(startDate).setHours(9);
-      return end - bookingStart > 0;
-    })
-    .withMessage("endDate cannot be on or before startDate"),
-  handleValidationErrors,
-];
+  .custom((value, {req}) =>{
+    let startDate = req.body.startDate
+    let end = new Date(value);
+    let bookingStart = new Date(startDate);
+  return (end - bookingStart) > 0
+  })
+  .withMessage("endDate cannot be on or before startDate"),
+  handleValidationErrors];
 
 /* ----------------------------------------------
 *   Get all of the Current User's Bookings
@@ -226,7 +317,7 @@ include:{
 
 router.put(
   "/:bookingId",
-  [requireAuth, bookingExists, bookingConflict, validateBooking],
+  [requireAuth, bookingExists, editBookingConflictCheck, bookingOwner, validateBooking],
   async (req, res) => {
     // error: can't edit a booking that's past the end date
 
@@ -242,12 +333,12 @@ router.put(
     } else {
       let { startDate, endDate } = req.body;
 
-      const startDateWithTime = new Date(startDate).setHours(9);
-      const endDateWithTime = new Date(endDate).setHours(4);
+      // const startDateWithTime = new Date(startDate).setHours(9);
+      // const endDateWithTime = new Date(endDate).setHours(4);
 
       booking.set({
-        startDate: startDateWithTime,
-        endDate: endDateWithTime,
+        startDate,
+        endDate,
       });
 
       await booking.save();
@@ -263,7 +354,7 @@ router.put(
 *   Delete a Booking
 ------------------------------------------------- */
 
-router.delete("/:bookingId", [requireAuth, bookingExists], async (req, res) => {
+router.delete("/:bookingId", [requireAuth, bookingExists, bookingOwner], async (req, res) => {
   const bookingId = +req.params.bookingId;
   const userId = +req.user.id;
 
