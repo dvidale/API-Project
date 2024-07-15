@@ -35,7 +35,6 @@ const Navigation = ({ isLoaded }) => {
       </div>
      
 <div id="nav-right">
-<NavLink to='/test'>Test</NavLink>
 {isLoaded && sessionLinks}
 
 </div>
