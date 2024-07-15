@@ -45,10 +45,7 @@ const ProfileButton = ({user}) => {
       const navigate = useNavigate()
 
       useEffect(()=>{
-
         if(!loggedIn) navigate('/')
-
-
       },[loggedIn, navigate])
   
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");

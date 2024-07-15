@@ -24,18 +24,23 @@ const err = {}
 
  if(!firstName){
 err.firstName = "Cannot be empty"
- } else if(firstName.length > 4 && firstName.slice(0,4).includes(" ")) err.firstName = "Cannot start with empty spaces"
+ } 
+//  else if(firstName.length > 4 && firstName.slice(0,4).includes(" ")) err.firstName = "Cannot start with empty spaces"
 
 
  if(!lastName){
 err.lastName = "Cannot be empty"
- } else if(lastName.length > 4 && lastName.slice(0,4).includes(" ")) err.lastName = "Cannot start with empty spaces"
+ }
+//  else if(lastName.length > 4 && lastName.slice(0,4).includes(" ")) err.lastName = "Cannot start with empty spaces"
+
+
  if(!email) err.email = "Cannot be empty"
 
  if(!username){
 err.username = "Cannot be empty"
 
- } else if(username.length > 4 && username.slice(0,4).includes(" ")) err.username = "Cannot start with empty spaces"
+ }
+  // else if(username.length > 4 && username.slice(0,4).includes(" ")) err.username = "Cannot start with empty spaces"
 
  if(!password) err.password = "Cannot be empty"
  if(!confirmPassword) err.confirmPassword = "Cannot be empty"
