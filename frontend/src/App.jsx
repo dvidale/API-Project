@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import * as sessionActions from './store/session';
 import HomePage from '../components/HomePage/HomePage';
+import TestPage from '../components/TestPage/TestPage';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage/>
+      },
+      {
+        path:'/test',
+        element:<TestPage/>
       }
     ]
   }

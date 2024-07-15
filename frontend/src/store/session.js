@@ -84,14 +84,11 @@ const options = {method, body}
 
 const response = await csrfFetch(url, options)
 
-if(response.ok){
+const data = await response.json()
 
-  const res = await response.json()
-  dispatch(loginSession(res.user))
-  return res.user;
-}
+  dispatch(loginSession(data.user))
 
-
+  return response
   } 
 
 /* ------------------

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch} from "react-redux";
 import { useModal } from '../../src/context/Modal'
 import * as sessionActions from '../../src/store/session';
@@ -6,22 +6,37 @@ import './SignupForm.css';
 
 
 const SignupFormModal = () => {
-  const [username, setUserName] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+ 
 const { closeModal } = useModal();
 
   const dispatch = useDispatch();
   
 
+useEffect(()=>{
+const err = {}
 
-  
+ if(!firstName) err.firstName = "Cannot be empty"
+ if(!lastName) err.lastName = "Cannot be empty"
+ if(!email) err.email = "Cannot be empty"
+ if(!username) err.username = "Cannot be empty"
+ if(!password) err.password = "Cannot be empty"
+ if(!confirmPassword) err.confirmPassword = "Cannot be empty"
+ 
+ if(username.length < 4) err.username = "Username must be longer than 4 characters"
+ if(password.length < 6) err.password = "Password must be 6 characters or more"
 
-  //Todo: Make sure the password validation behavior satisfies the scorecard
+
+ setErrors(err)
+
+
+},[firstName, lastName, email, username, password, confirmPassword])
 
 
   function submitHandler(e) {
@@ -42,9 +57,15 @@ const { closeModal } = useModal();
         async (res) => {
       const data = await res.json();
       if (data?.errors) setErrors(data.errors);
+      alert(`
+        ${data.errors.firstName ? data.errors.firstName : "" }
+         ${data.errors.lastName ? data.errors.lastName : "" }
+        ${data.errors.email ? data.errors.email : "" }
+        ${data.errors.username ? data.errors.username : "" }
+        ${data.errors.password ? data.errors.password : "" }`)
     });
   }
-//Todo: add error prompts to the form for all fields
+
 
 return setErrors({
   confirmPassword: "Confirm Password field must be the same as the Password field"
@@ -55,6 +76,30 @@ return setErrors({
     <>
       <h1>Sign Up</h1>
       <form onSubmit={submitHandler}>
+        <label htmlFor="firstName"> First Name:</label>
+        <input
+          type="text"
+          name="firstName"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        {errors.firstName && <p>{errors.firstName}</p>}
+        <label htmlFor="lastName">Last Name:</label>
+        <input
+          type="text"
+          name="lastName"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        {errors.lastName && <p>{errors.lastName}</p>}
+        <label htmlFor="email">Email:</label>
+        <input
+          type="text"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {errors.email && <p>{errors.email}</p>}
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -62,32 +107,8 @@ return setErrors({
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
-        {/* {errors.username && <p>{errors.username}</p>} */}
-        <label htmlFor="firstName">firstName:</label>
-        <input
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        {/* {errors.firstName && <p>{errors.firstName}</p>} */}
-        <label htmlFor="lastName">lastName:</label>
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        {/* {errors.lastName && <p>{errors.lastName}</p>} */}
-        <label htmlFor="email">email:</label>
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {/* {errors.email && <p>{errors.email}</p>} */}
-        <label htmlFor="password">password:</label>
+        {errors.username && <p>{errors.username}</p>}
+        <label htmlFor="password">Password:</label>
         <input
           type="password"
           name="password"
@@ -95,14 +116,14 @@ return setErrors({
           onChange={(e) => setPassword(e.target.value)}
         />
          {errors && <p>{errors.password}</p>}
-        <label htmlFor="confirmPassword">confirmPassword:</label>
+        <label htmlFor="confirmPassword">Confirm Password:</label>
         <input
           type="password"
           name="confirmPassword"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        {/* {errors.confirmPassword && <p>{errors.confirmPassword}</p>} */}
+        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <button type="submit" disabled={Object.keys(errors).length} >Sign Up</button>
       </form>
     </>

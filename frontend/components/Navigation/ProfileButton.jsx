@@ -5,6 +5,7 @@ import * as sessionActions from '../../src/store/session'
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import { useNavigate } from "react-router-dom";
 
 const ProfileButton = ({user}) => {
     const dispatch = useDispatch();
@@ -37,6 +38,16 @@ const ProfileButton = ({user}) => {
         dispatch(sessionActions.logout());
         closeMenu();
       };
+
+
+      const navigate = useNavigate()
+
+      useEffect(()=>{
+
+        if(!user) navigate('/')
+
+
+      },[navigate, user])
   
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
     
@@ -56,7 +67,6 @@ const ProfileButton = ({user}) => {
         <li>
           <button onClick={logout}>Log Out</button>
         </li>
-
 </>
         ):(
 <>
