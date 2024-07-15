@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch } from 'react-redux'
 import { useModal } from "../../src/context/Modal"
 
@@ -14,6 +14,21 @@ const LoginFormModal = () => {
     const dispatch = useDispatch()
 
   const { closeModal } = useModal();
+
+  useEffect(()=>{
+
+    let err = {}
+
+    if(credential.length < 4) err.credential = "Username or email is too short"
+    if(password.length < 6) err.password = "Password is too short"
+
+    setErrors(err)
+    
+
+
+  },[credential, password])
+
+
    
 const onSubmit = (e) => {
   
@@ -21,13 +36,12 @@ e.preventDefault()
 setErrors({});
 
 const user = { credential, password }
-//Todo: double check errors are being displayed properly
 
 return dispatch(sessionActions.login(user)).then(closeModal).catch(
     async (res) => {
       const data = await res.json();
       if (data && data.errors) setErrors(data.errors);
-      
+      alert(`${data.errors.message}`)
     });
 }
 
@@ -52,7 +66,7 @@ return dispatch(sessionActions.login(user)).then(closeModal).catch(
         onChange={e => {setPassword(e.target.value)}} 
         required />
         {errors.credential && (<p>{errors.credential}</p>)}
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={Object.keys(errors).length} >Log In</button>
         </form>
 
 

@@ -36,11 +36,12 @@ export const login = (user) =>
 
     const response = await csrfFetch(url, options);
 
-    if (response.ok) {
-      const data = await response.json();
-      dispatch(loginSession(data.user));
-      return data.user;
-    }
+
+    const data = await response.json();
+    
+    dispatch(loginSession(data.user));
+    return response;
+    
   };
 
 export const restoreUser = () => 
@@ -97,7 +98,7 @@ if(response.ok){
 *Reducers
 --------------------*/
 
-export default function sessionReducer(state = { user: null }, action) {
+function sessionReducer(state = { user: null }, action) {
   switch (action.type) {
     case LOGIN:
       return { ...state, user: action.payload };
@@ -109,3 +110,5 @@ export default function sessionReducer(state = { user: null }, action) {
       return state;
   }
 }
+
+export default sessionReducer
