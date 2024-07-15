@@ -1,29 +1,14 @@
-import {useDispatch} from 'react-redux'
-import { useEffect } from 'react'
-import * as sessionActions from '../../src/store';
+
 
 function SpotTile(){
-const dispatch = useDispatch()
-//dispatch for the spots
 
-    //map out all the spot results returned
-    useEffect(()=>{
-        async () =>{
-            const spots = await dispatch(sessionActions.getSpots())
-console.log(">>>> get spots", spots);
-        }
-       
-
-
-    },[dispatch])
-
+//create the tile design for each spot
 
 
 return (
     <>
-    <h1>Spot Tile</h1>
-
-    
+    <h1>Spot</h1>
+      
     </>
 
 )

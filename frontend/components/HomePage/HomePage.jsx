@@ -1,15 +1,34 @@
 import SpotTile from "../SpotTile"
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import * as spotsActions from '../../src/store/spots';
+// import { getSpots } from "../../src/store/spots";
 
 function HomePage(){
 
-//map the results of getting all spots to the home page
+    const spots = useSelector((state)=> state.spots);
 
+    
+const dispatch = useDispatch()
+useEffect(()=>{
+    dispatch(spotsActions.getSpots())
 
+},[dispatch])
 
+const spotsList = Object.entries(spots)
+console.log(">>>>spotsList", spotsList);
     return(
         <>
         <h1>HomePage</h1>
-        <SpotTile/>
+        {
+            spotsList.map(spot => {
+
+                return (
+                <SpotTile key={spot.id} spot={spot.name}/>
+                )
+            })
+        }
+        
         </>
     )
 }
