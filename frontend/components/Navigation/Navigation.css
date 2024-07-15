@@ -1,3 +1,8 @@
+#nav-container{
+    display:flex;
+    justify-content: space-between;
+}
+
 .profile-dropdown.hidden{
     display: none
 }

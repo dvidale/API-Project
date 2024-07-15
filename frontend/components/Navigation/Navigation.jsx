@@ -8,17 +8,19 @@ const Navigation = ({ isLoaded }) => {
   const sessionUser = useSelector((state) => state.session.user);
 
   return (
-      <ul>
-<li> 
+   
+      <nav id='nav-container'>
+<div> 
       <NavLink to="/"> {<img alt="Home" src="./heirbnb_site_logo_v1_full_size.png" />} </NavLink>
-      </li>
+      </div>
 
 {isLoaded && (
-<li>
+<div>
 <ProfileButton user={sessionUser} /> 
-   </li>
+   </div>
   )}
-</ul>
+</nav>
+
 );
 }
 export default Navigation;

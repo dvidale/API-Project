@@ -42,12 +42,14 @@ const ProfileButton = ({user}) => {
     
     return (
         <>
+        
        <button onClick={toggleMenu}> 
         <RiAccountCircleFill /> 
         </button> 
        <ul className={ulClassName} ref={ulRef}>
         {user ? (
 <>
+<p>Hello, {user.firstName}</p>
 <li>{user.username}</li>
         <li>{user.firstName} {user.lastName}</li>
         <li>{user.email}</li>
