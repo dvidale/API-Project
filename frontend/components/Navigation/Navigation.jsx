@@ -1,46 +1,48 @@
-import { NavLink } from "react-router-dom"
-import ProfileButton from "./ProfileButton"
-import { useSelector, } from 'react-redux';
+import { NavLink } from "react-router-dom";
+import ProfileButton from "./ProfileButton";
+import { useSelector } from "react-redux";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
-import './Navigation.css';
 
-const Navigation = ({isLoaded}) =>{
+import "./Navigation.css";
 
-const sessionUser = useSelector(state => state.session.user);
+const Navigation = ({ isLoaded }) => {
+  const sessionUser = useSelector((state) => state.session.user);
 
   const sessionLinks = sessionUser ? (
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
+    <ProfileButton user={sessionUser} />
   ) : (
     <>
-      <li>
       <OpenModalButton
-          buttonText="Log In"
-          modalComponent={<LoginFormModal />}
-        />
-      </li>
-      <li>
-        <OpenModalButton
-          buttonText="Sign Up"
-          modalComponent={<SignupFormModal />}
-        />
-      </li>
+        buttonText="Log In"
+        modalComponent={<LoginFormModal />}
+      />
+      <OpenModalButton
+        buttonText="Sign Up"
+        modalComponent={<SignupFormModal />}
+      />
     </>
   );
 
-    return (
-        <ul>
-            <li>
-            <NavLink to='/'>Home</NavLink>
-            </li>
-            {isLoaded && sessionLinks}
-        </ul>
-    );
+  return (
+    <header>
+    <nav>
+      <div id="nav-left">
+      <NavLink to="/">
+        {<img alt="Home" src="./heirbnb_site_logo_v1_full_size.png" />}
+      </NavLink>
+      </div>
+     
+<div id="nav-right">
+<NavLink to='/test'>Test</NavLink>
+{isLoaded && sessionLinks}
 
-}
-
+</div>
+      
+    </nav>
+    </header>
+  );
+};
 
 export default Navigation;

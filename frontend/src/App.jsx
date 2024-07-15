@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import * as sessionActions from './store/session'
 import { useDispatch } from 'react-redux'
 import Navigation from "../components/Navigation";
+import TestPage from "../components/TestPage";
+import HomePage from "../components/HomePage";
 
 
 function App() {
@@ -27,7 +29,8 @@ useEffect(() =>{
       <BrowserRouter>
       <Navigation isLoaded={isLoaded}/>
       <Routes>
-          <Route path="/" element={<h1>Welcome!</h1>} />
+          <Route path="/" element={<HomePage/>} />
+          <Route path='/test' element={<TestPage/>}/>
         </Routes>
         
       </BrowserRouter>
