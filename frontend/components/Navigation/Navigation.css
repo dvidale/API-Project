@@ -1,16 +1,3 @@
-#header{
-    display:block
-}
-
-#nav{
-    display: flex;
-    justify-content: space-between;
-}
-
-#nav-left{
-    display: inline
-}
-
-#nav-right{
-    display: inline
+.profile-dropdown.hidden{
+    display: none
 }
