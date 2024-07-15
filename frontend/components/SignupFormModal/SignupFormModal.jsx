@@ -22,12 +22,20 @@ const { closeModal } = useModal();
 useEffect(()=>{
 const err = {}
 
- if(!firstName) err.firstName = "Cannot be empty"
+ if(!firstName){
+err.firstName = "Cannot be empty"
+ } else if(firstName.slice(0,4).includes(" ")) err.firstName = "Cannot start with empty spaces"
+
+
  if(!lastName) err.lastName = "Cannot be empty"
+ if(lastName.slice(0,4).includes(" ")) err.lastName = "Cannot start with empty spaces"
  if(!email) err.email = "Cannot be empty"
+
  if(!username) err.username = "Cannot be empty"
+  if(username.slice(0,4).includes(" ")) err.username = "Cannot start with empty spaces"
+
  if(!password) err.password = "Cannot be empty"
- if(!confirmPassword) err.confirmPassword = "Cannot be empty"
+ if(!confirmPassword) err.confirmPassword = "Cannot start with empty spaces"
  
  if(username.length < 4) err.username = "Username must be longer than 4 characters"
  if(password.length < 6) err.password = "Password must be 6 characters or more"

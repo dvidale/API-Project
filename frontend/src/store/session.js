@@ -91,6 +91,23 @@ const data = await response.json()
   return response
   } 
 
+
+export const getSpots = () => async () =>{
+
+const response = await csrfFetch('/api/spots')
+
+const data = await response.json()
+
+return data;
+
+
+
+}
+
+
+
+
+
 /* ------------------
 *Reducers
 --------------------*/
