@@ -11,6 +11,7 @@ const ProfileButton = ({user}) => {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
+    const [loggedIn, setLoggedIn] = useState(true)
 
     const toggleMenu = (e) => {
         e.stopPropagation(); // Keep click from bubbling up to document and triggering closeMenu
@@ -37,6 +38,7 @@ const ProfileButton = ({user}) => {
         e.preventDefault();
         dispatch(sessionActions.logout());
         closeMenu();
+        setLoggedIn(false)
       };
 
 
@@ -44,10 +46,10 @@ const ProfileButton = ({user}) => {
 
       useEffect(()=>{
 
-        if(!user) navigate('/')
+        if(!loggedIn) navigate('/')
 
 
-      },[navigate, user])
+      },[loggedIn, navigate])
   
       const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
     
