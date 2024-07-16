@@ -40,7 +40,9 @@ const user = { credential, password }
 return dispatch(sessionActions.login(user)).then(closeModal).catch(
     async (res) => {
       const data = await res.json();
+    
       if (data && data.errors) setErrors(data.errors);
+      
       alert(`${data.errors.message}`)
     });
 }

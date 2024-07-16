@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "./create-a-spot.css";
+import * as spotsActions from '../../src/store/spots'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 function CreateASpot() {
   const [country, setCountry] = useState("");
@@ -15,6 +18,9 @@ function CreateASpot() {
   const [imgFour, setImgFour] = useState("");
   const [imgFive, setImgFive] = useState("");
   const [errors, setErrors] = useState({});
+
+const dispatch = useDispatch();
+const navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -52,10 +58,24 @@ function CreateASpot() {
 
 
     if(!Object.keys(err).length){
-const newSpotFormData = {
-
-
+const createSpotFormData = {
+address,
+city,
+state,
+country,
+lat: 70,
+lng: 70,
+name: title,
+description: desc,
+price
 }
+
+
+  dispatch(spotsActions.createSpot(createSpotFormData)).then( spot => navigate(`/spots/${spot.id}`))
+
+  
+
+
     }
   };
 
