@@ -7,6 +7,7 @@ import HomePage from '../components/HomePage/HomePage';
 import TestPage from '../components/TestPage/TestPage';
 import SpotDetails from '../components/SpotDetailsPage';
 import { csrfFetch } from './store/csrf';
+import CreateASpot from '../components/CreateASpot';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -40,11 +41,15 @@ const router = createBrowserRouter([
         element:<TestPage/>
       },
       {
-        path: 'spots/:id',
+        path: '/spots/:id',
         element:<SpotDetails/>,
         loader: async ({params}) => {
           return csrfFetch(`/api/spots/${params.id}`)
         }
+      },
+      {
+        path: '/spots/new',
+        element:<CreateASpot/>
       }
     ]
   }

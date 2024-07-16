@@ -1,12 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
+// import { useNavigate } from "react-router-dom";
 
 import "./Navigation.css";
 
 
 const Navigation = ({ isLoaded }) => {
   const sessionUser = useSelector((state) => state.session.user);
+// const navigate = useNavigate();
 
   return (
    
@@ -18,10 +20,13 @@ const Navigation = ({ isLoaded }) => {
 
 
 {isLoaded && (
+      <>
+       
 <div>
+{sessionUser &&  <Link to='/spots/new' id="create-spot-button" >Create A New Spot</Link>}
 <ProfileButton user={sessionUser} /> 
    </div>
-  )}
+   </> )}
 </nav>
 
 );
