@@ -19,7 +19,7 @@ const getAllSpots = (spots) => {
 --------------------*/
 
 export const getSpots = () => async (dispatch) =>{
-console.log(">>>>hitting the thunk");
+
     const response = await csrfFetch('/api/spots')
     
     const data = await response.json()
@@ -30,9 +30,6 @@ console.log(">>>>hitting the thunk");
     
     
     }
-
-
-
 
 
 /* ------------------

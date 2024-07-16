@@ -393,6 +393,9 @@ const validateSpot = [
     .withMessage("Price per day must be a positive number"),
   handleValidationErrors,
 ];
+/*-------------------
+* Create a spot
+----------------------*/
 
 router.post("/", [requireAuth, validateSpot], async (req, res) => {
   //pull in client-provided new spot data from req body
