@@ -1,11 +1,13 @@
 import SpotTile from "../SpotTile"
-import { useDispatch, useSelector} from "react-redux";
+import {  useSelector} from "react-redux";
 import { useEffect } from "react";
 import * as spotsActions from '../../src/store/spots';
 import '../../src/index.css'
+import { useDispatch } from "react-redux";
 
 function HomePage(){
 
+   
     let spots = useSelector((state)=> state.spots);
 
     

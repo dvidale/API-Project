@@ -1,14 +1,21 @@
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import OwnerSpotTile from "../OwnerSpotTile";
-import { useLoaderData, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 function ManageSpotsPage(){
 
-//     const sessionUser = useSelector((state) => state.session.user);
-// console.log(">>>>session user in ManageSpots", sessionUser);
-const ownerSpots = useLoaderData()
+const allTheSpots = useSelector(state => state.spots)
+const currentUser = useSelector(state => state.session.user)
 
 
+const allSpotsArr = Object.values(allTheSpots)
+
+const ownerSpots = allSpotsArr.filter(spot =>{
+        return (
+            spot.ownerId === currentUser.id
+    )
+}) 
 
 
 return (
@@ -17,9 +24,9 @@ return (
  
     <h1>Manage Spots</h1>
 
-    { ownerSpots.Spots.length > 0 ? (
+    { ownerSpots.length > 0 ? (
         <>
-        {ownerSpots.Spots.map((spot)=>{
+        {ownerSpots.map((spot)=>{
         return (
             <OwnerSpotTile key={spot.id} spot={spot}/>
         )

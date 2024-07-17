@@ -64,6 +64,7 @@ export const getSpots = () => async (dispatch) =>{
         return data;
     }
 
+
    export const updateASpot = (updateSpotFormData, id) => async(dispatch)=>{
     const url = `/api/spots/${id}`
     const method = 'PUT'
@@ -117,10 +118,10 @@ switch(action.type){
          return {...state, ...allSpots};
     } 
     case ADD_SPOT:{
-        const obj = {}
+        const newState = {...state}
         const newSpot = action.payload;
-        obj[newSpot.id] = newSpot;
-        return{...state, ...obj };
+        newState[newSpot.id] = newSpot;
+        return newState;
     }
     case DELETE_SPOT:{
         const newState = {...state}

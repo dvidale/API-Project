@@ -37,6 +37,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage/>
+        
       },
       {
         path:'/test',
@@ -55,10 +56,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/spots/current',
-        element: <ManageSpotsPage/>,
-        loader: async () =>{
-          return csrfFetch('/api/spots/current')
-        }
+        element: <ManageSpotsPage/>
       },
       {
         path: '/spots/:id/edit',
