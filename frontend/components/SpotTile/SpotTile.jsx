@@ -12,7 +12,7 @@ return (
         <span className="tooltiptext">{spot.name}</span>
     <img id="spot-img" alt={spot.name} src={spot.previewImage}/>
       <p>{spot.city}, {spot.state}</p>
-      <p>{spot.avgRating ? spot.avgRating : "New"}</p>
+      <p>{spot.avgRating ? (spot.avgRating).toFixed(1) : "New"}</p>
       <p>${spot.price} night</p>
     </div>
     </NavLink>

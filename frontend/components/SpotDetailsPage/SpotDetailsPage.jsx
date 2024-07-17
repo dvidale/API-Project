@@ -31,7 +31,7 @@ function comingSoon(e){
 <p>Paragraph: {spot.description}</p>
 <div id="spot-reserve-box">
     <div id="spot-price"> ${spot.price} night</div>
-    <div id="star-rating">{spot.avgStarRating} avg stars (change to icons)</div>
+    <div id="star-rating">{spot.avgStarRating && (spot.avgStarRating).toFixed(1)} avg stars (change to icons)</div>
     {spot.numReviews > 0 &&
      <div id="num-reviews">{`• `}{spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}</div>
     }
