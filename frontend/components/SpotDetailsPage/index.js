@@ -1,3 +1,3 @@
-import SpotDetails from "./SpotDetailsPage";
+import SpotDetailsPage from "./SpotDetailsPage";
 
-export default SpotDetails;
+export default SpotDetailsPage;

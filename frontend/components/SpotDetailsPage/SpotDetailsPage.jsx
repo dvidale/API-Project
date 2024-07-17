@@ -1,22 +1,19 @@
 import { useLoaderData } from "react-router-dom"
-// import { useSelector, useDispatch } from "react-redux";
-// import { useEffect } from 'react';
-// import * as spotsActions from '../../src/store/spots'
+import SpotReviewsList from "../SpotReviewsList";
 
-function SpotDetails(){
+function SpotDetailsPage(){
 
-// let spot = useSelector((state)=> state.spots[id]);
+
 
 let spot = useLoaderData()
-// console.log(">>>> spot data", spot);
 
+let spotId = spot.id
 
 function comingSoon(e){
     e.preventDefault();
 
     alert('Feature coming soon')
 }
-
 
     return(
 <>
@@ -41,6 +38,22 @@ function comingSoon(e){
     <div id="reviews-list">
 
     </div>
+    <div> <SpotReviewsList spotId={spotId}/> </div>
+    {/* If there are reviews for this spot, render them below from newest to oldest.
+    
+- WE NEED TO CREATE A STATE SLICE FOR REVIEWS!
+
+    - use the current spot id to drive a dispatch to '/api/spots/:spotId/reviews'
+    - return the results to a local state variable
+
+    - I can use the useSelector to listen to the state slice loaded by the dispatch, and set the local state variable to the info from the slice
+
+    - use the state variable to populate the review list on the page
+
+    - this way, if a review is added to the list, the selector will be triggered to update the state variable, dynamically updating the list
+    
+    
+    */}
 </>
        
     )
@@ -48,4 +61,4 @@ function comingSoon(e){
 
 }
 
-export default SpotDetails
+export default SpotDetailsPage

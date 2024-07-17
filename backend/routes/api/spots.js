@@ -694,6 +694,7 @@ router.get('/:spotId/reviews', async(req,res)=>{
   //get all the reviews around that id
   
   const Reviews = await Review.findAll({
+    order:[['id', 'DESC']],
       where:{
           spotId
       },

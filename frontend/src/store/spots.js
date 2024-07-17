@@ -1,5 +1,9 @@
 import { csrfFetch } from "./csrf";
 
+/* --------------------
+*Action Types
+--------------------*/
+
 const GET_SPOTS = '/spots/GET_SPOTS'
 const ADD_SPOT = '/spots/ADD_SPOT'
 const DELETE_SPOT = '/spots/DELETE_SPOT'
