@@ -1,9 +1,10 @@
 import { useLoaderData } from "react-router-dom"
+import { useSelector } from "react-redux";
 import SpotReviewsList from "../SpotReviewsList";
 
 function SpotDetailsPage(){
 
-
+const user = useSelector(state => state.session.user)
 
 let spot = useLoaderData()
 
@@ -38,20 +39,20 @@ function comingSoon(e){
     <div id="reviews-list">
 
     </div>
-    <div> <SpotReviewsList spotId={spotId}/> </div>
+    <div> <SpotReviewsList spotId={spotId} spot={spot} user={user} /> </div>
     {/* If there are reviews for this spot, render them below from newest to oldest.
-    
-- WE NEED TO CREATE A STATE SLICE FOR REVIEWS!
+  
+  scenario #1 - user is NOT logged in, there are reviews - show the reviews, no create review button
 
-    - use the current spot id to drive a dispatch to '/api/spots/:spotId/reviews'
-    - return the results to a local state variable
+  scenario #2 - user IS logged in, there are reviews, IS owner - show the reviews, no create review button
 
-    - I can use the useSelector to listen to the state slice loaded by the dispatch, and set the local state variable to the info from the slice
+  scenario #3 - user IS logged in, there are reviews, is NOT owner - show the reviews AND create review button
 
-    - use the state variable to populate the review list on the page
+  scenario #4 - user IS logged in, there are NO reviews, is NOT owner - REPLACE reviews with "Create first Post," AND create review button
 
-    - this way, if a review is added to the list, the selector will be triggered to update the state variable, dynamically updating the list
-    
+  scenario #5 - user IS logged in, there are NO reviews, IS owner - REPLACE reviews with "No Reviews yet"
+
+    scenario #6 - user is NOT logged in, there are NO reviews - REPLACE reviews with "No Reviews yet"
     
     */}
 </>

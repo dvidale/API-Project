@@ -47,7 +47,7 @@ const initialState = {}
 function reviewsReducer(state = initialState, action){
 switch(action.type){
 case GET_SPOT_REVIEWS:{
-    const newState = {...state}
+    const newState = {}
     action.payload.forEach(review => {
     newState[review.id] = review;        
     });
