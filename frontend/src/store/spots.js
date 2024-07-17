@@ -2,6 +2,9 @@ import { csrfFetch } from "./csrf";
 
 const GET_SPOTS = '/spots/GET_SPOTS'
 const ADD_SPOT = '/spots/ADD_SPOT'
+const DELETE_SPOT = '/spots/DELETE_SPOT'
+
+
 
 /* --------------------
 *Regular Action Creators
@@ -19,8 +22,13 @@ return {
     type: ADD_SPOT,
     payload: spot
 }
+}
 
-
+const deleteSpot = (id) =>{
+    return{
+        type:DELETE_SPOT,
+        payload: id
+    }
 }
 
 
@@ -51,11 +59,47 @@ export const getSpots = () => async (dispatch) =>{
         const response = await csrfFetch(url, options)
 
         const data = await response.json()
-        console.log(">>>>>>data returned from server to createSpot thunk ", data);
+    
         dispatch(addSpot(data))
         return data;
     }
 
+   export const updateASpot = (updateSpotFormData, id) => async(dispatch)=>{
+    const url = `/api/spots/${id}`
+    const method = 'PUT'
+    const body = JSON.stringify(updateSpotFormData)
+    const options = { method, body}
+
+    const response = await csrfFetch(url, options)
+
+    const data = await response.json()
+
+    dispatch(addSpot(data))
+return data;
+
+
+
+   }
+
+
+   export const deleteASpot = (id) => async (dispatch) =>{
+
+    const url = `/api/spots/${id}`
+
+    const method = 'DELETE'
+
+    const options = {method}
+
+    const response = await csrfFetch(url, options)
+    if(response.ok){
+    dispatch(deleteSpot(id))
+    }
+    return response
+
+
+
+
+   }
 
 /* ------------------
 *Reducers
@@ -77,6 +121,11 @@ switch(action.type){
         const newSpot = action.payload;
         obj[newSpot.id] = newSpot;
         return{...state, ...obj };
+    }
+    case DELETE_SPOT:{
+        const newState = {...state}
+delete newState[action.payload]
+return newState
     }
         default:
             return state;

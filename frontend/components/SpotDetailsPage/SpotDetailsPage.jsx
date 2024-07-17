@@ -22,7 +22,7 @@ function comingSoon(e){
 <>
 <h1>{spot.name}</h1>
 <h3>Location: {spot.city}, {spot.address}</h3>
-<div id="big-spot-img"><img alt="big spot img" src={spot.SpotImages[0].url} /></div>
+<div id="big-spot-img"><img alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
 <div id="sm-spot-img"><img alt="small img 1"/></div>
 <div id="sm-spot-img"><img alt="small img 2"/></div>
 <div id="sm-spot-img"><img alt="small img 3"/></div>

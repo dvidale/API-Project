@@ -610,8 +610,6 @@ res.json(updatedSpot)
 
 
 //DELETE A SPOT
-//DONE: There seems to be a bug around deleting spots that have an image associated with them. In production, the error says it's related to the foreign key contraints
-
 
 router.delete('/:spotId', requireAuth, async (req, res)=>{
 

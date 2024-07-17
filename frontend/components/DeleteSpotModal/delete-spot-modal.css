@@ -1,0 +1,9 @@
+.red-button{
+    color: white;
+    background-color: red;
+}
+
+.gray-button{
+    background-color: darkgray;
+    color: black
+}

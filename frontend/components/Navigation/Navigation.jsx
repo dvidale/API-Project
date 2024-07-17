@@ -1,14 +1,15 @@
 import { NavLink, Link } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
+
 
 import "./Navigation.css";
 
 
 const Navigation = ({ isLoaded }) => {
   const sessionUser = useSelector((state) => state.session.user);
-// const navigate = useNavigate();
+
+
 
   return (
    
