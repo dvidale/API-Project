@@ -49,7 +49,8 @@ if(user !== null){
 <div> <OpenModalButton buttonText="Post Your Review" modalComponent={<PostYourReviewModal user={user} spotId={spotId}/>}/> 
     </div>}
 
-{reviewsList.length > 0 &&        
+{
+reviewsList.length > 0 &&        
         reviewsList.map((review) => {
           return ( <SpotReview key={review.id} review={review} user={user} />)
         })}

@@ -62,10 +62,11 @@ function comingSoon(e){
    
    
     <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
-    {spot.numReviews > 0 && <div id="reviews-list">
+    
+    <div id="reviews-list">
     <div> <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> </div>
     
-    </div>}
+    </div>
 </>
 )}
 </>   
