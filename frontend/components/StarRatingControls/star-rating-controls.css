@@ -1,0 +1,13 @@
+.rating-input {
+    display: flex;
+    margin-right: 4px;
+  }
+
+
+.rating-input .filled {
+    color: gold
+  }
+  
+  .rating-input .empty {
+    color: silver;
+  }

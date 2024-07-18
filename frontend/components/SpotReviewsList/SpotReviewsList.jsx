@@ -2,8 +2,10 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useState } from "react"
 import { useEffect } from "react";
-import * as reviewActions from "../../src/store/reviews";
+import * as reviewsActions from "../../src/store/reviews";
 import SpotReview from "../SpotReview";
+import OpenModalButton from "../OpenModalButton";
+import PostYourReviewModal from "../PostYourReviewModal/PostYourReviewModal";
 
 function SpotReviewsList({ spotId, spot, user }) {
   let spotReviews = useSelector((state) => state.reviews);
@@ -11,7 +13,7 @@ function SpotReviewsList({ spotId, spot, user }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(reviewActions.getReviewsForSpot(spotId));
+    dispatch(reviewsActions.getReviewsForSpot(spotId));
   }, [dispatch, spotId]);
 
   const reviewsList = Object.values(spotReviews).reverse();
@@ -39,7 +41,8 @@ if(user !== null){
 
 {/* User is logged in, not the owner, and has not reviewed*/}     
 {user !==null && spot.ownerId !== user.id && userHasReviewed === false &&
-<button>Post Your Review</button>}
+<div> <OpenModalButton buttonText="Post Your Review" modalComponent={<PostYourReviewModal user={user} spotId={spotId}/>}/> 
+    </div>}
 
 {reviewsList.length > 0 &&        
         reviewsList.map((review) => {

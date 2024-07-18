@@ -781,11 +781,7 @@ const createdReview = await Review.create({
     stars
   })
   
-  // let newReview = await Review.findAll({
-  //   order:[['id', 'DESC']],
-  //   limit:1
-  // })
-  
+
   res.status(201)
   res.json(createdReview)
 
