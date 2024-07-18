@@ -8,6 +8,11 @@ import OpenModalButton from "../OpenModalButton";
 import PostYourReviewModal from "../PostYourReviewModal/PostYourReviewModal";
 
 function SpotReviewsList({ spotId, spot, user }) {
+
+  console.log(">>> spotId in SpotReviewsList", spotId);
+console.log(">>>>> spot in SpotReviewsList", spot);
+console.log(">>>>>> user in SpotReviewsList", user);
+
   let spotReviews = useSelector((state) => state.reviews);
 
   const dispatch = useDispatch();
