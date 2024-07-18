@@ -28,7 +28,7 @@ return (
               />
               </div>
       
-      <Link to={`/spots/${spot.id}`}><MdOutlineStar /><p>{spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"}</p></Link>
+      <Link to={`/spots/${spot.id}`}><p><MdOutlineStar />{spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"}</p></Link>
       
       <Link to={`/spots/${spot.id}`}><p>${spot.price} night</p></Link>
     </div>

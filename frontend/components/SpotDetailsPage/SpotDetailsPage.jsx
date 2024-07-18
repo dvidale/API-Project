@@ -52,7 +52,7 @@ function comingSoon(e){
     <div id="spot-price"> ${spot.price} night</div>
     <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
     {spot.numReviews > 0 &&
-     <div id="num-reviews">{`• `}{spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}</div>
+     <div id="num-reviews">{`• `}{spot.numReviews} {+spot.numReviews === 1 ? "Review" : "Reviews"}</div>
     }
    
     <button id="reserve-button" type="button"  onClick={comingSoon}>Reserve</button>
