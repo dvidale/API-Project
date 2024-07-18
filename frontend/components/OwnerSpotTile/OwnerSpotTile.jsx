@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { MdOutlineStar } from "react-icons/md";
 import DeleteSpotModal from '../DeleteSpotModal'
 import OpenModalButton from '../OpenModalButton'
 
@@ -27,7 +28,7 @@ return (
               />
               </div>
       
-      <Link to={`/spots/${spot.id}`}><p>{spot.avgRating ? spot.avgRating : "New"}</p></Link>
+      <Link to={`/spots/${spot.id}`}><MdOutlineStar /><p>{spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"}</p></Link>
       
       <Link to={`/spots/${spot.id}`}><p>${spot.price} night</p></Link>
     </div>
