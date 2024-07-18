@@ -6,7 +6,7 @@ import '../../src/index.css'
 function SpotTile({spot}){
 
 //create the tile design for each spot
-
+console.log(">>>>>> spot data on SpotTile", spot);
 
 return (
     <NavLink to={`spots/${spot.id}`} >
@@ -15,7 +15,7 @@ return (
     <img id="spot-img" alt={spot.name} src={spot.previewImage}/>
       <p>{spot.city}, {spot.state}</p>
       <span className='rating-star'><MdOutlineStar /> 
-       {spot.avgRating ? (spot.avgRating).toFixed(1) : "New"}</span>
+       {spot.avgRating > 0 ? (spot.avgRating).toFixed(1) : "New"}</span>
       <p>${spot.price} night</p>
     </div>
     </NavLink>
