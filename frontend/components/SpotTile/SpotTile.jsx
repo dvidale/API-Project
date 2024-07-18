@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router-dom'
+import { MdOutlineStar } from "react-icons/md";
 
+import '../../src/index.css'
 
 function SpotTile({spot}){
 
@@ -12,7 +14,8 @@ return (
         <span className="tooltiptext">{spot.name}</span>
     <img id="spot-img" alt={spot.name} src={spot.previewImage}/>
       <p>{spot.city}, {spot.state}</p>
-      <p>{spot.avgRating ? (spot.avgRating).toFixed(1) : "New"}</p>
+      <span className='rating-star'><MdOutlineStar /> 
+       {spot.avgRating ? (spot.avgRating).toFixed(1) : "New"}</span>
       <p>${spot.price} night</p>
     </div>
     </NavLink>

@@ -1,6 +1,8 @@
 import { useLoaderData } from "react-router-dom"
 import { useSelector } from "react-redux";
 import SpotReviewsList from "../SpotReviewsList";
+import { MdOutlineStar } from "react-icons/md";
+import '../../src/index.css'
 
 function SpotDetailsPage(){
 
@@ -29,7 +31,7 @@ function comingSoon(e){
 <p>Paragraph: {spot.description}</p>
 <div id="spot-reserve-box">
     <div id="spot-price"> ${spot.price} night</div>
-    <div id="star-rating">{spot.avgStarRating && (spot.avgStarRating).toFixed(1)} avg stars (change to icons)</div>
+    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating > 0 ? (spot.avgStarRating).toFixed(1) : "New"}</div>
     {spot.numReviews > 0 &&
      <div id="num-reviews">{`• `}{spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}</div>
     }
@@ -39,6 +41,8 @@ function comingSoon(e){
     <div id="reviews-list">
 
     </div>
+    <hr/>
+    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating > 0 ? (spot.avgStarRating).toFixed(1) : "New"}</div>
     <div> <SpotReviewsList spotId={spotId} spot={spot} user={user} /> </div>
     {/* If there are reviews for this spot, render them below from newest to oldest.
   

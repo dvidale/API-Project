@@ -34,7 +34,7 @@ if(user !== null){
 
   return (
     <>
-      <h1>Reviews</h1>
+
 
 {/*User is logged in, not the owner, and there are no reviews */}
 {user !== null && spot.ownerId !== user.id && reviewsList.length === 0 && <p>Be the first to post a review!</p> }
