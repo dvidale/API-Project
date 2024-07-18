@@ -9,9 +9,7 @@ import PostYourReviewModal from "../PostYourReviewModal/PostYourReviewModal";
 
 function SpotReviewsList({ spotId, spot, user }) {
 
-  console.log(">>> spotId in SpotReviewsList", spotId);
-console.log(">>>>> spot in SpotReviewsList", spot);
-console.log(">>>>>> user in SpotReviewsList", user);
+
 
   let spotReviews = useSelector((state) => state.reviews);
 
@@ -26,6 +24,7 @@ console.log(">>>>>> user in SpotReviewsList", user);
 const [userHasReviewed, setUserHasReviewed] = useState(false)
 
   useEffect(()=>{
+    setUserHasReviewed(false)
 if(user !== null){
     const previousReview = reviewsList.find(review =>{
         return review.userId === user.id
@@ -35,7 +34,7 @@ if(user !== null){
     setUserHasReviewed(true)
 }
     
-  },[reviewsList, user])
+  },[reviewsList, user, spotReviews])
 
   return (
     <>

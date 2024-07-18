@@ -69,7 +69,7 @@ return (
 {serverError.review && <p className="errors" >{serverError.review}</p>}
 {serverError.stars && <p className="errors" >{serverError.stars}</p>}
     <form onSubmit={submitHandler}>
-        <textarea value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here"/>
+        <textarea value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here..."/>
         <StarRatingControls onChange={onChange} stars={stars}/> <label>Stars</label>
         <button disabled={Object.keys(errors).length > 0}>Submit Your Review</button>
     </form>
