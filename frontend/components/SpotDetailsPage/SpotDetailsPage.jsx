@@ -57,15 +57,15 @@ function comingSoon(e){
    
     <button id="reserve-button" type="button"  onClick={comingSoon}>Reserve</button>
     </div>
-    <div id="reviews-list">
-
-    </div>
     <hr/>
+
+   
+   
     <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
+    {spot.numReviews > 0 && <div id="reviews-list">
     <div> <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> </div>
-    {/* If there are reviews for this spot, render them below from newest to oldest.
-  
-    */}
+    
+    </div>}
 </>
 )}
 </>   
