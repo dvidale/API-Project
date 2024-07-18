@@ -5,9 +5,10 @@ import { csrfFetch } from "./csrf";
 --------------------*/
 
 const GET_SPOTS = '/spots/GET_SPOTS'
+
+
 const ADD_SPOT = '/spots/ADD_SPOT'
 const DELETE_SPOT = '/spots/DELETE_SPOT'
-
 
 
 /* --------------------
@@ -20,6 +21,8 @@ const getAllSpots = (spots) => {
         payload: spots
     }
 }
+
+
 
 const addSpot = (spot) => {
 return {
@@ -53,6 +56,9 @@ export const getSpots = () => async (dispatch) =>{
     
     }
 
+
+
+   
     export const createSpot = (createSpotFormData)=> async (dispatch)=>{
 
         const url = '/api/spots'
@@ -121,6 +127,7 @@ switch(action.type){
          })
          return {...state, ...allSpots};
     } 
+
     case ADD_SPOT:{
         const newState = {...state}
         const newSpot = action.payload;

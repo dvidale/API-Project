@@ -20,8 +20,7 @@ return (
      <Link to={`/spots/${spot.id}`}> <p>{spot.city}, {spot.state}</p> </Link>
       
       <div id='update-btn'><Link to={`/spots/${spot.id}/edit`}>Update</Link></div>
-      
-      <div id="delete-btn"><Link>Delete</Link></div>
+    
       <div><OpenModalButton
                 buttonText="Delete"
                 modalComponent={<DeleteSpotModal spotId={spot.id}/>}

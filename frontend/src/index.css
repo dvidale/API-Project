@@ -34,3 +34,17 @@
 .rating-star{
     height: 200px;
 }
+
+.modal-delete-button{
+    color: white;
+    background-color: red;
+}
+
+.modal-cancel-delete-button{
+    background-color: darkgray;
+    color: black
+}
+
+.errors {
+    color: red;
+}

@@ -6,10 +6,11 @@ import * as sessionActions from './store/session';
 import HomePage from '../components/HomePage/HomePage';
 import TestPage from '../components/TestPage/TestPage';
 import SpotDetails from '../components/SpotDetailsPage';
-import { csrfFetch } from './store/csrf';
 import CreateASpot from '../components/CreateASpot';
 import ManageSpotsPage from '../components/ManageSpotsPage/ManageSpotsPage';
 import UpdateSpotPage from '../components/UpdateSpotPage/UpdateSpotPage';
+
+
 
 function Layout() {
   const dispatch = useDispatch();
@@ -45,10 +46,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/spots/:id',
-        element:<SpotDetails/>,
-        loader: async ({params}) => {
-          return csrfFetch(`/api/spots/${params.id}`)
-        }
+        element:<SpotDetails/>
       },
       {
         path: '/spots/new',

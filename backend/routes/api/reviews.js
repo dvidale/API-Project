@@ -292,7 +292,7 @@ res.json(updatedReview)
 
 router.delete('/:reviewId',[requireAuth, reviewExists], async(req,res)=>{
 
-//Todo: I'm getting a foreign key constraint error when trying to delete
+
   // make sure the current user owns the review
 
   const userId = +req.user.id

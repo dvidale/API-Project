@@ -22,7 +22,7 @@ return (
     <h1>Confirm Delete</h1>
     <p>Are you sure you want to remove this spot?</p>
     <button id="delete-spot-btn" className="red-button" onClick={deleteASpot}>Yes (Delete Spot)</button>
-    <button id="cancel-delete-spot-btn" className="gray-button">No (Keep Spot)</button>
+    <button id="cancel-delete-spot-btn" className="gray-button" onClick={closeModal}>No (Keep Spot)</button>
 
     </>
 )

@@ -1,16 +1,32 @@
-import { useLoaderData } from "react-router-dom"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import SpotReviewsList from "../SpotReviewsList";
 import { MdOutlineStar } from "react-icons/md";
+import * as spotDetailsActions from '../../src/store/spotDetails'
+
 import '../../src/index.css'
 
 function SpotDetailsPage(){
+    const user = useSelector(state => state.session.user)
 
-const user = useSelector(state => state.session.user)
+    const {id} = useParams() 
 
-let spot = useLoaderData()
+const dispatch = useDispatch()
 
-let spotId = spot.id
+
+const spot = useSelector(state => state.spotDetails[id])
+
+const reviews = useSelector(state => state.reviews)
+
+useEffect(()=>{
+
+   dispatch(spotDetailsActions.getSpotDetails(id))
+
+},[dispatch,id,reviews])
+
+
 
 function comingSoon(e){
     e.preventDefault();
@@ -19,7 +35,9 @@ function comingSoon(e){
 }
 
     return(
+      
 <>
+{!spot ? (<> </>) : (<>
 <h1>{spot.name}</h1>
 <h3>Location: {spot.city}, {spot.address}</h3>
 <div id="big-spot-img"><img alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
@@ -43,7 +61,7 @@ function comingSoon(e){
     </div>
     <hr/>
     <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating > 0 ? (spot.avgStarRating).toFixed(1) : "New"}</div>
-    <div> <SpotReviewsList spotId={spotId} spot={spot} user={user} /> </div>
+    <div> <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> </div>
     {/* If there are reviews for this spot, render them below from newest to oldest.
   
   scenario #1 - user is NOT logged in, there are reviews - show the reviews, no create review button
@@ -60,10 +78,11 @@ function comingSoon(e){
     
     */}
 </>
-       
-    )
+)}
+</>   
+    
 
-
+)
 }
 
 export default SpotDetailsPage

@@ -6,7 +6,7 @@ import { csrfFetch } from "./csrf";
 --------------------*/
 const GET_SPOT_REVIEWS = '/reviews/GET_SPOT_REVIEWS'
 const CREATE_REVIEW = '/reviews/CREATE_REVIEW'
-
+const DELETE_REVIEW = '/reviews/DELETE_REVIEW'
 
 /* --------------------
 *Regular Action Creators
@@ -26,7 +26,12 @@ const createAReview = (review) => {
     }
 }
 
-
+const deleteAreview = (reviewId) => {
+    return {
+        type:DELETE_REVIEW,
+        payload: reviewId
+    }
+}
 
 
 /* ------------------
@@ -65,6 +70,21 @@ export const createReview = (reviewData, spotId, user) => async (dispatch) =>{
 
 }
 
+
+export const deleteReview = (reviewId) => async (dispatch) => {
+
+const url = `/api/reviews/${reviewId}`
+const method = 'DELETE'
+
+const response = await csrfFetch(url, {method});
+
+dispatch(deleteAreview(reviewId))
+
+return response
+
+
+}
+
 /* ------------------
 *Reducers
 --------------------*/
@@ -86,7 +106,11 @@ case CREATE_REVIEW:{
     newState[newReview.id] = newReview
     return newState;
 }
-
+case DELETE_REVIEW:{
+    const newState = {...state}
+    delete newState[action.payload]
+    return newState;
+}
 
 
 

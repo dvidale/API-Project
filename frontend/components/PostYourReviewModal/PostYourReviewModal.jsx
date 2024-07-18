@@ -4,7 +4,7 @@ import StarRatingControls from "../StarRatingControls";
 import { useDispatch } from "react-redux";
 import * as reviewsActions from '../../src/store/reviews'
 import './post-your-review.css'
-
+import '../../src/index.css'
 
 function PostYourReviewModal({user, spotId}){
 
@@ -21,7 +21,7 @@ const dispatch = useDispatch();
     useEffect(()=>{
         const err = {}
 
-        // if(review.length < 10) err.review = "Review must be longer than 10 characters"
+        if(review.length < 10) err.review = "Review must be longer than 10 characters"
 
         if(stars === 0) err.stars = "Star rating must be greater than zero"
 
@@ -48,7 +48,7 @@ return dispatch(reviewsActions.createReview(reviewData, spotId, user)).then(clos
     async (res) => {
       const data = await res.json();
     
-      if (data && data.errors) setServerError(data.message);
+      if (data && data.errors) setServerError(data.errors);
       
     });
 
@@ -66,7 +66,8 @@ return dispatch(reviewsActions.createReview(reviewData, spotId, user)).then(clos
 return (
     <>
     <h1>How was your stay?</h1>
-{serverError && <p>{serverError}</p>}
+{serverError.review && <p className="errors" >{serverError.review}</p>}
+{serverError.stars && <p className="errors" >{serverError.stars}</p>}
     <form onSubmit={submitHandler}>
         <textarea value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here"/>
         <StarRatingControls onChange={onChange} stars={stars}/> <label>Stars</label>

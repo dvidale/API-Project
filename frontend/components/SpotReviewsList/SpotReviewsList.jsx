@@ -46,7 +46,7 @@ if(user !== null){
 
 {reviewsList.length > 0 &&        
         reviewsList.map((review) => {
-          return ( <SpotReview key={review.id} review={review} />)
+          return ( <SpotReview key={review.id} review={review} user={user} />)
         })}
 
 
