@@ -14,7 +14,7 @@ return (
     <div>{month} {new Date(review.createdAt).getFullYear() }</div>
     <div>{review.review}</div>
     </div>
-    {review.userId === user.id && <div><OpenModalButton
+    {user !== null && review.userId === user.id && <div><OpenModalButton
                 buttonText="Delete"
                 modalComponent={<DeleteReviewModal reviewId={review.id}/>}
               />
