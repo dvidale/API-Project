@@ -6,7 +6,7 @@ import '../../src/index.css'
 function SpotTile({spot}){
 
 //create the tile design for each spot
-console.log(">>>>> spot object on spot tile", spot);
+
 
 return (
     <NavLink to={`spots/${spot.id}`} >

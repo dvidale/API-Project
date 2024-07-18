@@ -49,7 +49,7 @@ function comingSoon(e){
 <p>Paragraph: {spot.description}</p>
 <div id="spot-reserve-box">
     <div id="spot-price"> ${spot.price} night</div>
-    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating > 0 ? (spot.avgStarRating).toFixed(1) : "New"}</div>
+    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
     {spot.numReviews > 0 &&
      <div id="num-reviews">{`• `}{spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}</div>
     }
@@ -60,22 +60,10 @@ function comingSoon(e){
 
     </div>
     <hr/>
-    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating > 0 ? (spot.avgStarRating).toFixed(1) : "New"}</div>
+    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
     <div> <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> </div>
     {/* If there are reviews for this spot, render them below from newest to oldest.
   
-  scenario #1 - user is NOT logged in, there are reviews - show the reviews, no create review button
-
-  scenario #2 - user IS logged in, there are reviews, IS owner - show the reviews, no create review button
-
-  scenario #3 - user IS logged in, there are reviews, is NOT owner - show the reviews AND create review button
-
-  scenario #4 - user IS logged in, there are NO reviews, is NOT owner - REPLACE reviews with "Create first Post," AND create review button
-
-  scenario #5 - user IS logged in, there are NO reviews, IS owner - REPLACE reviews with "No Reviews yet"
-
-    scenario #6 - user is NOT logged in, there are NO reviews - REPLACE reviews with "No Reviews yet"
-    
     */}
 </>
 )}
