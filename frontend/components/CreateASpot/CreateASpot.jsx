@@ -39,27 +39,25 @@ const navigate = useNavigate();
   
 
 
-if(previewImg.length > 0 && (!previewImg.endsWith("jpeg") || !previewImg.endsWith("jpg") || !previewImg.endsWith("png"))){
+if(previewImg.length > 0 && !(previewImg.endsWith("jpeg") || previewImg.endsWith("jpg") || previewImg.endsWith("png"))){
   err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
-if(imgTwo && !imgTwo.toLowerCase().endsWith("jpeg") && !imgTwo.toLowerCase().endsWith("jpg") && !imgTwo.toLowerCase().endsWith("png")){
+if(imgTwo.length > 0 && !(imgTwo.endsWith("jpeg") || imgTwo.endsWith("jpg") || imgTwo.endsWith("png"))){
   err.imgTwo = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
-if(imgThree && !imgThree.toLowerCase().endsWith("jpeg") && !imgThree.toLowerCase().endsWith("jpg") && !imgThree.toLowerCase().endsWith("png")){
+if(imgThree.length > 0 && !(imgThree.endsWith("jpeg") || imgThree.endsWith("jpg") || imgThree.endsWith("png"))){
   err.imgThree = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
-if(imgFour && !imgFour.toLowerCase().endsWith("jpeg") && !imgFour.toLowerCase().endsWith("jpg") && !imgFour.toLowerCase().endsWith("png")){
+if(imgFour.length > 0 && !(imgFour.endsWith("jpeg") || imgFour.endsWith("jpg") || imgFour.endsWith("png"))){
   err.imgFour = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
-if(imgFive && !imgFive.toLowerCase().endsWith("jpeg") && !imgFive.toLowerCase().endsWith("jpg") && !imgFive.toLowerCase().endsWith("png")){
+if(imgFive.length > 0 && !(imgFive.endsWith("jpeg") || imgFive.endsWith("jpg") || imgFive.endsWith("png"))){
   err.imgFive = "Image URL must end in .png, .jpg, or .jpeg";
 }
-
-
 
     setErrors(err);
 
