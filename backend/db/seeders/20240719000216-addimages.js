@@ -9,6 +9,7 @@ let options = {
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -22,14 +23,29 @@ module.exports = {
      * }], {});
     */
 
-await SpotImage.create({
-  spotId: await Spot.findAll().then(array => array[0].id),
-  url: "https://i0.wp.com/static.independent.co.uk/s3fs-public/styles/article_small/public/thumbnails/image/2016/06/27/03/jon-stark-targaryen.jpg",
-  preview: true
-})
+let url = './kings-landing.jpg'
 
+    let spots = await Spot.findAll()
 
-return;
+    spots.forEach(spot =>    
+      SpotImage.create({
+        spotId: spot.id,
+        url,
+        preview: true
+      })
+    )
+
+for(let i = 1; i <= 4; i++ ){
+
+  spots.forEach(spot =>    
+    SpotImage.create({
+      spotId: spot.id,
+      url,
+      preview: false
+    })
+  )
+
+}
 
   },
 
@@ -41,9 +57,8 @@ return;
      * await queryInterface.bulkDelete('People', null, {});
      */
 
-    let imageToDelete = await SpotImage.findAll().then(array => array[0]);
+    
 
-    await imageToDelete.destroy();
 
   }
 };

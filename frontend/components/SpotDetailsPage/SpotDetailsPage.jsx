@@ -42,10 +42,11 @@ function comingSoon(e){
 <h1>{spot.name}</h1>
 <h3>Location: {spot.city}, {spot.address}</h3>
 <div id="big-spot-img"><img alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
-<div id="sm-spot-img"><img alt="small img 1"/></div>
-<div id="sm-spot-img"><img alt="small img 2"/></div>
-<div id="sm-spot-img"><img alt="small img 3"/></div>
-<div id="sm-spot-img"><img alt="small img 4"/></div>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[1]}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[2]}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[3]}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[4]}/>
+
 <p>Hosted by: {spot.owner.firstName} {spot.owner.lastName}</p>
 <p>Paragraph: {spot.description}</p>
 <div id="spot-reserve-box">
