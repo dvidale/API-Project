@@ -1,0 +1,19 @@
+#post-review-form-container{
+    padding: 30px;
+}
+
+textarea{
+    width: 100%;
+    height: 100px;
+}
+.star-inputs-and-label{
+    margin: 10px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.post-review-button{
+    margin: 10px 0px 0px 0px;
+    display: flex;
+    justify-content: center;
+}

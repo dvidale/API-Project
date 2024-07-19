@@ -39,6 +39,7 @@ align-items: start;
  display: flex;
  flex-direction: row;
  flex-wrap: nowrap;
+ justify-content: space-between;
  gap: 50px;
 
 }
@@ -50,6 +51,7 @@ align-items: start;
     border-radius: 20px;
     padding: 20px;
     min-width: 200px;
+    max-width: 300px;
     flex-basis: 100%;
   display:flex;
   flex-direction: column;

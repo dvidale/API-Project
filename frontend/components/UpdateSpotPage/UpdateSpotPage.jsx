@@ -3,7 +3,7 @@ import * as spotsActions from '../../src/store/spots'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import '../CreateASpot/create-a-spot.css'
-
+import '../../src/index.css'
 
 
 
@@ -71,15 +71,18 @@ price
 
   return (
     <>
+    <div id="create-spot-form-container">
+    <form id="create-spot-form" onSubmit={submitHandler}>
       <h1>Update Your Spot</h1>
       <h2>Where&apos;s your place located?</h2>
       <p>
         Guests will only get your exact address once they booked a reservation.
       </p>
-      <form onSubmit={submitHandler}>
+      
         <label>Country</label>
-        {errors.country && <p className="errors">{errors.country}</p>}
-        <input
+        {errors.country && <span className="inline-errors">{errors.country}</span>}
+        <div><input
+        className="long-input-field"
           type="text"
           name="country"
           id="country"
@@ -87,9 +90,12 @@ price
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         />
-        <label>Street Address</label>
-        {errors.address && <p className="errors">{errors.address}</p>}
-        <input
+</div>
+<div className="label-margin">
+        <label >Street Address</label>
+        {errors.address && <span className="inline-errors">{errors.address}</span>}
+       <div> <input
+        className="long-input-field"
           type="text"
           name="street-address"
           id="street-address"
@@ -97,9 +103,15 @@ price
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
+        </div>
+        </div>
+        <div className="two-input-fields-container label-margin"> 
+          <div className="city-and-field-container">
         <label>City</label>
-        {errors.city && <p className="errors">{errors.city}</p>}
+        {errors.city && <span className="inline-errors">{errors.city}</span>}
+       <div>
         <input
+        className="medium-input-field"
           type="text"
           name="city"
           id="city"
@@ -107,8 +119,13 @@ price
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        ,<label>State</label>
-        {errors.state && <p className="errors">{errors.state}</p>}
+        ,
+        </div>
+        </div>
+        <div className="state-and-field-container">
+        <label>State</label>
+        {errors.state && <span className="inline-errors">{errors.state}</span>}
+        <div>
         <input
           type="text"
           name="state"
@@ -117,6 +134,10 @@ price
           value={state}
           onChange={(e) => setState(e.target.value)}
         />
+        </div>
+         </div>
+         </div>
+
         <label>
           <h2>Describe your place to guests</h2>
         </label>
@@ -125,11 +146,14 @@ price
           fast wifi or parking, and what you love about the neighborhood.
         </p>
         <textarea
+         className="desc-text-area"
           placeholder="Please write at least 30 characters"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-        {errors.desc && <p className="errors">{errors.desc}</p>}
+        {errors.desc && <span className="errors">{errors.desc}</span>}
+
+        <hr/>
         <label>
           <h2>Create a title for your spot</h2>
         </label>
@@ -137,7 +161,9 @@ price
           Catch guests&apos; attention with a spot title that highlights what
           makes your place special.
         </p>
+
         <input
+        className="long-input-field"
           type="text"
           name="title"
           id="title"
@@ -146,8 +172,9 @@ price
           onChange={(e) => setTitle(e.target.value)}
         />
         <label>
-          {errors.title && <p className="errors">{errors.title}</p>}
 
+          {errors.title && <div className="errors label-margin">{errors.title}</div>}
+<hr/>
           <h2>Set a base price for your spot</h2>
         </label>
         <p>
@@ -156,6 +183,7 @@ price
         </p>
         $
         <input
+        className="price-input-field"
           type="number"
           id="price"
           name="price"
@@ -163,13 +191,15 @@ price
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-        {errors.price && <p className="errors">{errors.price}</p>}
-       
-
+        {errors.price && <div className="errors label-margin">{errors.price}</div>}
+        <hr/>
+        <div id="create-button-container">
         <button type="submit" id="submit-new-spot">
           Update Your Spot
         </button>
+        </div>
       </form>
+      </div>
     </>
   );
 }

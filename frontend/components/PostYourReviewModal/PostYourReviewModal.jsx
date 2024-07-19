@@ -65,14 +65,21 @@ return dispatch(reviewsActions.createReview(reviewData, spotId, user)).then(clos
 
 return (
     <>
+    <div id="post-review-form-container">
+        <form onSubmit={submitHandler}>
     <h1>How was your stay?</h1>
 {serverError.review && <p className="errors" >{serverError.review}</p>}
 {serverError.stars && <p className="errors" >{serverError.stars}</p>}
-    <form onSubmit={submitHandler}>
+
         <textarea value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here..."/>
+            <div className="star-inputs-and-label"> 
         <StarRatingControls onChange={onChange} stars={stars}/> <label>Stars</label>
+        </div>
+        <div className="post-review-button">
         <button disabled={Object.keys(errors).length > 0}>Submit Your Review</button>
+        </div>
     </form>
+    </div>
     </>
 )
 

@@ -1,9 +1,21 @@
 .red-button{
     color: white;
     background-color: red;
+    width: 100%;
+height: 30px;
 }
 
 .gray-button{
+    margin: 5px 0px 5px 0px;
+    width: 100%;
     background-color: darkgray;
-    color: black
+    color: black;
+    height: 30px;
+}
+
+#delete-modal-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
 }

@@ -64,6 +64,7 @@ if(imgFive.length > 0 && !(imgFive.endsWith("jpeg") || imgFive.endsWith("jpg") |
 
 
     if(!Object.keys(err).length){
+
 const createSpotFormData = {
 address,
 city,
@@ -77,7 +78,9 @@ price
 }
 
 
-  dispatch(spotsActions.createSpot(createSpotFormData)).then( spot => navigate(`/spots/${spot.id}`))
+  dispatch(spotsActions.createSpot(createSpotFormData))
+  .then(spot => dispatch(spotsActions.addSpotImage(spot.id, previewImg)))
+  .then( spotId => navigate(`/spots/${spotId}`))
 
   
 
@@ -96,7 +99,7 @@ price
       </p>
       
         <label>Country</label>
-        {errors.country && <p className="errors">{errors.country}</p>}
+        {errors.country && <span className="inline-errors">{errors.country}</span>}
         <div><input
         className="long-input-field"
           type="text"
@@ -107,8 +110,9 @@ price
           onChange={(e) => setCountry(e.target.value)}
         />
 </div>
-        <label>Street Address</label>
-        {errors.address && <p className="errors">{errors.address}</p>}
+<div className="label-margin">
+        <label >Street Address</label>
+        {errors.address && <span className="inline-errors">{errors.address}</span>}
        <div> <input
         className="long-input-field"
           type="text"
@@ -119,12 +123,14 @@ price
           onChange={(e) => setAddress(e.target.value)}
         />
         </div>
-        <div className="two-input-fields-container"> 
+        </div>
+        <div className="two-input-fields-container label-margin"> 
           <div className="city-and-field-container">
         <label>City</label>
-        {errors.city && <p className="errors">{errors.city}</p>}
+        {errors.city && <span className="inline-errors">{errors.city}</span>}
        <div>
         <input
+        className="medium-input-field"
           type="text"
           name="city"
           id="city"
@@ -137,7 +143,7 @@ price
         </div>
         <div className="state-and-field-container">
         <label>State</label>
-        {errors.state && <p className="errors">{errors.state}</p>}
+        {errors.state && <span className="inline-errors">{errors.state}</span>}
         <div>
         <input
           type="text"
@@ -159,11 +165,14 @@ price
           fast wifi or parking, and what you love about the neighborhood.
         </p>
         <textarea
+         className="desc-text-area"
           placeholder="Please write at least 30 characters"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
-        {errors.desc && <p className="errors">{errors.desc}</p>}
+        {errors.desc && <span className="errors">{errors.desc}</span>}
+
+        <hr/>
         <label>
           <h2>Create a title for your spot</h2>
         </label>
@@ -171,7 +180,9 @@ price
           Catch guests&apos; attention with a spot title that highlights what
           makes your place special.
         </p>
+
         <input
+        className="long-input-field"
           type="text"
           name="title"
           id="title"
@@ -180,8 +191,9 @@ price
           onChange={(e) => setTitle(e.target.value)}
         />
         <label>
-          {errors.title && <p className="errors">{errors.title}</p>}
 
+          {errors.title && <div className="errors label-margin">{errors.title}</div>}
+<hr/>
           <h2>Set a base price for your spot</h2>
         </label>
         <p>
@@ -190,6 +202,7 @@ price
         </p>
         $
         <input
+        className="price-input-field"
           type="number"
           id="price"
           name="price"
@@ -197,12 +210,14 @@ price
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-        {errors.price && <p className="errors">{errors.price}</p>}
+        {errors.price && <div className="errors label-margin">{errors.price}</div>}
+        <hr/>
         <label>
           <h2>Liven up your spot with photos</h2>
         </label>
         <p>Submit a link to at least one photo to publish your spot.</p>
         <input
+        className="preview-img-input-field"
           type="text"
           id="Image-URL"
           name="Preview-Image-URL"
@@ -210,8 +225,9 @@ price
           value={previewImg}
           onChange={(e) => setPreviewImg(e.target.value)}
         />
-        {errors.previewImg && <p className="errors">{errors.previewImg}</p>}
+        {errors.previewImg && <div className="errors">{errors.previewImg}</div>}
         <input
+        className="img-input-field"
           type="text"
           id="Image-URL"
           name="Image-URL-2"
@@ -219,8 +235,9 @@ price
           value={imgTwo}
           onChange={(e) => setImgTwo(e.target.value)}
         />
-        {errors.imgTwo && <p className="errors">{errors.imgTwo}</p>}
+        {errors.imgTwo && <span className="errors">{errors.imgTwo}</span>}
         <input
+        className="img-input-field"
           type="text"
           id="Image-URL"
           name="Image-URL-3"
@@ -228,10 +245,11 @@ price
           value={imgThree}
           onChange={(e) => setImgThree(e.target.value)}
         />
-         {errors.imgThree && <p className="errors">{errors.imgThree}</p>}
+         {errors.imgThree && <span className="errors">{errors.imgThree}</span>}
         
         
         <input
+        className="img-input-field"
           type="text"
           id="Image-URL"
           name="Image-URL-4"
@@ -239,10 +257,11 @@ price
           value={imgFour}
           onChange={(e) => setImgFour(e.target.value)}
         />
-         {errors.imgFour && <p className="errors">{errors.imgFour}</p>}
+         {errors.imgFour && <span className="errors">{errors.imgFour}</span>}
 
 
         <input
+        className="img-input-field"
           type="text"
           id="Image-URL"
           name="Image-URL-5"
@@ -250,12 +269,14 @@ price
           value={imgFive}
           onChange={(e) => setImgFive(e.target.value)}
         />
-         {errors.imgFive && <p className="errors">{errors.imgFive}</p>}
+         {errors.imgFive && <span className="errors">{errors.imgFive}</span>}
 
-
+<hr/>
+<div id="create-button-container">
         <button type="submit" id="submit-new-spot">
           Create Spot
         </button>
+        </div>
       </form>
       </div>
     </>

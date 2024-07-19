@@ -23,7 +23,7 @@ const validateSignup = [
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Username is required.'),
+    .withMessage('Username must be 4 characters or more.'),
   check('username')
     .not()
     .isEmail()
@@ -55,7 +55,7 @@ if(emailCheck){
   return res.json({
     "message": "User already exists",
     "errors": {
-      "email": "User with that email already exists"
+      "email": "User with that email already exists."
     }
   })
 }
@@ -73,7 +73,7 @@ if(usernameCheck){
   return res.json({
     "message": "User already exists",
     "errors": {
-      "username": "User with that username already exists"
+      "username": "Username must be unique."
     }
   })
 }

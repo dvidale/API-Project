@@ -45,10 +45,10 @@ function comingSoon(e){
 <div id="big-spot-img-container"><img id="big-spot-img" alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
 
 <div id="image-quad-container">
-<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[1].url}/>
-<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[2].url}/>
-<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[3].url}/>
-<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[4].url}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}/>
+<img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}/>
 </div>
 </div>
 

@@ -74,6 +74,21 @@ export const getSpots = () => async (dispatch) =>{
         return data;
     }
 
+    export const addSpotImage = (spotId, imgURL) => async () =>{
+
+        const url = `/api/spots/${spotId}/images`
+const method = "POST"
+const body = JSON.stringify({
+    spotId,
+    url: imgURL,
+    preview: false
+})
+const options = {method, body}
+
+await csrfFetch(url, options)
+return spotId;
+    }
+
 
    export const updateASpot = (updateSpotFormData, id) => async(dispatch)=>{
     const url = `/api/spots/${id}`
