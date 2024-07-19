@@ -54,6 +54,7 @@ const ProfileButton = ({user}) => {
        <ul className={ulClassName} ref={ulRef}>
         {user ? (
 <>
+<div id="user-menu">
 <p>Hello, {user.firstName}</p>
 <li>{user.username}</li>
         <li>{user.firstName} {user.lastName}</li>
@@ -62,6 +63,7 @@ const ProfileButton = ({user}) => {
         <li>
           <button onClick={logout}>Log Out</button>
         </li>
+        </div>
 </>
         ):(
 <>

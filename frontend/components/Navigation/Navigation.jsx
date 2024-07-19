@@ -22,9 +22,9 @@ const Navigation = ({ isLoaded }) => {
 {isLoaded && (
       <>
        
-<div>
+<div id="create-and-dropdown">
 {sessionUser &&  <Link to='/spots/new' id="create-spot-button" >Create A New Spot</Link>}
-<ProfileButton user={sessionUser} /> 
+<ProfileButton id='profile-button' user={sessionUser} /> 
    </div>
    </> )}
 </nav>

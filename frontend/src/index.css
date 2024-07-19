@@ -22,13 +22,24 @@
     visibility: visible;
 }
 
+#spot-tile-container{
+display: inline-flex;
+/* flex-direction: row; */
+justify-content: center;
+/* border: 2px;
+border-style: dotted;
+border-color: greenyellow; */
+flex-wrap: wrap;
+}
+
 #spot-tile{
     width: 300px;
-    padding: 5px;
+    padding: 15px;
 }
 
 #spot-img{
     width: 100%;
+    border-radius: 30px;
 }
 
 .rating-star{

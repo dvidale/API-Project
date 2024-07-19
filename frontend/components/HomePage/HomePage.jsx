@@ -22,18 +22,20 @@ const spotsList = Object.values(spots)
 
     return(
         <>
-        <h1>HomePage</h1>
+    <div id="spot-tile-container">
         {
             spotsList.map(spot => {
 
                 return (
-                
+                    <>
+               
                 <SpotTile key={spot.id} spot={spot}/>
                 
+                </>
                 )
             })
         }
-        
+        </div>
         </>
     )
 }

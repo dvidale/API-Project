@@ -1,0 +1,23 @@
+#img-container{
+display: flex;
+
+}
+#big-spot-img-container{
+    width: 500px;
+}
+
+#big-spot-img{
+    width:100%
+}
+
+#image-quad-container{
+    width: 500px;
+    display:flex-inline;
+    flex-wrap: wrap;
+    justify-content: center;
+   
+}
+#sm-spot-img{
+    width: 200px;
+    margin: 10px;
+}

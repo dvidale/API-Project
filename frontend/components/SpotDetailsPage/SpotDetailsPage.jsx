@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import SpotReviewsList from "../SpotReviewsList";
 import { MdOutlineStar } from "react-icons/md";
 import * as spotDetailsActions from '../../src/store/spotDetails'
-
+import './spotdetails.css'
 import '../../src/index.css'
 
 function SpotDetailsPage(){
@@ -40,12 +40,15 @@ function comingSoon(e){
 {!spot ? (<> </>) : (<>
 <h1>{spot.name}</h1>
 <h3>Location: {spot.city}, {spot.address}</h3>
-<div id="big-spot-img"><img alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
+<div id='img-container'> 
+<div id="big-spot-img-container"><img id="big-spot-img" alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
+<div id="image-quad-container">
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[1].url}/>
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[2].url}/>
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[3].url}/>
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[4].url}/>
-
+</div>
+</div>
 <p>Hosted by: {spot.owner.firstName} {spot.owner.lastName}</p>
 <p>Paragraph: {spot.description}</p>
 <div id="spot-reserve-box">

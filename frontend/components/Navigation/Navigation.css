@@ -1,8 +1,37 @@
 #nav-container{
     display:flex;
     justify-content: space-between;
+   margin: 20px;
 }
 
 .profile-dropdown.hidden{
-    display: none
+    display: none;
+}
+
+#create-and-dropdown{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    position: relative;
+}
+
+#create-spot-button{
+    padding: 5px;
+    margin: 15px;
+}
+
+#user-menu{
+    position:absolute;
+    right: 50px;
+    z-index: 1;
+    background-color: white;
+    border-style: solid;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+#user-menu li{
+    list-style: none;
+    padding-top: 3px;
 }
