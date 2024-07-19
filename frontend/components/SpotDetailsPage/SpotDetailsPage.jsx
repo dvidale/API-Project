@@ -12,12 +12,11 @@ function SpotDetailsPage(){
     const user = useSelector(state => state.session.user)
 
     const {id} = useParams() 
-console.log(">>>> id from params", id);
+
 const dispatch = useDispatch()
 
 
 const spot = useSelector(state => state.spotDetails[id])
-console.log(">>>>> spot from useSelector", spot);
 
 const reviews = useSelector(state => state.reviews)
 

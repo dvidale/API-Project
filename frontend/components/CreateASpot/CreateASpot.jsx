@@ -36,23 +36,30 @@ const navigate = useNavigate();
 
     if (desc.length < 30) err.desc = "Description needs 30 or more characters";
    
-    const imgTypes = ["png", "jpg", "jpeg"];
+  
 
-    if (previewImg && !imgTypes.includes(previewImg.split(".")[1].toLowerCase())) {
-      err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-    if (imgTwo && !imgTypes.includes(imgTwo.split(".")[1].toLowerCase())) {
-      err.imgTwo = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-    if (imgThree && !imgTypes.includes(imgThree.split(".")[1].toLowerCase())) {
-      err.imgThree = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-    if (imgFour && !imgTypes.includes(imgFour.split(".")[1].toLowerCase())) {
-      err.imgFour = "Image URL must end in .png, .jpg, or .jpeg";
-    }
-    if (imgFive && !imgTypes.includes(imgFive.split(".")[1].toLowerCase())) {
-      err.imgFive = "Image URL must end in .png, .jpg, or .jpeg";
-    }
+
+if(previewImg && !previewImg.toLowerCase().endsWith("jpeg") && !previewImg.toLowerCase().endsWith("jpg") && !previewImg.toLowerCase().endsWith("png")){
+  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+}
+
+if(imgTwo && !imgTwo.toLowerCase().endsWith("jpeg") && !imgTwo.toLowerCase().endsWith("jpg") && !imgTwo.toLowerCase().endsWith("png")){
+  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+}
+
+if(imgThree && !imgThree.toLowerCase().endsWith("jpeg") && !imgThree.toLowerCase().endsWith("jpg") && !imgThree.toLowerCase().endsWith("png")){
+  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+}
+
+if(imgFour && !imgFour.toLowerCase().endsWith("jpeg") && !imgFour.toLowerCase().endsWith("jpg") && !imgFour.toLowerCase().endsWith("png")){
+  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+}
+
+if(imgFive && !imgFive.toLowerCase().endsWith("jpeg") && !imgFive.toLowerCase().endsWith("jpg") && !imgFive.toLowerCase().endsWith("png")){
+  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+}
+
+
 
     setErrors(err);
 
