@@ -39,24 +39,24 @@ const navigate = useNavigate();
   
 
 
-if(previewImg && !previewImg.toLowerCase().endsWith("jpeg") && !previewImg.toLowerCase().endsWith("jpg") && !previewImg.toLowerCase().endsWith("png")){
+if(previewImg && (!previewImg.endsWith("jpeg") || !previewImg.endsWith("jpg") || !previewImg.endsWith("png"))){
   err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
 if(imgTwo && !imgTwo.toLowerCase().endsWith("jpeg") && !imgTwo.toLowerCase().endsWith("jpg") && !imgTwo.toLowerCase().endsWith("png")){
-  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+  err.imgTwo = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
 if(imgThree && !imgThree.toLowerCase().endsWith("jpeg") && !imgThree.toLowerCase().endsWith("jpg") && !imgThree.toLowerCase().endsWith("png")){
-  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+  err.imgThree = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
 if(imgFour && !imgFour.toLowerCase().endsWith("jpeg") && !imgFour.toLowerCase().endsWith("jpg") && !imgFour.toLowerCase().endsWith("png")){
-  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+  err.imgFour = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
 if(imgFive && !imgFive.toLowerCase().endsWith("jpeg") && !imgFive.toLowerCase().endsWith("jpg") && !imgFive.toLowerCase().endsWith("png")){
-  err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
+  err.imgFive = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
 
