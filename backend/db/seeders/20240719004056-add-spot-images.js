@@ -23,29 +23,47 @@ module.exports = {
      * }], {});
     */
 
+let spots = await Spot.findAll()
 let url = './kings-landing.jpg'
 
-    let spots = await Spot.findAll()
+let i=0
+while (i < spots.length) {
+  await SpotImage.bulkCreate([
 
-    spots.forEach(spot =>    
-      SpotImage.create({
-        spotId: spot.id,
-        url,
-        preview: true
-      })
-    )
-
-for(let i = 1; i <= 4; i++ ){
-
-  spots.forEach(spot =>    
-    SpotImage.create({
-      spotId: spot.id,
+    {
+      spotId: spots[i].id,
+      url,
+      preview: true
+    },
+    {
+      spotId: spots[i].id,
       url,
       preview: false
-    })
+    },
+    {
+      spotId: spots[i].id,
+      url,
+      preview: false
+    },
+    {
+      spotId: spots[i].id,
+      url,
+      preview: false
+    },
+    {
+      spotId: spots[i].id,
+      url,
+      preview: false
+    }
+  
+  
+  ]
+   
   )
 
+  i++
 }
+
 
   },
 
@@ -56,9 +74,5 @@ for(let i = 1; i <= 4; i++ ){
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-
-    
-
-
   }
 };
