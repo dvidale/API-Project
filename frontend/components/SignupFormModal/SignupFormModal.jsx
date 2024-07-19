@@ -90,8 +90,9 @@ return setErrors({
 }
   return (
     <>
-      <h1>Sign Up</h1>
+      <div id="sign-up-form-modal">
       <form onSubmit={submitHandler}>
+      <h1>Sign Up</h1>
         <label htmlFor="firstName"> First Name:</label>
         <input
           type="text"
@@ -142,6 +143,7 @@ return setErrors({
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <button type="submit" disabled={Object.keys(errors).length} >Sign Up</button>
       </form>
+      </div>
     </>
   );
 };

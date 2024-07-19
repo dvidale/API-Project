@@ -38,10 +38,12 @@ function comingSoon(e){
       
 <>
 {!spot ? (<> </>) : (<>
+<div id='spot-details-page-container'> 
 <h1>{spot.name}</h1>
 <h3>Location: {spot.city}, {spot.address}</h3>
 <div id='img-container'> 
 <div id="big-spot-img-container"><img id="big-spot-img" alt="big spot img" src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""} /></div>
+
 <div id="image-quad-container">
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[1].url}/>
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[2].url}/>
@@ -49,26 +51,50 @@ function comingSoon(e){
 <img id="sm-spot-img" className="sm-spot-img" alt={spot.name} src={spot.SpotImages[4].url}/>
 </div>
 </div>
-<p>Hosted by: {spot.owner.firstName} {spot.owner.lastName}</p>
-<p>Paragraph: {spot.description}</p>
+
+<div id='desc-reserve-box-container'>
+    <div id="host-and-desc-container">
+<h2>Hosted by {spot.owner.firstName} {spot.owner.lastName}</h2>
+<p>{spot.description}</p>
+</div>
+
 <div id="spot-reserve-box">
+
+    <div id="price-rating-reviews-container">
     <div id="spot-price"> ${spot.price} night</div>
-    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
+
+    <div id="rating-review-container">
+    <div id="star-rating">
+        <span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}
+        </div>
     {spot.numReviews > 0 &&
-     <div id="num-reviews">{`• `}{spot.numReviews} {+spot.numReviews === 1 ? "Review" : "Reviews"}</div>
+     <div id="num-reviews">{`•   `}{spot.numReviews} {+spot.numReviews === 1 ? "Review" : "Reviews"}</div>
     }
-   
+   </div>
+   </div>
+
     <button id="reserve-button" type="button"  onClick={comingSoon}>Reserve</button>
     </div>
+    </div>
+
     <hr/>
 
    
-   
-    <div id="star-rating"><span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}</div>
-    
+    <div id="review-list-rating-review-container">
+    <div id="star-rating">
+        <span className='rating-star'><MdOutlineStar /> </span>{spot.avgStarRating !== null ? (+spot.avgStarRating).toFixed(1) : "New"}
+        </div>
+    {spot.numReviews > 0 &&
+     <div id="num-reviews">
+        {`•   `}{spot.numReviews} {+spot.numReviews === 1 ? "Review" : "Reviews"}
+        </div>
+    }
+</div>
+
     <div id="reviews-list">
-    <div> <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> </div>
+    <SpotReviewsList spotId={spot.id} spot={spot} user={user} /> 
     
+    </div>
     </div>
 </>
 )}

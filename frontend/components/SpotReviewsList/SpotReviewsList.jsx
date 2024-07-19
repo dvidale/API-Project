@@ -6,6 +6,7 @@ import * as reviewsActions from "../../src/store/reviews";
 import SpotReview from "../SpotReview";
 import OpenModalButton from "../OpenModalButton";
 import PostYourReviewModal from "../PostYourReviewModal/PostYourReviewModal";
+import '../SpotDetailsPage/spotdetails.css'
 
 function SpotReviewsList({ spotId, spot, user }) {
 
@@ -45,7 +46,7 @@ if(user !== null){
 
 {/* User is logged in, not the owner, and has not reviewed*/}     
 {user !==null && spot.ownerId !== user.id && userHasReviewed === false &&
-<div> <OpenModalButton buttonText="Post Your Review" modalComponent={<PostYourReviewModal user={user} spotId={spotId}/>}/> 
+<div id="post-your-review-button"> <OpenModalButton buttonText="Post Your Review" modalComponent={<PostYourReviewModal user={user} spotId={spotId}/>}/> 
     </div>}
 
 {

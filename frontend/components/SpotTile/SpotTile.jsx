@@ -12,11 +12,18 @@ return (
     <NavLink to={`spots/${spot.id}`} >
     <div id="spot-tile" className="tooltip" >
         <span className="tooltiptext">{spot.name}</span>
+      
     <img id="spot-img" alt={spot.name} src={spot.previewImage}/>
-      <p>{spot.city}, {spot.state}</p>
-      <span className='rating-star'><MdOutlineStar /> 
+
+<div id='location-rating-price-container'> 
+    <div id='location-rating-container'>   
+      <span id="location-caption">{spot.city}, {spot.state}</span>
+      <span id='landing-page-rating' className='rating-star'><MdOutlineStar /> 
        {spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"}</span>
-      <p>${spot.price} night</p>
+       </div>
+
+      <span>${spot.price} night</span>
+    </div>
     </div>
     </NavLink>
 )

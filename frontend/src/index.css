@@ -1,5 +1,13 @@
 /* TODO: Add sitewide styles */
 
+:root{
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
 .tooltip{
     position: relative;
     display: inline-block;
@@ -58,4 +66,32 @@ flex-wrap: wrap;
 
 .errors {
     color: red;
+}
+
+#location-rating-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* border: 2px solid yellowgreen; */
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#location-caption{
+    height: 18px;
+}
+
+#landing-page-rating{
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* border: 2px solid yellowgreen; */
+}
+
+#location-rating-price-container{
+    /* border: 2px solid yellowgreen; */
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
 }

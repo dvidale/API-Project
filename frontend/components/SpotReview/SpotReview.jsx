@@ -1,5 +1,7 @@
 import OpenModalButton from '../OpenModalButton'
 import DeleteReviewModal from '../DeleteReviewModal'
+import '../SpotDetailsPage/spotdetails.css'
+
 
 function SpotReview({review, user}){
     const reviewDate = new Date(review.createdAt)
@@ -9,8 +11,8 @@ function SpotReview({review, user}){
 
 return (
     <>
-    <div id ="spot-review">
-    <div>{review.User.firstName}</div>
+    <div className ="spot-review">
+    <div className='reviewer-name'>{review.User.firstName}</div>
     <div>{month} {new Date(review.createdAt).getFullYear() }</div>
     <div>{review.review}</div>
     </div>

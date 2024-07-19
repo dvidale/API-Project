@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./create-a-spot.css";
+import '../../src/index.css'
 import * as spotsActions from '../../src/store/spots'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -86,15 +87,18 @@ price
 
   return (
     <>
+<div id="create-spot-form-container">
+    <form id="create-spot-form" onSubmit={submitHandler}>
       <h1>Create a new Spot</h1>
       <h2>Where&apos;s your place located?</h2>
       <p>
         Guests will only get your exact address once they booked a reservation.
       </p>
-      <form onSubmit={submitHandler}>
+      
         <label>Country</label>
         {errors.country && <p className="errors">{errors.country}</p>}
-        <input
+        <div><input
+        className="long-input-field"
           type="text"
           name="country"
           id="country"
@@ -102,9 +106,11 @@ price
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         />
+</div>
         <label>Street Address</label>
         {errors.address && <p className="errors">{errors.address}</p>}
-        <input
+       <div> <input
+        className="long-input-field"
           type="text"
           name="street-address"
           id="street-address"
@@ -112,8 +118,12 @@ price
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
+        </div>
+        <div className="two-input-fields-container"> 
+          <div className="city-and-field-container">
         <label>City</label>
         {errors.city && <p className="errors">{errors.city}</p>}
+       <div>
         <input
           type="text"
           name="city"
@@ -122,8 +132,13 @@ price
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        ,<label>State</label>
+        ,
+        </div>
+        </div>
+        <div className="state-and-field-container">
+        <label>State</label>
         {errors.state && <p className="errors">{errors.state}</p>}
+        <div>
         <input
           type="text"
           name="state"
@@ -132,6 +147,10 @@ price
           value={state}
           onChange={(e) => setState(e.target.value)}
         />
+        </div>
+         </div>
+         </div>
+
         <label>
           <h2>Describe your place to guests</h2>
         </label>
@@ -238,6 +257,7 @@ price
           Create Spot
         </button>
       </form>
+      </div>
     </>
   );
 }

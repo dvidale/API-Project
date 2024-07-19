@@ -1,3 +1,33 @@
-.errors{
-    color: red
+#create-spot-form-container{
+display: grid;
+grid-template-columns: 100px 500px 100px;
+justify-content: center;
+
+
+}
+
+#create-spot-form{
+    grid-column-start: 2;
+    grid-column-end: 2;
+}
+
+.long-input-field{
+    width: 100%;
+}
+
+.two-input-fields-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.city-and-field-container{
+    flex-basis:80%;
+    flex-grow: 3;
+}
+
+.state-and-field-container{
+    flex-basis:20%;
+    flex-grow: 1;
 }
