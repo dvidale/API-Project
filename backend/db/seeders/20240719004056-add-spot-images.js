@@ -24,7 +24,7 @@ module.exports = {
     */
 
 let spots = await Spot.findAll()
-let url ='https://www.pexels.com/photo/photo-of-castle-1130256/'
+let url ='https://images.pexels.com/photos/1130256/pexels-photo-1130256.jpeg'
 
 let i=0
 while (i < spots.length) {
