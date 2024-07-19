@@ -39,7 +39,7 @@ const navigate = useNavigate();
   
 
 
-if(previewImg && (!previewImg.endsWith("jpeg") || !previewImg.endsWith("jpg") || !previewImg.endsWith("png"))){
+if(previewImg.length > 0 && (!previewImg.endsWith("jpeg") || !previewImg.endsWith("jpg") || !previewImg.endsWith("png"))){
   err.previewImg = "Image URL must end in .png, .jpg, or .jpeg";
 }
 
