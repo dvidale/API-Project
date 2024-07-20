@@ -98,7 +98,7 @@ price
         Guests will only get your exact address once they booked a reservation.
       </p>
       
-        <label>Country</label>
+        <label htmlFor="Country">Country
         {errors.country && <span className="inline-errors">{errors.country}</span>}
         <div><input
         className="long-input-field"
@@ -109,9 +109,11 @@ price
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         />
+    
 </div>
+</label>
 <div className="label-margin">
-        <label >Street Address</label>
+        <label htmlFor="Street Address">Street Address
         {errors.address && <span className="inline-errors">{errors.address}</span>}
        <div> <input
         className="long-input-field"
@@ -123,10 +125,11 @@ price
           onChange={(e) => setAddress(e.target.value)}
         />
         </div>
+        </label>
         </div>
         <div className="two-input-fields-container label-margin"> 
           <div className="city-and-field-container">
-        <label>City</label>
+        <label htmlFor="City">City
         {errors.city && <span className="inline-errors">{errors.city}</span>}
        <div>
         <input
@@ -140,9 +143,10 @@ price
         />
         ,
         </div>
+        </label>
         </div>
         <div className="state-and-field-container">
-        <label>State</label>
+        <label htmlFor="State">State
         {errors.state && <span className="inline-errors">{errors.state}</span>}
         <div id="state-input-field">
         <input
@@ -155,28 +159,31 @@ price
           onChange={(e) => setState(e.target.value)}
         />
         </div>
+        </label>
          </div>
          </div>
 
-        <label>
+        <label htmlFor="Description">
           <h2>Describe your place to guests</h2>
-        </label>
+        
         <p>
           Mention the best features of your space, any special amentities like
           fast wifi or parking, and what you love about the neighborhood.
         </p>
         <textarea
+        id="description"
          className="desc-text-area"
           placeholder="Please write at least 30 characters"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
+        </label>
         {errors.desc && <span className="errors">{errors.desc}</span>}
 
         <hr/>
-        <label>
+        <label htmlFor="Title">
           <h2>Create a title for your spot</h2>
-        </label>
+    
         <p>
           Catch guests&apos; attention with a spot title that highlights what
           makes your place special.
@@ -191,12 +198,15 @@ price
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <label>
+    </label>
+
+
+        <label htmlFor="Price">
 
           {errors.title && <div className="errors label-margin">{errors.title}</div>}
 <hr/>
           <h2>Set a base price for your spot</h2>
-        </label>
+     
         <p>
           Competitive pricing can help your listing stand out and rank higher in
           search results.
@@ -211,66 +221,74 @@ price
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+   </label>
         {errors.price && <div className="errors label-margin">{errors.price}</div>}
         <hr/>
-        <label>
           <h2>Liven up your spot with photos</h2>
-        </label>
         <p>Submit a link to at least one photo to publish your spot.</p>
+        <label htmlFor="Preview Image URL">
         <input
         className="preview-img-input-field"
-          type="text"
-          id="Image-URL"
-          name="Preview-Image-URL"
-          placeholder="Preview Image URL"
-          value={previewImg}
-          onChange={(e) => setPreviewImg(e.target.value)}
+        type="text"
+        id="Preview-Image-URL"
+        name="Preview-Image-URL"
+        placeholder="Preview Image URL"
+        value={previewImg}
+        onChange={(e) => setPreviewImg(e.target.value)}
         />
+        </label>
         {errors.previewImg && <div className="errors">{errors.previewImg}</div>}
+        <label htmlFor="Image URL 2">
         <input
         className="img-input-field"
           type="text"
-          id="Image-URL"
+          id="Image-URL-2"
           name="Image-URL-2"
           placeholder="Image URL"
           value={imgTwo}
           onChange={(e) => setImgTwo(e.target.value)}
         />
+</label>
         {errors.imgTwo && <span className="errors">{errors.imgTwo}</span>}
+
+        <label htmlFor="Image URL 3">
         <input
         className="img-input-field"
           type="text"
-          id="Image-URL"
+          id="Image-URL-3"
           name="Image-URL-3"
           placeholder="Image URL"
           value={imgThree}
           onChange={(e) => setImgThree(e.target.value)}
         />
+        </label>
          {errors.imgThree && <span className="errors">{errors.imgThree}</span>}
         
-        
+         <label htmlFor="Image URL 4">
         <input
         className="img-input-field"
           type="text"
-          id="Image-URL"
+          id="Image-URL-4"
           name="Image-URL-4"
           placeholder="Image URL"
           value={imgFour}
           onChange={(e) => setImgFour(e.target.value)}
         />
+        </label>
          {errors.imgFour && <span className="errors">{errors.imgFour}</span>}
 
-
+         <label htmlFor="Image URL 5">
         <input
         className="img-input-field"
           type="text"
-          id="Image-URL"
+          id="Image-URL-5"
           name="Image-URL-5"
           placeholder="Image URL"
           value={imgFive}
           onChange={(e) => setImgFive(e.target.value)}
         />
-         {errors.imgFive && <span className="errors">{errors.imgFive}</span>}
+        </label>
+                 {errors.imgFive && <span className="errors">{errors.imgFive}</span>}
 
 <hr/>
 <div id="create-button-container">

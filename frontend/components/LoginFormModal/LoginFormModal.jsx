@@ -70,21 +70,27 @@ return dispatch(sessionActions.login(user)).then(closeModal).catch(
        <div className="input-fields-container">
        <h1>Log In</h1>
        {Object.keys(serverError).length > 0 && <p className="errors">{serverError.message}</p>}
+       <label htmlFor="credential">
         <input className="form-field"
+        id="credential"
         name="credential" 
         placeholder="Username or Email"
         type="text" 
         value={credential} 
         onChange={e => {setCredential(e.target.value)}} 
         required />
-     
+     </label>
+
+<label htmlFor="password">
         <input className="form-field"
+        id="password"
         name="password" 
         placeholder=" Password"
         type="password" 
         value={password} 
         onChange={e => {setPassword(e.target.value)}} 
         required />
+        </label>
         <button id="login-button" type="submit" disabled={Object.keys(errors).length} >Log In</button>
       <button id="demo-user-login" onClick={demoUserLogin}>Demo User</button>
 

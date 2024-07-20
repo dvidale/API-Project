@@ -116,7 +116,7 @@ setIsDisabled(true)
       //   ${data.errors.username ? data.errors.username : "" }
       //   ${data.errors.password ? data.errors.password : "" }`)
 
-      console.log(">>>>setErrors with server res", errors);
+      // console.log(">>>>setErrors with server res", errors);
     });
   }
 
@@ -135,59 +135,74 @@ setIsDisabled(true)
       {errors.username && <p className="errors">{errors.username}</p>}
       {errors.password && <p className="errors">{errors.password}</p>}
       {errors.confirmPassword && <p className="errors">{errors.confirmPassword}</p>}
+      <label htmlFor="First Name">
          <input
+         id='firstName'
           type="text"
           name="firstName"
           placeholder="First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
+        </label>
 
-    
+    <label htmlFor="Last Name"> 
         <input
+        id="lastName"
           type="text"
           name="lastName"
           placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
-   
+   </label>
     
+    <label htmlFor="Email">
         <input
+        id='email'
           type="text"
           name="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        </label>
      
-
+<label htmlFor="Username">
         <input
+        id='username'
           type="text"
           name="username"
           placeholder="Username"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
-    
-    
+    </label>
+
+    <label htmlFor="Password"> 
         <input
+        id='password'
           type="password"
           name="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-   
+   </label>
+
+<label htmlFor="Confirm Password"> 
         <input
+        id='confirmPassword'
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+</label>
+
    <div className="center-button">
-        <button type="submit" disabled={isDisabled} >Sign Up</button>
+        <button id='sign-up-button' type="submit" disabled={isDisabled} >Sign Up</button>
         </div>
       </form>
       </div>

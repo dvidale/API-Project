@@ -79,7 +79,7 @@ price
         Guests will only get your exact address once they booked a reservation.
       </p>
       
-        <label>Country</label>
+        <label htmlFor='Country'>Country
         {errors.country && <span className="inline-errors">{errors.country}</span>}
         <div><input
         className="long-input-field"
@@ -91,8 +91,9 @@ price
           onChange={(e) => setCountry(e.target.value)}
         />
 </div>
+</label>
 <div className="label-margin">
-        <label >Street Address</label>
+        <label htmlFor=''>Street Address
         {errors.address && <span className="inline-errors">{errors.address}</span>}
        <div> <input
         className="long-input-field"
@@ -104,10 +105,11 @@ price
           onChange={(e) => setAddress(e.target.value)}
         />
         </div>
+        </label>
         </div>
         <div className="two-input-fields-container label-margin"> 
           <div className="city-and-field-container">
-        <label>City</label>
+        <label htmlFor="City">City
         {errors.city && <span className="inline-errors">{errors.city}</span>}
        <div>
         <input
@@ -121,9 +123,10 @@ price
         />
         ,
         </div>
+        </label>
         </div>
         <div className="state-and-field-container">
-        <label>State</label>
+        <label htmlFor="State">State
         {errors.state && <span className="inline-errors">{errors.state}</span>}
         <div>
         <input
@@ -135,33 +138,38 @@ price
           onChange={(e) => setState(e.target.value)}
         />
         </div>
+        </label>
          </div>
          </div>
 
-        <label>
+        
           <h2>Describe your place to guests</h2>
-        </label>
+      
         <p>
           Mention the best features of your space, any special amentities like
           fast wifi or parking, and what you love about the neighborhood.
         </p>
+        <label htmlFor="Description">
         <textarea
+        id="desc-text-area"
          className="desc-text-area"
           placeholder="Please write at least 30 characters"
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
         />
+          </label>
         {errors.desc && <span className="errors">{errors.desc}</span>}
 
         <hr/>
-        <label>
+        
           <h2>Create a title for your spot</h2>
-        </label>
+        
         <p>
           Catch guests&apos; attention with a spot title that highlights what
           makes your place special.
         </p>
 
+        <label htmlFor="Title">
         <input
         className="long-input-field"
           type="text"
@@ -171,17 +179,22 @@ price
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <label>
+        </label>
+
+
+
 
           {errors.title && <div className="errors label-margin">{errors.title}</div>}
 <hr/>
           <h2>Set a base price for your spot</h2>
-        </label>
+       
         <p>
           Competitive pricing can help your listing stand out and rank higher in
           search results.
         </p>
         $
+
+        <label htmlFor="Price">
         <input
         className="price-input-field"
           type="number"
@@ -191,6 +204,7 @@ price
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+         </label>
         {errors.price && <div className="errors label-margin">{errors.price}</div>}
         <hr/>
         <div id="create-button-container">

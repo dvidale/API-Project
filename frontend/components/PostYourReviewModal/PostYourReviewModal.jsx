@@ -70,10 +70,10 @@ return (
     <h1>How was your stay?</h1>
 {serverError.review && <p className="errors" >{serverError.review}</p>}
 {serverError.stars && <p className="errors" >{serverError.stars}</p>}
-
-        <textarea value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here..."/>
+<label htmlFor="Review">
+        <textarea id="review" name='review' value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here..."/></label>
             <div className="star-inputs-and-label"> 
-        <StarRatingControls onChange={onChange} stars={stars}/> <label>Stars</label>
+            <label htmlFor="stars"><StarRatingControls onChange={onChange} stars={stars}/> Stars</label>
         </div>
         <div className="post-review-button">
         <button disabled={Object.keys(errors).length > 0}>Submit Your Review</button>
