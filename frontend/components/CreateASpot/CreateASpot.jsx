@@ -92,7 +92,7 @@ price
     <>
 <div id="create-spot-form-container">
     <form id="create-spot-form" onSubmit={submitHandler}>
-      <h1>Create a new Spot</h1>
+      <h1>Create a New Spot</h1>
       <h2>Where&apos;s your place located?</h2>
       <p>
         Guests will only get your exact address once they booked a reservation.
@@ -144,8 +144,9 @@ price
         <div className="state-and-field-container">
         <label>State</label>
         {errors.state && <span className="inline-errors">{errors.state}</span>}
-        <div>
+        <div id="state-input-field">
         <input
+          className="small-input-field"
           type="text"
           name="state"
           id="state"

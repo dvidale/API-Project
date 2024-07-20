@@ -51,11 +51,17 @@ useEffect(()=>{
 //   {
 // err.username = "Cannot be empty"
 
+
+if(username.length < 4) setIsDisabled(true)
+
 //  }
   // else if(username.length > 4 && username.slice(0,4).includes(" ")) err.username = "Cannot start with empty spaces"
 
+
  if(!password) setIsDisabled(true)
   // err.password = "Cannot be empty"
+
+ if(password.length < 6) setIsDisabled(true)
  
  if(!confirmPassword) setIsDisabled(true)
   // err.confirmPassword = "Cannot be empty"

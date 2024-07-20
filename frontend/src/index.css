@@ -33,11 +33,12 @@ a {
 #spot-tile-container{
 display: inline-flex;
 /* flex-direction: row; */
-justify-content: center;
+justify-content: start;
 /* border: 2px;
 border-style: dotted;
 border-color: greenyellow; */
 flex-wrap: wrap;
+margin-bottom: 200px;
 }
 
 #spot-tile{

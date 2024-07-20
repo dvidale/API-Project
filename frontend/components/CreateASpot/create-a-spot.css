@@ -21,11 +21,14 @@ textarea{
 }
 .long-input-field{
     width: 100%;
-
 }
 
 .medium-input-field{
     width: 90%;
+}
+
+.small-input-field{
+    width: 80%;
 }
 
 .price-input-field{
@@ -38,7 +41,9 @@ margin-left: 5px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    min-width: 530px;
     /* justify-content: space-between; */
+
 }
 
 .city-and-field-container{
@@ -50,6 +55,7 @@ margin-left: 5px;
 .state-and-field-container{
     flex-basis:20%;
     flex-grow: 1;
+    min-width: 170px;
 }
 
 .desc-text-area{
