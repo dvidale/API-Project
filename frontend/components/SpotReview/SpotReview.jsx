@@ -13,7 +13,7 @@ return (
     <>
     <div className ="spot-review">
     <div className='reviewer-name'>{review.User.firstName}</div>
-    <div>{month} {new Date(review.createdAt).getFullYear() }</div>
+    <div className="review-month-year">{month} {new Date(review.createdAt).getFullYear() }</div>
     <div>{review.review}</div>
     </div>
     {user !== null && review.userId === user.id && <div><OpenModalButton

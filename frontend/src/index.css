@@ -52,6 +52,7 @@ flex-wrap: wrap;
 display:flex;
     justify-content: space-between;
     row-gap: 40px;
+    column-gap: 20px;
 }
 
 #spot-tile{
@@ -90,6 +91,7 @@ display:flex;
 #location-rating-container{
     display: flex;
     flex-direction: row;
+    flex-wrap:nowrap;
     justify-content: space-between;
     /* border: 2px solid yellowgreen; */
     align-items: center;
@@ -98,15 +100,9 @@ display:flex;
 
 #location-caption{
     height: 18px;
-}
+  }
 
-#landing-page-rating{
-    height: 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    /* border: 2px solid yellowgreen; */
-}
+
 
 #location-rating-price-container{
     /* border: 2px solid yellowgreen; */

@@ -2,6 +2,7 @@ import {Link } from 'react-router-dom'
 import { MdOutlineStar } from "react-icons/md";
 
 import '../../src/index.css'
+import "../SpotDetailsPage/spotdetails.css";
 
 function SpotTile({spot}){
 
@@ -20,9 +21,9 @@ return (
     <div id='location-rating-container'>   
     <Link to={`/spots/${spot.id}`}><span id="location-caption">{spot.city}, {spot.state}</span></Link>
 
-    <Link to={`/spots/${spot.id}`}> <span id='landing-page-rating' className='rating-star'><MdOutlineStar /> 
+    <div id="star-rating"><Link to={`/spots/${spot.id}`}>  <span className='rating-star'><MdOutlineStar /> </span>
    
-       {spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"}</span> </Link>
+       {spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"} </Link> </div>
        </div>
 
        <Link to={`/spots/${spot.id}`}><span>${spot.price} night</span></Link>

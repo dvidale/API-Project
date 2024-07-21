@@ -87,7 +87,7 @@ function SpotDetailsPage() {
 
               <div id="spot-reserve-box">
                 <div id="price-rating-reviews-container">
-                  <div id="spot-price"> ${spot.price} night</div>
+                  <div ><span id="spot-price"> ${spot.price}</span> night</div>
 
                   <div id="rating-review-container">
                     <div id="star-rating">
@@ -102,7 +102,7 @@ function SpotDetailsPage() {
                       <div id="num-reviews">
                         {`•   `}
                         {spot.numReviews}{" "}
-                        {+spot.numReviews === 1 ? "Review" : "Reviews"}
+                        {+spot.numReviews === 1 ? "review" : "reviews"}
                       </div>
                     )}
                   </div>
@@ -129,7 +129,7 @@ function SpotDetailsPage() {
                 <div id="num-reviews">
                   {`•   `}
                   {spot.numReviews}{" "}
-                  {+spot.numReviews === 1 ? "Review" : "Reviews"}
+                  {+spot.numReviews === 1 ? "review" : "reviews"}
                 </div>
               )}
             </div>
