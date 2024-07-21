@@ -1,17 +1,53 @@
 #nav-container{
+    grid-column: 2;
+    grid-row: 1;
     display:flex;
     justify-content: space-between;
-   margin: 20px;
+    padding-right: 30px;
+   /* border: 2px solid purple; */
+
+}
+
+.profile-dropdown{
+    position: absolute;
+    top: 35px;
+    right: 0px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;    
+    background-color: white;
+    border-style: solid;
+    border: 1px solid black;
+    padding: 1px 5px;
+    text-align: left;
+    min-width: 80px;
+}
+
+.dropdown-button-container {
+    text-align: center;
+}
+
+.dropdown-button-container button{
+    background-color: gold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.profile-dropdown li{
+    list-style: none;
+    padding-top: 5px;
 }
 
 .profile-dropdown.hidden{
     display: none;
+  
 }
 
 #create-and-dropdown{
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex-direction: row;
     position: relative;
 }
@@ -24,25 +60,5 @@
 #user-menu-button{
     border-radius: 20px;
     padding: 5px 10px 5px 10px;
-}
-
-
-.user-menu{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    width: 100px;
-    position:absolute;
-    top: 35px;
-    right: 40px;
-    z-index: 1;
-    background-color: white;
-    border-style: solid;
-    border: 1px solid black;
-    padding: 5px;
-}
-
-.user-menu li{
-    list-style: none;
-    padding-top: 3px;
+    position: static;
 }

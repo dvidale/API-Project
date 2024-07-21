@@ -24,9 +24,10 @@ function Layout() {
 
   return (
     <>
+   <div id="site-wide-grid-container">
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
-     
+      </div>
     </>
   );
 }

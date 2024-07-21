@@ -41,40 +41,40 @@ function SpotDetailsPage() {
               Location: {spot.city}, {spot.address}
             </h3>
             <div id="img-container">
-              <div id="big-spot-img-container">
+              
                 <img
                   id="big-spot-img"
                   alt="big spot img"
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
-              </div>
+             
 
-              <div id="image-quad-container">
+             
                 <img
-                  id="sm-spot-img"
+                  id="sm-spot-img-1"
                   className="sm-spot-img"
                   alt={spot.name}
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
                 <img
-                  id="sm-spot-img"
+                  id="sm-spot-img-2"
                   className="sm-spot-img"
                   alt={spot.name}
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
                 <img
-                  id="sm-spot-img"
+                  id="sm-spot-img-3"
                   className="sm-spot-img"
                   alt={spot.name}
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
                 <img
-                  id="sm-spot-img"
+                  id="sm-spot-img-4"
                   className="sm-spot-img"
                   alt={spot.name}
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
-              </div>
+         
             </div>
 
             <div id="desc-reserve-box-container">

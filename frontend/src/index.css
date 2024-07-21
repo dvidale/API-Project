@@ -1,5 +1,3 @@
-/* TODO: Add sitewide styles */
-
 :root{
     box-sizing: border-box;
 }
@@ -7,6 +5,20 @@
 a {
     text-decoration: none;
 }
+
+#site-wide-grid-container{
+    border: 2px dotted orange;
+    display: grid;
+    grid-template-columns: 80px auto 80px;
+    grid-template-rows: auto auto 200px;
+    justify-content: center;
+    grid-auto-flow: row;
+    grid-row-gap: 50px;
+    grid-column-gap: 0px;
+    margin-top: 30px;
+}
+
+
 
 .tooltip{
     position: relative;
@@ -31,19 +43,20 @@ a {
 }
 
 #spot-tile-container{
-display: inline-flex;
-/* flex-direction: row; */
-justify-content: start;
-/* border: 2px;
-border-style: dotted;
-border-color: greenyellow; */
+/* border: 2px dotted yellowgreen; */
+grid-column: 2;
+grid-row: 2;
+display:flex;
+flex-direction: row;
 flex-wrap: wrap;
-margin-bottom: 200px;
+display:flex;
+    justify-content: space-between;
+    row-gap: 40px;
 }
 
 #spot-tile{
     width: 300px;
-    padding: 15px;
+    /* padding: 15px; */
 }
 
 #spot-img{

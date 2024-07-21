@@ -46,11 +46,6 @@ useEffect(()=>{
   
   // err.email = "Cannot be empty"
 
- if(!username) setIsDisabled(true)
-  
-//   {
-// err.username = "Cannot be empty"
-
 
 if(username.length < 4) setIsDisabled(true)
 
@@ -58,12 +53,9 @@ if(username.length < 4) setIsDisabled(true)
   // else if(username.length > 4 && username.slice(0,4).includes(" ")) err.username = "Cannot start with empty spaces"
 
 
- if(!password) setIsDisabled(true)
-  // err.password = "Cannot be empty"
-
  if(password.length < 6) setIsDisabled(true)
  
- if(!confirmPassword) setIsDisabled(true)
+ if(confirmPassword.length < 6) setIsDisabled(true)
   // err.confirmPassword = "Cannot be empty"
  
 
@@ -126,7 +118,7 @@ setIsDisabled(true)
 }
   return (
     <>
-      <div id="sign-up-form-modal">
+    
       <form onSubmit={submitHandler}>
       <h1>Sign Up</h1>
       {errors.firstName && <p className="errors">{errors.firstName}</p>}
@@ -205,7 +197,7 @@ setIsDisabled(true)
         <button id='sign-up-button' type="submit" disabled={isDisabled} >Sign Up</button>
         </div>
       </form>
-      </div>
+     
     </>
   );
 };

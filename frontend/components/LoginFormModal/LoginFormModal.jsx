@@ -63,11 +63,11 @@ return dispatch(sessionActions.login(user)).then(closeModal).catch(
 
     return (
         <>
-        <div className="modal-window">
+       
        
         <form onSubmit={onSubmit} >
        
-       <div className="input-fields-container">
+      
        <h1>Log In</h1>
        {Object.keys(serverError).length > 0 && <p className="errors">{serverError.message}</p>}
        <label htmlFor="credential">
@@ -94,9 +94,9 @@ return dispatch(sessionActions.login(user)).then(closeModal).catch(
         <button id="login-button" type="submit" disabled={Object.keys(errors).length} >Log In</button>
       <button id="demo-user-login" onClick={demoUserLogin}>Demo User</button>
 
-        </div>
+   
         </form>
-        </div>
+
 
     
         </>

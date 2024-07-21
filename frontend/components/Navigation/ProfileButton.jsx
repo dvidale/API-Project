@@ -57,8 +57,8 @@ const ProfileButton = ({user}) => {
        <ul className={ulClassName} ref={ulRef}>
         {user ? (
 <>
-<div className="user-menu">
-<p>Hello, {user.firstName}</p>
+
+<span>Hello, {user.firstName}</span>
 <li>{user.username}</li>
         <li>{user.firstName} {user.lastName}</li>
         <li>{user.email}</li>
@@ -66,29 +66,35 @@ const ProfileButton = ({user}) => {
         <li><Link to='/spots/current'>Manage Spots</Link></li>
         <br/>
         <li>
-          <button onClick={logout}>Log Out</button>
+          <div className="dropdown-button-container"> 
+          <button  onClick={logout}>Log Out</button>
+          </div>
         </li>
-        </div>
+ 
 </>
         ):(
 <>
-<div className="user-menu"> 
+
 <li>
+  <div className="dropdown-button-container" >
               <OpenModalButton
                 buttonText="Sign Up"
                 onButtonClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
+              </div>
             </li>
-<li>
+<li><div className="dropdown-button-container" >
               <OpenModalButton
                 buttonText="Log In"
                 onButtonClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
+               </div>
             </li>
+           
             
-            </div>
+         
 </>
         )}     
       </ul>
