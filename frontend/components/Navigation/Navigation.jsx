@@ -23,7 +23,7 @@ const Navigation = ({ isLoaded }) => {
       <>
        
 <div id="create-and-dropdown">
-{sessionUser &&  <Link to='/spots/new' id="create-spot-button" >Create A New Spot</Link>}
+{sessionUser &&  <Link to='/spots/new' replace={true}id="create-spot-button" >Create A New Spot</Link>}
 <ProfileButton id='profile-button' user={sessionUser} /> 
    </div>
    </> )}

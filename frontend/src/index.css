@@ -32,6 +32,8 @@ display:flex;
 justify-content: left;
 row-gap: 40px;
 column-gap: 20px;
+max-width: 1300px;
+
 }
 
 #spot-tile:hover tool-tip{
@@ -62,6 +64,10 @@ tool-tip{
 #spot-img{
     width: 100%;
     border-radius: 30px;
+}
+
+#spot-price-bold{
+    font-weight: bold;
 }
 
 .rating-star{
@@ -139,4 +145,11 @@ margin-top: 20px;
 .manage-spots-title{
     grid-column: 2;
     grid-row:2;
+}
+
+#manager-create-spot-button{
+    width: 150px;
+    height: 30px;
+    background-color: gold;
+    box-shadow: 2px 2px 3px 2px;
 }

@@ -144,7 +144,7 @@ price
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        ,
+        <span>{" "},</span>
         </div>
         </label>
         </div>

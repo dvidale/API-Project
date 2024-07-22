@@ -25,7 +25,7 @@ return (
        {spot.avgRating !== null ? (+spot.avgRating).toFixed(1) : "New"} </Link> </div>
        </div>
 
-       <Link to={`/spots/${spot.id}`}><span>${spot.price} night</span></Link>
+       <Link to={`/spots/${spot.id}`}><span id="spot-price-bold">${spot.price}</span><span> night</span></Link>
     </div>
     </div>
  

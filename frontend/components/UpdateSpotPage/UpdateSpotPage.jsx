@@ -14,7 +14,7 @@ function UpdateSpotPage() {
 const {id} = useParams();
 const spot = useSelector((state) => state.spots[id])
 
-console.log(">>> spot in update spot", spot);
+
 
 
   const [country, setCountry] = useState(spot.country);

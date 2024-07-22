@@ -40,9 +40,12 @@ return (
 
     <>
  <div className="manage-spots-title">
-    <h1 >Manage Spots</h1></div>
+    <h1 >Manage Your Spots</h1>
+    <div id="spot-tile-container"><button id="manager-create-spot-button">
+        <Link to='/spots/new'>Create a New Spot</Link>
+        </button></div></div>
 
-    { ownerSpots.length > 0 ? (
+    { ownerSpots.length > 0 && (
         <>
         <div id="spot-tile-container">
         {ownerSpots.map((spot)=>{
@@ -52,14 +55,7 @@ return (
         } )}
         </div>
  </> 
-):(
-        <>
-       <div id="spot-tile-container">
-        <Link to='/spots/new'>Create a New Spot</Link>
-        </div>
-        </>
-
-    )}
+)}
 
     </>
 )

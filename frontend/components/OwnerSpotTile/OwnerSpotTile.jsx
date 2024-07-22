@@ -13,10 +13,10 @@ function OwnerSpotTile({spot}){
 
 return (
    
-    <div id="spot-tile" className="tooltip" >
-        <span className="tooltiptext">{spot.name}</span>
+    <div id="spot-tile">
+        
     
-    <Link to={`/spots/${spot.id}`}><img id="spot-img" alt={spot.name} src={spot.previewImage}/></Link>
+    <Link to={`/spots/${spot.id}`}><tool-tip>{spot.name}</tool-tip><img id="spot-img" alt={spot.name} src={spot.previewImage}/></Link>
 
     <div id='location-rating-price-container'> 
     <div id='location-rating-container'>  

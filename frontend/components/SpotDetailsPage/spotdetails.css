@@ -2,7 +2,8 @@
     /* border: 2px solid yellowgreen; */
    grid-column: 2;
    grid-row: 2;
-   
+   max-width: 1000px;
+   justify-self: center;
 }
 
 #img-container{

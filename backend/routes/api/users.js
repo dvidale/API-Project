@@ -20,6 +20,14 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isEmail()
     .withMessage('Invalid email.'),
+    check('email')
+    .custom( email =>{
+      return User.findOne({
+        where:{
+          email
+        }
+      }).then(()=> {return Promise.reject('Email must be unique.')})
+    } ),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
@@ -28,6 +36,14 @@ const validateSignup = [
     .not()
     .isEmail()
     .withMessage('Username cannot be an email.'),
+    check('username')
+    .custom( username =>{
+      return User.findOne({
+        where:{
+          username
+        }
+      }).then(()=> {return Promise.reject('Username must be unique.')})
+    } ),
   check('password')
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
