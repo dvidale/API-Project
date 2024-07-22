@@ -42,11 +42,25 @@ function SpotDetailsPage() {
             </h3>
             <div id="img-container">
               
+              {spot.SpotImages.length > 0 ? (
+                <>
                 <img
                   id="big-spot-img"
                   alt="big spot img" 
-                  src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
+                  src={spot.SpotImages[0].url}
                 />
+                </>
+              ):(
+                <>
+                <span>No Image Available</span>
+                </>
+              )
+              }
+                {/* <img
+                  id="big-spot-img"
+                  alt="big spot img" 
+                  src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : "No Image"}
+                /> */}
                 
                 {/* <div id='big-spot-img' className="fill" style={{backgroundImg: `url(https://images.pexels.com/photos/1130256/pexels-photo-1130256.jpeg)`}}></div> */}
              
