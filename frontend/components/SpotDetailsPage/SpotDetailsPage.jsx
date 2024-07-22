@@ -44,9 +44,11 @@ function SpotDetailsPage() {
               
                 <img
                   id="big-spot-img"
-                  alt="big spot img"
+                  alt="big spot img" 
                   src={spot.SpotImages.length > 0 ? spot.SpotImages[0].url : ""}
                 />
+                
+                {/* <div id='big-spot-img' className="fill" style={{backgroundImg: `url(https://images.pexels.com/photos/1130256/pexels-photo-1130256.jpeg)`}}></div> */}
              
 
              
@@ -82,7 +84,7 @@ function SpotDetailsPage() {
                 <h2>
                   Hosted by {spot.owner.firstName} {spot.owner.lastName}
                 </h2>
-                <p>{spot.description}</p>
+                <p>Description: {spot.description}</p>
               </div>
 
               <div id="spot-reserve-box">

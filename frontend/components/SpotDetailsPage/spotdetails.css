@@ -8,9 +8,10 @@
 
 #img-container{
 display:grid;
-grid-template-columns: auto auto auto auto;
-grid-template-rows: auto auto;
+grid-template-columns: 25% 25% 25% 25%;
+grid-template-rows: 50% 50%;
 gap: 5px;
+padding-right: 20px;
 }
 
 #big-spot-img{
@@ -19,8 +20,16 @@ gap: 5px;
     grid-row-start: 1;
     grid-row-end:3;
     width:100%;
+    height:100%;
 
 }
+
+/* .fill{
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+} */
 
 #sm-spot-img-1{
     grid-column-start:3;
@@ -141,4 +150,8 @@ color: gold;
 
 .review-month-year{
     color: darkslategray
+}
+
+#review-delete-button{
+    margin-bottom: 20px;
 }
