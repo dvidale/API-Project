@@ -1,9 +1,12 @@
 import { useState } from "react";
-import "./create-a-spot.css";
-import '../../src/index.css'
+
+// import '../Navigation/Navigation.css'
 import * as spotsActions from '../../src/store/spots'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import '../../src/index.css'
+import "./create-a-spot.css";
+
 
 function CreateASpot() {
   const [country, setCountry] = useState("");

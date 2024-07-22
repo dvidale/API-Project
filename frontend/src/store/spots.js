@@ -6,6 +6,7 @@ import { csrfFetch } from "./csrf";
 
 const GET_SPOTS = '/spots/GET_SPOTS'
 
+// const GET_OWNER_SPOTS = '/spots/GET_OWNER_SPOTS'
 
 const ADD_SPOT = '/spots/ADD_SPOT'
 const DELETE_SPOT = '/spots/DELETE_SPOT'
@@ -22,6 +23,12 @@ const getAllSpots = (spots) => {
     }
 }
 
+// const getCurrentOwnerSpots = (spots) =>{
+//     return {
+//         type:GET_OWNER_SPOTS,
+//         payload: spots
+//     }
+// }
 
 
 const addSpot = (spot) => {
@@ -56,6 +63,22 @@ export const getSpots = () => async (dispatch) =>{
     
     }
 
+    export const getOwnerSpots = () => async (dispatch) =>{
+
+        const url= '/api/spots/current'
+    
+        const response = await csrfFetch(url)
+
+        const data = await response.json()
+
+        dispatch(getAllSpots(data.Spots))
+        return data.Spots;
+
+
+
+
+
+    }
 
 
    

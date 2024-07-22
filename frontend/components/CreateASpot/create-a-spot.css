@@ -1,4 +1,6 @@
 #create-spot-form-container{
+    grid-column: 2;
+
 display: grid;
 grid-template-columns: 100px 500px 100px;
 justify-content: center;

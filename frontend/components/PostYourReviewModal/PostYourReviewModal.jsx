@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import StarRatingControls from "../StarRatingControls";
 import { useDispatch } from "react-redux";
 import * as reviewsActions from '../../src/store/reviews'
-import './post-your-review.css'
 import '../../src/index.css'
+import './post-your-review.css'
+
 
 function PostYourReviewModal({user, spotId}){
 
@@ -65,21 +66,21 @@ return dispatch(reviewsActions.createReview(reviewData, spotId, user)).then(clos
 
 return (
     <>
-    <div id="post-review-form-container">
+   
         <form onSubmit={submitHandler}>
     <h1>How was your stay?</h1>
 {serverError.review && <p className="errors" >{serverError.review}</p>}
 {serverError.stars && <p className="errors" >{serverError.stars}</p>}
 <label htmlFor="Review">
         <textarea id="review" name='review' value={review} onChange={e => setReview(e.target.value) } placeholder="Leave your review here..."/></label>
-            <div className="star-inputs-and-label"> 
-            <label htmlFor="stars"><StarRatingControls onChange={onChange} stars={stars}/> Stars</label>
-        </div>
-        <div className="post-review-button">
-        <button disabled={Object.keys(errors).length > 0}>Submit Your Review</button>
-        </div>
+            
+            <StarRatingControls onChange={onChange} stars={stars}/>
+      
+        
+        <button id="post-review-button" disabled={Object.keys(errors).length > 0}>Submit Your Review</button>
+     
     </form>
-    </div>
+  
     </>
 )
 

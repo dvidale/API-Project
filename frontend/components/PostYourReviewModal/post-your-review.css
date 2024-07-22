@@ -1,19 +1,29 @@
-#post-review-form-container{
-    padding: 30px;
-}
+
 
 textarea{
     width: 100%;
     height: 100px;
 }
 .star-inputs-and-label{
+border: 2px dotted orangered;
+justify-self: center;
+align-items: center;
     margin: 10px 0px 0px 0px;
-    display: flex;
-    justify-content: center;
 }
 
-.post-review-button{
+/* .post-review-button{
     margin: 10px 0px 0px 0px;
+    height: 40px;
+    width: 100%;
+    background-color: gold;
     display: flex;
     justify-content: center;
+} */
+
+#post-review-button{
+    margin-top: 20px;
+    height: 40px;
+    width: 100%;
+    background-color: gold;
+    box-shadow: 3px 3px 5px 1px;
 }

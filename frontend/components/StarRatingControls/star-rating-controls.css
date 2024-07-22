@@ -1,13 +1,18 @@
 .rating-input {
-    display: flex;
     margin-right: 4px;
   }
 
 
 .rating-input .filled {
+  position: relative;
+top: 2px;
+display:inline;
     color: gold
   }
   
   .rating-input .empty {
+    position: relative;
+top: 2px;
+    display: inline;
     color: silver;
   }

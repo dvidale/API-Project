@@ -2,8 +2,11 @@ import SpotTile from "../SpotTile"
 import {  useSelector} from "react-redux";
 import { useEffect } from "react";
 import * as spotsActions from '../../src/store/spots';
-import '../../src/index.css'
+
 import { useDispatch } from "react-redux";
+
+import '../../src/index.css'
+
 
 function HomePage(){
 
@@ -21,6 +24,9 @@ useEffect(()=>{
 const spotsList = Object.values(spots)
 
     return(
+        <>{!spots ? (
+            <> </>
+        ) : (
         <>
     <div id="spot-tile-container">
         {
@@ -36,6 +42,8 @@ const spotsList = Object.values(spots)
             })
         }
         </div>
+        </>
+        )}
         </>
     )
 }

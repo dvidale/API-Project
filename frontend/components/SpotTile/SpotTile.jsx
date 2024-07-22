@@ -11,11 +11,10 @@ function SpotTile({spot}){
 
 
 return (
-    // <NavLink to={`spots/${spot.id}`} >
-    <div id="spot-tile" className="tooltip" >
-        <span className="tooltiptext">{spot.name}</span>
+    
+    <div id="spot-tile">
       
-        <Link to={`/spots/${spot.id}`}> <img id="spot-img" alt={spot.name} src={spot.previewImage}/></Link>
+        <Link to={`/spots/${spot.id}`}><tool-tip inert role="tooltip">{spot.name}</tool-tip> <img id="spot-img" alt={spot.name} src={spot.previewImage}/></Link>
 
 <div id='location-rating-price-container'> 
     <div id='location-rating-container'>   
@@ -29,7 +28,7 @@ return (
        <Link to={`/spots/${spot.id}`}><span>${spot.price} night</span></Link>
     </div>
     </div>
-    // </NavLink>
+ 
 )
 
 }

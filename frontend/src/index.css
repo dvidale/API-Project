@@ -1,5 +1,6 @@
 :root{
     box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
 }
 
 a {
@@ -7,10 +8,10 @@ a {
 }
 
 #site-wide-grid-container{
-    border: 2px dotted orange;
+    /* border: 2px dotted orange; */
     display: grid;
-    grid-template-columns: 80px auto 80px;
-    grid-template-rows: auto auto 200px;
+    grid-template-columns: 5% 90% 5%;
+    grid-template-rows: auto auto auto 200px;
     justify-content: center;
     grid-auto-flow: row;
     grid-row-gap: 50px;
@@ -20,40 +21,38 @@ a {
 
 
 
-.tooltip{
-    position: relative;
-    display: inline-block;
-}
-
-.tooltip .tooltiptext{
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    bottom: 100%;
-    left: 50%;
-    /* margin-left: -60px; */
-}
-
-.tooltip:hover .tooltiptext{
-    visibility: visible;
-}
-
 #spot-tile-container{
 /* border: 2px dotted yellowgreen; */
 grid-column: 2;
-grid-row: 2;
+grid-row: 3;
 display:flex;
 flex-direction: row;
 flex-wrap: wrap;
 display:flex;
-    justify-content: space-between;
-    row-gap: 40px;
-    column-gap: 20px;
+justify-content: left;
+row-gap: 40px;
+column-gap: 20px;
 }
+
+#spot-tile:hover tool-tip{
+ display:block;   
+ background-color:white;
+ opacity: 0.5;
+ width: 300px;
+}
+
+tool-tip{
+    position: absolute;
+    z-index: 1;
+    display:none;
+    margin-left: 0px;
+    margin-top: 30px;
+    color:black;
+    text-align: center;
+   
+}
+
+
 
 #spot-tile{
     width: 300px;
@@ -89,11 +88,11 @@ display:flex;
 
 }
 #location-rating-container{
+    /* border: 2px solid yellowgreen; */
     display: flex;
     flex-direction: row;
     flex-wrap:nowrap;
     justify-content: space-between;
-    /* border: 2px solid yellowgreen; */
     align-items: center;
     margin-bottom: 10px;
 }
@@ -135,4 +134,9 @@ margin-top: 20px;
 .center-button{
     display:flex;
     justify-content: center;
+}
+
+.manage-spots-title{
+    grid-column: 2;
+    grid-row:2;
 }
