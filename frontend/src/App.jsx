@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import * as sessionActions from './store/session';
 import HomePage from '../components/HomePage/HomePage';
-import TestPage from '../components/TestPage/TestPage';
+
 import SpotDetails from '../components/SpotDetailsPage';
 import CreateASpot from '../components/CreateASpot';
 import ManageSpotsPage from '../components/ManageSpotsPage/ManageSpotsPage';
@@ -42,10 +42,6 @@ const router = createBrowserRouter([
         
       },
       {
-        path:'/test',
-        element:<TestPage/>
-      },
-      {
         path: '/spots/:id',
         element:<SpotDetails/>
       },
@@ -60,7 +56,11 @@ const router = createBrowserRouter([
       {
         path: '/spots/:id/edit',
         element:<UpdateSpotPage/>
-      }
+      },
+      {
+        path:'*',
+        element:<h1>Page Not Found</h1>
+      },
     ]
   }
 ]);
