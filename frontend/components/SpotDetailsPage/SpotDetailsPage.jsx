@@ -10,14 +10,19 @@ import "../../src/index.css";
 
 function SpotDetailsPage() {
   const user = useSelector((state) => state.session.user);
+console.log(">>>>> user session state in Spot Details", user);
 
   const { id } = useParams();
+console.log(">>>>>> id from useParams in SpotDetails", id);
 
   const dispatch = useDispatch();
 
   const spot = useSelector((state) => state.spotDetails[id]);
+console.log(">>>>>>> spot state in SpotDetails", spot);
+
 
   const reviews = useSelector((state) => state.reviews);
+  console.log(">>>>>>>> reviews state in SpotDetails", reviews)
 
   useEffect(() => {
     dispatch(spotDetailsActions.getSpotDetails(id));
