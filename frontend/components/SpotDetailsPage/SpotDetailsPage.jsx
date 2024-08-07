@@ -11,15 +11,17 @@ import "../../src/index.css";
 function SpotDetailsPage() {
   const user = useSelector((state) => state.session.user);
 
+  console.log(">>> user:", user);
 
   const { id } = useParams();
 
+  console.log(">>>> id:", id);
 
   const dispatch = useDispatch();
 
   const spot = useSelector((state) => state.spotDetails[id]);
 
-
+  console.log(">>>>> spot:", spot);
 
   const reviews = useSelector((state) => state.reviews);
  
