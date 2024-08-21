@@ -18,7 +18,7 @@ const dispatch = useDispatch()
 useEffect(()=>{
 
    dispatch(spotsActions.getSpots())
-
+  
 },[dispatch])
 
 const spotsList = Object.values(spots)
